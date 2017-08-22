@@ -1,0 +1,372 @@
+C:/Users/giuse/Desktop/project_simulations/a.c.IRAM.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.c.IRAM.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package std_logic_textio
+-- Loading package constants
+-- Compiling entity IRAM
+-- Compiling architecture IRam_Bhe of IRAM
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.f.ALU_MUX.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.f.ALU_MUX.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package constants
+-- Loading package log
+-- Loading package myTypes
+-- Compiling entity ALU_MUX
+-- Compiling architecture behavior of ALU_MUX
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/fd.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/fd.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity FD
+-- Compiling architecture PIPPO of FD
+-- Compiling architecture PLUTO of FD
+-- Loading entity FD
+-- Compiling configuration CFG_FD_PIPPO
+-- Loading entity FD
+-- Loading architecture PIPPO of FD
+-- Compiling configuration CFG_FD_PLUTO
+-- Loading entity FD
+-- Loading architecture PLUTO of FD
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.d.c.INV.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.d.c.INV.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity INV
+-- Compiling architecture BEHAVIORAL of INV
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.b.b.G_gen.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.b.b.G_gen.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity G_gen
+-- Compiling architecture behavior of G_gen
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.d.b.fa.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.d.b.fa.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity FA
+-- Compiling architecture BEHAVIORAL of FA
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.b.e.PG_0.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.b.e.PG_0.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity PG_0
+-- Compiling architecture behavior of PG_0
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.b.d.PG.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.b.d.PG.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity PG
+-- Compiling architecture behavior of PG
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.b.i.sum_generator.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.b.i.sum_generator.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package constants
+-- Compiling entity sum_generator
+-- Compiling architecture STRUCTURAL of sum_generator
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.c.b.nd2.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.c.b.nd2.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package constants
+-- Compiling entity ND2
+-- Compiling architecture ARCH2 of ND2
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.ALU.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.ALU.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package log
+-- Loading package myTypes
+-- Compiling entity ALU
+-- Compiling architecture structural of ALU
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/register.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/register.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package constants
+-- Compiling entity register_gen
+-- Compiling architecture behaviour of register_gen
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.b.h.sparse_tree.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.b.h.sparse_tree.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package log
+-- Compiling entity sparse_tree
+-- Compiling architecture structural of sparse_tree
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.c.mux21.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.c.mux21.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package constants
+-- Compiling entity MUX21_GENERIC
+-- Compiling architecture STRUCTURAL of MUX21_GENERIC
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.Datapath.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.Datapath.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package log
+-- Loading package myTypes
+-- Loading package constants
+-- Compiling entity datapath
+-- Compiling architecture structure of datapath
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.c.a.iv.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.c.a.iv.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package constants
+-- Compiling entity IV
+-- Compiling architecture BEHAVIORAL of IV
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.DLX.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.DLX.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package log
+-- Loading package myTypes
+-- Loading package constants
+-- Compiling entity DLX
+-- Compiling architecture structural of DLX
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.c.general_logic_block.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.c.general_logic_block.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity general_logic_block
+-- Compiling architecture structural of general_logic_block
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.b.g.rca_gen_s.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.b.g.rca_gen_s.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package MATH_REAL
+-- Compiling entity RCA_s
+-- Compiling architecture STRUCTURAL of RCA_s
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.b.c.mux21.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.b.c.mux21.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package constants
+-- Compiling entity MUX21_GENERIC
+-- Compiling architecture BEHAVIORAL_2 of MUX21_GENERIC
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.a.log.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.a.log.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling package log
+-- Compiling package body log
+-- Loading package log
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/000-globals.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/000-globals.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package log
+-- Compiling package myTypes
+-- Compiling package constants
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.d.e.OR2.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.d.e.OR2.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity OR2
+-- Compiling architecture BEHAVIORAL of OR2
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.b.a.carry_select_block.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.b.a.carry_select_block.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package constants
+-- Compiling entity carry_select_block
+-- Compiling architecture STRUCTURAL of carry_select_block
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/latch.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/latch.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package constants
+-- Compiling entity latch
+-- Compiling architecture behaviour of latch
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.d.comparator.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.d.comparator.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity comparator
+-- Compiling architecture structural of comparator
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/register_beh_gen.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/register_beh_gen.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity register_gen_en
+-- Compiling architecture behav of register_gen_en
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.b.registerfile.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.b.registerfile.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package NUMERIC_STD
+-- Loading package log
+-- Loading package constants
+-- Compiling entity register_file
+-- Compiling architecture behavioral_basic of register_file
+-- Compiling configuration CFG_RF_BEH
+-- Loading entity register_file
+-- Loading architecture behavioral_basic of register_file
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.d.DRAM.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.d.DRAM.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Compiling entity DRAM
+-- Compiling architecture Dram_Beh of DRAM
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.c.a.NAND3.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.c.a.NAND3.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity NAND3
+-- Compiling architecture behavioral of NAND3
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.b.f.PG_gen.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.b.f.PG_gen.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity PG_gen
+-- Compiling architecture behavior of PG_gen
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.a.shifter.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.a.shifter.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package NUMERIC_STD
+-- Loading package log
+-- Loading package myTypes
+-- Compiling entity shifter
+-- Compiling architecture structural of shifter
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.d.d.NORGEN.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.d.d.NORGEN.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity NORGEN
+-- Compiling architecture BEHAVIORAL of NORGEN
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.b.P4ADD.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.b.P4ADD.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Loading package log
+-- Compiling entity P4ADD
+-- Compiling architecture structural of P4ADD
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.b.j.types.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.b.j.types.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package log
+-- Compiling package types
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.d.a.AND2.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.d.a.AND2.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity AND2
+-- Compiling architecture BEHAVIORAL of AND2
+
+} {} {}} C:/Users/giuse/Desktop/project_simulations/a.b.e.c.b.NAND4.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/giuse/Desktop/project_simulations/a.b.e.c.b.NAND4.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity NAND4
+-- Compiling architecture behavioral of NAND4
+
+} {} {}}
