@@ -159,6 +159,15 @@ DOUT : OUT STD_LOGIC_vector)
 ; -- output.
 end component;
 
+
+component NOR5 is
+	generic (
+		 n_bit :	integer := 6); 
+	Port (	A:	In	std_logic_vector(n_bit-1 downto 0);
+		S:	Out	std_logic);
+end component; 
+
+
 --signals declarations
 
 --used in fetch
@@ -168,7 +177,8 @@ signal MUX_BRANCHES_sig, PC_OUT_sig: std_logic_vector(n_bit-1 downto 0);
 
 --used in decode
 signal reg_file_in, regin1, reg_mux1, regin2, reg_mux2, imm2, imm_mux2: std_logic_vector(n_bit-1 downto 0);
-signal ADD_WR_SIG,ADD_WR_DEC,ADD_WR_EX : std_logic_vector(4 downto 0);
+signal IRout_delay, ADD_WR_SIG,ADD_WR_DEC,ADD_WR_EX : std_logic_vector(n_bit-1 downto 0);
+signal ADD_WR_SIG_mux : std_logic_vector(4 downto 0);
 
 --used in execute
 signal reg_alu_out, ALUout, ALUin1, ALUin2: std_logic_vector(n_bit-1 downto 0);
@@ -178,6 +188,9 @@ signal sign_ext_delay : std_logic_vector(n_bit -1  downto 0);
 
 --used in memory
 signal DRAMout, LMDout,reg_alu_mem : std_logic_vector(n_bit-1 downto 0);
+
+--used in wb
+signal rt_vs_it : std_logic;
 
 begin
 
@@ -284,9 +297,9 @@ register_file_0 : register_file  --register file
            RD1 => '1',         --probably not needed because of next latch
            RD2 => '1',
            WR => RF_WE,
-           ADD_WR =>ADD_WR_SIG,
-           ADD_RD1 => IRout(20 downto 16),
-           ADD_RD2 => IRout(15 downto 11),
+           ADD_WR =>ADD_WR_SIG_mux,
+           ADD_RD1 => IRout(25 downto 21),
+           ADD_RD2 => IRout(20 downto 16),
            DATAIN => reg_file_in,
            OUT1 => regin1,
            OUT2 => regin2 );
@@ -298,6 +311,9 @@ port map(regin1, RegA_LATCH_EN, reset, reg_mux1 );
 latchB: latch --latch B to save the value from the rf
 generic map(n_bit =>32)
 port map(regin2, RegB_LATCH_EN, reset, reg_mux2 );
+
+
+
 
 
 reg_imm : register_gen_en
@@ -312,10 +328,10 @@ DOUT  => imm_mux2);
 
 reg_wra : register_gen_en
     generic map (
-            n_bit  => 5 )
+            n_bit  => 32 )
 port map (
 
-DIN  => IRout(25 downto 21) ,
+DIN  => IRout,
 ENABLE  => '1',
 RESET  => reset,
 CLK  => clk,
@@ -324,7 +340,7 @@ DOUT  => ADD_WR_DEC);
 
 reg_2 : register_gen_en
     generic map (
-            n_bit  => 5 )
+            n_bit  => 32 )
 port map (
 DIN  => ADD_WR_DEC,
 ENABLE  => '1',
@@ -335,13 +351,13 @@ DOUT  => ADD_WR_EX);
 
 reg_3 : register_gen_en
     generic map (
-            n_bit  => 5 )
+            n_bit  => 32 )
 port map (
 DIN  => ADD_WR_EX,
 ENABLE  => '1',
 RESET  => reset,
 CLK  => clk,
-DOUT  => ADD_WR_SIG);
+DOUT  => IRout_delay);
 
 
 --latchimm: latch --latch immediate to save the value of the immediate2
@@ -483,6 +499,17 @@ generic map (n_bit => 32)  --mux to choose the second operand of the ALU
 port map (reg_alu_mem, LMDout, WB_MUX_SEL, reg_file_in);
 
 
+          mux_wb: MUX21_GENERIC --mux to choose the where to write in case of Itype or Rtype
+generic map (n_bit => 5)
+port map (IRout_delay(15 downto 11), IRout_delay(20 downto 16), rt_vs_it, ADD_WR_SIG_mux); --if control is 0 (itype) 1 for Rtype
+
+
+NOR5_0 : NOR5
+	generic map (
+		 n_bit  => 6 )
+	port map (
+	        	A => IRout_delay(31 downto 26),
+		S => rt_vs_it );
 
 
 
