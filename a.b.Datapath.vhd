@@ -168,14 +168,16 @@ signal MUX_BRANCHES_sig, PC_OUT_sig: std_logic_vector(n_bit-1 downto 0);
 
 --used in decode
 signal reg_file_in, regin1, reg_mux1, regin2, reg_mux2, imm2, imm_mux2: std_logic_vector(n_bit-1 downto 0);
+signal ADD_WR_SIG,ADD_WR_DEC,ADD_WR_EX : std_logic_vector(4 downto 0);
 
 --used in execute
 signal reg_alu_out, ALUout, ALUin1, ALUin2: std_logic_vector(n_bit-1 downto 0);
 signal pc_mux_sig: std_logic_vector(0 downto 0);
 signal not_comp_sig, comp_sig, branch_out_sig : std_logic_vector(0 downto 0);
+signal sign_ext_delay : std_logic_vector(n_bit -1  downto 0);
 
 --used in memory
-signal DRAMout, LMDout : std_logic_vector(n_bit-1 downto 0);
+signal DRAMout, LMDout,reg_alu_mem : std_logic_vector(n_bit-1 downto 0);
 
 begin
 
@@ -195,29 +197,60 @@ PC_out <= PC_OUT_sig;
 
 ---------interface---------------
 
-NPC: latch  --Next program counter LATCH
-generic map(n_bit => 32)
-port map(ADDPC_out_sig, NPC_LATCH_EN, reset, NPC_out_sig);
+NPC : register_gen_en
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => ADDPC_out_sig,
+ENABLE  => '1',--NPC_LATCH_EN,
+RESET  => reset,
+CLK  => clk,
+DOUT  => NPC_out_sig );
 
-instr_latch: latch --Istruction Register
-generic map(n_bit => 32)
-port map(IRAMout, IR_LATCH_EN, reset, IRout);
+
+instr_latch : register_gen_en
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => IRAMout,
+ENABLE  => '1', --IR_LATCH_EN,
+RESET  => reset,
+CLK  => clk,
+DOUT  =>  IRout);
+
+
+--NPC: latch  --Next program counter LATCH
+--generic map(n_bit => 32)
+--port map(ADDPC_out_sig, NPC_LATCH_EN, reset, NPC_out_sig);
+--
+--instr_latch: latch --Istruction Register
+--generic map(n_bit => 32)
+--port map(IRAMout, IR_LATCH_EN, reset, IRout);
 
 --PC_register: register_gen --register to implement the PC
 --generic map(n_bit =>32)
 --port map(MUX_BRANCHES_sig, clock, reset, PC_OUT_sig ); --to be completed, PC enable is always 1, no control
 
 
-reg_alu_2 : register_gen_en
-    generic map (
-            n_bit  => 32 )
-port map (
-DIN  => MUX_BRANCHES_sig,
-ENABLE  => PC_LATCH_EN,
-RESET  => reset,
-CLK  => clk,
-DOUT  => PC_OUT_sig );
+--reg_pc : register_gen_en
+--    generic map (
+--            n_bit  => 32 )
+--port map (
+--DIN  => MUX_BRANCHES_sig,
+--ENABLE  => '1', --PC_LATCH_EN eliminated because during first instructions it does not update the pc
+--RESET  => reset,
+--CLK  => clk,
+--DOUT  => PC_OUT_sig );
 
+
+PC_latch : latch
+	generic map (
+	        n_bit => 32 )
+	port map (
+	        	D => MUX_BRANCHES_sig,
+		EN => '1',
+		RESET => reset,
+		Q => PC_OUT_sig);
 
 
 
@@ -227,13 +260,19 @@ DOUT  => PC_OUT_sig );
 
 ----------assignments-------------
 
+
 --sign extention
+
+
+
 imm2(15 downto 0) <= IRout(15 downto 0);
 imm2(31 downto 16) <= (others => IRout(15));
 
 ----------processes---------------
 
 ----------interface---------------
+
+
 
 register_file_0 : register_file  --register file
     generic map (
@@ -245,7 +284,7 @@ register_file_0 : register_file  --register file
            RD1 => '1',         --probably not needed because of next latch
            RD2 => '1',
            WR => RF_WE,
-           ADD_WR =>IRout(25 downto 21) ,
+           ADD_WR =>ADD_WR_SIG,
            ADD_RD1 => IRout(20 downto 16),
            ADD_RD2 => IRout(15 downto 11),
            DATAIN => reg_file_in,
@@ -260,9 +299,54 @@ latchB: latch --latch B to save the value from the rf
 generic map(n_bit =>32)
 port map(regin2, RegB_LATCH_EN, reset, reg_mux2 );
 
-latchimm: latch --latch immediate to save the value of the immediate2
-generic map(n_bit =>32)
-port map(imm2, RegIMM_LATCH_EN, reset, imm_mux2 );
+
+reg_imm : register_gen_en
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => imm2,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => imm_mux2);
+
+reg_wra : register_gen_en
+    generic map (
+            n_bit  => 5 )
+port map (
+
+DIN  => IRout(25 downto 21) ,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => ADD_WR_DEC);
+
+
+reg_2 : register_gen_en
+    generic map (
+            n_bit  => 5 )
+port map (
+DIN  => ADD_WR_DEC,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => ADD_WR_EX);
+
+
+reg_3 : register_gen_en
+    generic map (
+            n_bit  => 5 )
+port map (
+DIN  => ADD_WR_EX,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => ADD_WR_SIG);
+
+
+--latchimm: latch --latch immediate to save the value of the immediate2
+--generic map(n_bit =>32)
+--port map(imm2, RegIMM_LATCH_EN, reset, imm_mux2 );
 
 ----------------------------------EXECUTE----------------------------------------------
 
@@ -366,10 +450,20 @@ CLK  => clk,
 DOUT  => LMDout);
 
 
+ALU_output_mem : register_gen_en
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => reg_alu_out,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => reg_alu_mem);
+
 
 mux_pc: MUX21_GENERIC  --mux to choose whether to take NPC or aluoutput as PC, 0 NPC, 1 ALUoutput
 generic map (n_bit => 32) 
-port map (ALUout, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
+port map (reg_alu_mem, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
 
 
 ---------------------------------WRITE BACK-------------------------------------------
@@ -386,7 +480,7 @@ port map (ALUout, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
 
 mux3: MUX21_GENERIC
 generic map (n_bit => 32)  --mux to choose the second operand of the ALU
-port map (LMDout, reg_alu_out, WB_MUX_SEL, reg_file_in);
+port map (reg_alu_mem, LMDout, WB_MUX_SEL, reg_file_in);
 
 
 

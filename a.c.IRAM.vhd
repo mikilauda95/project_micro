@@ -3,7 +3,6 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
 use std.textio.all;
 use ieee.std_logic_textio.all;
-use work.constants.all;
 
 
 -- Instruction memory for DLX
@@ -11,8 +10,8 @@ use work.constants.all;
 -- file name is "test.asm.mem"
 entity IRAM is
   generic (
-    RAM_DEPTH : integer := RAM_DEPTH;
-    I_SIZE : integer := IR_SIZE);
+    RAM_DEPTH : integer := 48;
+    I_SIZE : integer := 32);
   port (
     Rst  : in  std_logic;
     Addr : in  std_logic_vector(I_SIZE - 1 downto 0);
