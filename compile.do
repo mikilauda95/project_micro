@@ -105,6 +105,20 @@ sim:/tb_dlx/DLX_0/IRAM_0/Rst \
 sim:/tb_dlx/DLX_0/IRAM_0/Addr \
 sim:/tb_dlx/DLX_0/IRAM_0/Dout \
 sim:/tb_dlx/DLX_0/IRAM_0/IRAM_mem
+add wave -position insertpoint  \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/CLK \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/RESET \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/ENABLE \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/RD1 \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/RD2 \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/WR \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/ADD_WR \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/ADD_RD1 \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/ADD_RD2 \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/DATAIN \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/OUT1 \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/OUT2 \
+sim:/tb_dlx/DLX_0/datapath_1/register_file_0/REGISTERS
 
 
 

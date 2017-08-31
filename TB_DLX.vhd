@@ -50,7 +50,7 @@ reset  => reset );
 		Clock <= not(Clock) after 0.5 ns;	
 	end process;
 	
-	Reset <= '1', '0' after 6 ns, '1' after 11 ns, '0' after 15 ns;
+	Reset <= '1', '0' after 6 ns, '1' after 11 ns, '0' after 16 ns;
        
 
 end TEST;

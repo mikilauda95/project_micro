@@ -55,6 +55,7 @@ component datapath
     IRAMout: in std_logic_vector(IR_SIZE-1 downto 0);
     PC_out : out std_logic_vector(IR_SIZE-1 downto 0)
  );
+
 end component;
 
 
@@ -112,6 +113,19 @@ component IRAM is
     );
 end component;
 
+
+component register_gen_en
+    generic(n_bit : integer := 32);
+PORT(
+DIN : IN STD_LOGIC_VECTOR(n_bit-1 DOWNTO 0); -- input.
+ENABLE : IN STD_LOGIC; -- load/enable.
+RESET : IN STD_LOGIC; -- async. clear.
+CLK : IN STD_LOGIC; -- clock.
+DOUT : OUT STD_LOGIC_vector)
+; -- output.
+end component;
+
+
 signal s_IR_LATCH_EN : std_logic;
 signal s_NPC_LATCH_EN : std_logic;
 signal s_RegA_LATCH_EN : std_logic;
@@ -130,6 +144,8 @@ end component;
 signal s_RF_WE : std_logic;
 signal s_IR_IN: std_logic_vector(IR_SIZE-1 downto 0);
 signal s_PC_out : std_logic_vector(IR_SIZE-1 downto 0);
+
+signal s_cu_in : std_logic_vector(IR_SIZE-1 downto 0);
 
 begin
 datapath_1 : datapath
@@ -162,7 +178,7 @@ datapath_1 : datapath
     -- WB Control signalsin
     WB_MUX_SEL          => s_WB_MUX_SEL,
     RF_WE               => s_RF_WE,
-	IRAMout            => s_IR_IN,
+	IRAMout            => s_cu_in,
 	PC_OUT              => s_PC_OUT);
         
 
@@ -183,7 +199,7 @@ dlx_cu_0 : dlx_cu
     Clk                 => clock,
     Rst                 => reset,
     -- Instruction register
-    IR_In               => s_IR_IN,
+    IR_In               => s_IR_in,
     -- If control signal
     IR_Latch_en         => s_IR_LATCH_EN,
     NPC_latch_en        => s_NPC_LATCH_EN,
@@ -218,4 +234,17 @@ IRAM_0 : iram
     Addr  => s_PC_OUT,
     Dout  => s_IR_IN
     );
+
+
+register_input_cw : register_gen_en
+    generic map (
+            n_bit  => IR_SIZE)
+port map (
+DIN  => s_IR_IN,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clock,
+DOUT  => s_cu_in);
+
+
 end structural;

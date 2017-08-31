@@ -68,40 +68,40 @@ architecture dlx_cu_hw of dlx_cu is
     "000000000000000", --5 BNEZ
     "000000000000000", --6 bfpt (not implemented)
     "000000000000000", --7 bfpf (not implemented)
-    "110010110000111", --8 ADD i
-    "000000000000000", --9 Addui (not implemented)
-    "110010110000111", --10 SUB i 
-    "000000000000000", --11 Subui (not implemented)
-    "110010110000111", --12 AND i 
-    "110010110000111", --13 OR i 
-    "110010110000111", --14 XOR i 
-    "000000000000000", --15 lhi (not implemented)
-    "000000000000000", --16 rfe (not implemented)
-    "000000000000000", --17 trap (not implemented)
-    "000000000000000", --18 jr (not implemented)
-    "000000000000000", --19 jalr(not implemented)
-    "110010110000111", --20 slli 
-    "000000000000000", --21 nop
-    "000000000000000", --22 srli (not implemented)
-    "000000000000000", --23 srai (not implemented)
-    "110010110000111", --24 seqi
-    "110010110000111", --25 snei
-    "000000000000000", --26 slti (not implemented)
-    "000000000000000", --27 sgti (not implemented)
-    "110010110000111", --28 slei
-    "110010110000111", --29 sgei
-    "000000000000000", --30
-    "000000000000000", --31
-    "000000000000000", --32 lb (not implemented)
-    "000000000000000", --33 lh (not implemented)
-    "000000000000000", --34
-    "000000000000000", --35 lw
-    "000000000000000", --36 lbu(not implemented)
-    "000000000000000", --37 lhu(not implemented) 
-    "000000000000000", --38 lf(not implemented)
-    "000000000000000", --39 ld(not implemented)
-    "000000000000000", --40 sb(not implemented)
-    "000000000000000", --41 sh(not implemented)
+    "111010110000111", --8 ADD i
+    "001000000000000", --9 Addui (not implemented)
+    "111010110000111", --10 SUB i 
+    "001000000000000", --11 Subui (not implemented)
+    "111010110000111", --12 AND i 
+    "111010110000111", --13 OR i 
+    "111010110000111", --14 XOR i 
+    "001000000000000", --15 lhi (not implemented)
+    "001000000000000", --16 rfe (not implemented)
+    "001000000000000", --17 trap (not implemented)
+    "001000000000000", --18 jr (not implemented)
+    "001000000000000", --19 jalr(not implemented)
+    "111010110000111", --20 slli 
+    "001000000000000", --21 nop
+    "001000000000000", --22 srli (not implemented)
+    "001000000000000", --23 srai (not implemented)
+    "111010110000111", --24 seqi
+    "111010110000111", --25 snei
+    "001000000000000", --26 slti (not implemented)
+    "001000000000000", --27 sgti (not implemented)
+    "111010110000111", --28 slei
+    "111010110000111", --29 sgei
+    "001000000000000", --30
+    "001000000000000", --31
+    "001000000000000", --32 lb (not implemented)
+    "001000000000000", --33 lh (not implemented)
+    "001000000000000", --34
+    "001000000000000", --35 lw
+    "001000000000000", --36 lbu(not implemented)
+    "001000000000000", --37 lhu(not implemented) 
+    "001000000000000", --38 lf(not implemented)
+    "001000000000000", --39 ld(not implemented)
+    "001000000000000", --40 sb(not implemented)
+    "001000000000000", --41 sh(not implemented)
     "000000000000000", --42
     "000000000000000", --43
     "000000000000000",
@@ -123,7 +123,7 @@ architecture dlx_cu_hw of dlx_cu is
     "000000000000000",
     "000000000000000",
     "000000000000000",
-    "000000000000000"); -- sw
+    "000000000000000"); -- changed cw(cwsize-3 ) to 1 (latch for the first operand in register)
 
 
     signal IR_opcode: std_logic_vector(OP_CODE_SIZE -1 downto 0);  -- OpCode part of IR
@@ -150,7 +150,6 @@ begin  -- dlx_cu_rtl
     IR_opcode<= IR_IN(31 downto 26);
     IR_func(10 downto 0)  <= IR_IN(FUNC_SIZE - 1 downto 0);
 
-    cw <= cw_mem(conv_integer(IR_opcode));
 
 
   -- stage one control signals
@@ -183,6 +182,7 @@ begin  -- dlx_cu_rtl
     CW_PIPE: process (Clk, Rst)
     begin  -- process Clk
         if Rst = '1' then                   -- asynchronous reset (active low)
+            cw <= (others => '0');
             cw1 <= (others => '0');
             cw2 <= (others => '0');
             cw3 <= (others => '0');
@@ -192,6 +192,7 @@ begin  -- dlx_cu_rtl
             aluOpcode2 <= NOP;
             aluOpcode3 <= NOP;
         elsif Clk'event and Clk = '1' then  -- rising clock edge
+            cw <= cw_mem(conv_integer(IR_opcode));
             --cw1 <= cw;
             cw2 <= cw(CW_SIZE - 1 - 2 downto 0);
             cw3 <= cw2(CW_SIZE - 1 - 5 downto 0);
@@ -200,11 +201,11 @@ begin  -- dlx_cu_rtl
 
             aluOpcode1 <= aluOpcode_i;
             aluOpcode2 <= aluOpcode1;
-            --aluOpcode3 <= aluOpcode2; 
+            aluOpcode3 <= aluOpcode2; 
         end if;
     end process CW_PIPE;
 
-    ALU_OPCODE <= aluOpcode2;
+    ALU_OPCODE <= aluOpcode3;
 
    -- purpose: Generation of ALU OpCode
    -- type   : combinational
