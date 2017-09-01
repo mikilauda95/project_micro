@@ -198,7 +198,6 @@ begin  -- dlx_cu_rtl
             cw3 <= cw2(CW_SIZE - 1 - 5 downto 0);
             cw4 <= cw3(CW_SIZE - 1 - 9 downto 0);
             cw5 <= cw4(CW_SIZE -1 - 13 downto 0);
-
 		--ciao
             aluOpcode1 <= aluOpcode_i;
             aluOpcode2 <= aluOpcode1;
