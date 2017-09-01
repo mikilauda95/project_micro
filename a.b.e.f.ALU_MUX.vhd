@@ -35,6 +35,9 @@ case OpCode is
 	when LOEQ => RESULT <= COMP;
 	when GREQ => RESULT <= COMP;
 	when MULS => RESULT <= MUL;
+	when EQU => RESULT <= COMP;
+	when GR => RESULT <= COMP;
+	when LO => RESULT <= COMP;
 	when others => RESULT <= (others => '0');
 end case;
 

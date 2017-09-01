@@ -6,7 +6,7 @@ use work.all;
 package myTypes is
 
 	type aluOp is (
-		NOP, ADDS, LLS, LRS, SUBS, ANDS, ORS, XORS, NOTEQ, GREQ, LOEQ, SHAR, SHARX, EQU, MULS
+		NOP, ADDS, LLS, LRS, SUBS, ANDS, ORS, XORS, NOTEQ, GREQ, GR, LO, LOEQ, SHAR, SHARX, EQU, MULS
 			);
 
 end myTypes;
@@ -25,6 +25,6 @@ constant IR_SIZE : integer := 32;
 constant OP_CODE_SIZE : integer := 6;
 constant FUNC_SIZE: integer := 11;
 constant MICROCODE_MEM_SIZE: integer:=64;
-constant RAM_DEPTH: integer:= 48;
+constant RAM_DEPTH: integer:= 128;
 
 end constants;

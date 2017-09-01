@@ -61,8 +61,8 @@ architecture dlx_cu_hw of dlx_cu is
     constant OFFSET_CU5 : integer := 13;
     type mem_array is array (0 to MICROCODE_MEM_SIZE-1) of std_logic_vector(CW_SIZE - 1 downto 0);
     signal cw_mem : mem_array := ("111100010000111", --0 R type: IS IT CORRECT?
-    "000000000000000", --1   
-    "111011111001100", --2 J (0X02) instruction encoding corresponds to the address to this ROM
+    "000000000000000", --1 	
+	"111011111001100", --2 J (0X02) instruction encoding corresponds to the address to this ROM
     "000000000000000", --3 JAL to be filled
     "000000000000000", --4 BEQZ to be filled
     "000000000000000", --5 BNEZ
@@ -86,8 +86,8 @@ architecture dlx_cu_hw of dlx_cu is
     "111010110000111", --23 srai 
     "111010110000111", --24 seqi
     "111010110000111", --25 snei
-    "001000000000000", --26 slti (not implemented)
-    "001000000000000", --27 sgti (not implemented)
+    "111010110000111", --26 slti 
+    "111010110000111", --27 sgti 
     "111010110000111", --28 slei
     "111010110000111", --29 sgei
     "001000000000000", --30
@@ -225,13 +225,16 @@ begin  -- dlx_cu_rtl
                     when 36 => aluOpcode_i <= ANDS; -- and
                     when 37 => aluOpcode_i <= ORS; -- or
                     when 38 => aluOpcode_i <= XORS; -- xor
+					when 40 => aluOpcode_i <= EQU; --set if equal
                     when 41 => aluOpcode_i <= NOTEQ; -- set if not equal
                     when 45 => aluOpcode_i <= GREQ; -- set of greater or equal
                     when 44 => aluOpcode_i <= LOEQ; -- set if lower or equal 
 					when 14 => aluOpcode_i <= MULS; --it's the multiplication 
+					when 42 => aluOpcode_i <= LO; --set if lower
+					when 43 => aluOpcode_i <= GR; --set if greater
                     when others => aluOpcode_i <= NOP;
                 end case;
-            when 2 => aluOpcode_i <= NOP; -- j
+            when 2 => aluOpcode_i <= ADDS; -- j
             when 3 => aluOpcode_i <= NOP; -- jal
             when 8 => aluOpcode_i <= ADDS; -- addi
             when 12 => aluOpcode_i <= ANDS; -- and
@@ -243,12 +246,15 @@ begin  -- dlx_cu_rtl
             when 20 => aluOpcode_i <= LLS; -- sll immediate according to instruction set coding
             when 25 => aluOpcode_i <= NOTEQ; -- set if not equal immediate
             when 22 => aluOpcode_i <= LRS; -- srl immediate
+			when 24 => aluOpcode_i <= EQU; --set if equal 
 			when 23 => aluOpcode_i <= SHARX; -- sra immediate
             when 10 => aluOpcode_i <= SUBS; -- subi
             when 14 => aluOpcode_i <= XORS; -- xori
             when 35 => aluOpcode_i <= ADDS; -- lw
             when 21 => aluOpcode_i <= NOP; -- nop
             when 43 => aluOpcode_i <= ADDS; -- sw
+			when 26 => aluOpcode_i <= LO; --set if lower immediate
+			when 27 => aluOpcode_i <= GR; --set if greater immediate
             when others => aluOpcode_i <= NOP;
         end case;
     end process ALU_OP_CODE_P;

@@ -124,9 +124,12 @@ begin
              first: process(control,AneB,AaeB,AbeB,control_signal_gen_log,input2) 
              begin
                  case control is
+					 when EQU => res_comp(0) <= AeB;
                      when NOTEQ => res_comp(0) <= AneB;
                      when GREQ => res_comp(0) <= AaeB;
                      when LOEQ => res_comp(0) <= AbeB;
+					 when LO => res_comp(0)<= AbB;
+					 when GR => res_comp(0)<= AaB;
                      when ANDS => control_signal_gen_log <= "1000";
                      when ORS => control_signal_gen_log <= "1110";
                      when XORS => control_signal_gen_log <= "0110";
