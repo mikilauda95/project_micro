@@ -121,14 +121,14 @@ begin
             case control_sig is
                 when lls => 
                     case ref_sel is
-                        when "000" => temp3 := mask_refined_sll(0); 
-                        when "001" => temp3 := mask_refined_sll(1); 
-                        when "010" => temp3 := mask_refined_sll(2); 
-                        when "011" => temp3 := mask_refined_sll(3); 
-                        when "100" => temp3 := mask_refined_sll(4); 
-                        when "101" => temp3 := mask_refined_sll(5); 
-                        when "110" => temp3 := mask_refined_sll(6); 
-                        when "111" => temp3 := mask_refined_sll(7); 
+                        when "000" => temp3 := mask_refined_sll(7); 
+                        when "001" => temp3 := mask_refined_sll(6); 
+                        when "010" => temp3 := mask_refined_sll(5); 
+                        when "011" => temp3 := mask_refined_sll(4); 
+                        when "100" => temp3 := mask_refined_sll(3); 
+                        when "101" => temp3 := mask_refined_sll(2); 
+                        when "110" => temp3 := mask_refined_sll(1); 
+                        when "111" => temp3 := mask_refined_sll(0); 
                         when others => temp3 := (others => '0');
                     end case;
                 when lrs => 

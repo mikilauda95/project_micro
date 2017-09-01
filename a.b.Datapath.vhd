@@ -185,6 +185,7 @@ signal reg_alu_out, ALUout, ALUin1, ALUin2: std_logic_vector(n_bit-1 downto 0);
 signal pc_mux_sig: std_logic_vector(0 downto 0);
 signal not_comp_sig, comp_sig, branch_out_sig : std_logic_vector(0 downto 0);
 signal sign_ext_delay : std_logic_vector(n_bit -1  downto 0);
+signal regb_bypass : std_logic_vector(n_bit-1 downto 0);
 
 --used in memory
 signal DRAMout, LMDout,reg_alu_mem : std_logic_vector(n_bit-1 downto 0);
@@ -391,6 +392,20 @@ end process;
 --alias ALU_OUTREG_EN :bit is controls(7);
 --alias EQ_COND :bit is controls(6);
 
+--bypass of Regb for store
+
+reg_1 : register_gen_en
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => reg_mux2,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => regb_bypass);
+
+
+
 --ALU part--
 mux1: MUX21_GENERIC   --mux to choose the first operand of the ALU
 generic map (n_bit => 32)
@@ -447,7 +462,7 @@ port map(branch_out_sig, JUMP_EN, reset, pc_mux_sig);
 DataRam: DRAM
 generic map(DRAM_DEPTH => 4*32, 
 	    DATA_SIZE => 8)
-port map(reset, DRAM_WE, reg_alu_out, reg_mux2, DRAMout);
+port map(reset, DRAM_WE, reg_alu_out, regb_bypass, DRAMout);
 
 --LMD: register_gen  --LMD register
 --generic map(n_bit => 32)
