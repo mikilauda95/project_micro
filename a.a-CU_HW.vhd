@@ -77,7 +77,7 @@ architecture dlx_cu_hw of dlx_cu is
     "111010110000111", --14 XOR i 
     "001000000000000", --15 lhi (not implemented)
     "001000000000000", --16 rfe (not implemented)
-    "001000000000000", --17 trap (not implemented)
+    "000000000000000", --17 trap (not implemented)
     "001000000000000", --18 jr (not implemented)
     "001000000000000", --19 jalr(not implemented)
     "111010110000111", --20 slli 
@@ -219,6 +219,7 @@ begin  -- dlx_cu_rtl
                 case conv_integer(unsigned(IR_func)) is
                     when 4 => aluOpcode_i <= LLS; -- sll according to instruction set coding
                     when 6 => aluOpcode_i <= LRS; -- srl
+					when 7 => aluOpcode_i <= SHARX; -- sra
                     when 32 => aluOpcode_i <= ADDS; -- add
                     when 34 => aluOpcode_i <= SUBS; -- sub
                     when 36 => aluOpcode_i <= ANDS; -- and
@@ -227,6 +228,7 @@ begin  -- dlx_cu_rtl
                     when 41 => aluOpcode_i <= NOTEQ; -- set if not equal
                     when 45 => aluOpcode_i <= GREQ; -- set of greater or equal
                     when 44 => aluOpcode_i <= LOEQ; -- set if lower or equal 
+					when 14 => aluOpcode_i <= MULS; --it's the multiplication 
                     when others => aluOpcode_i <= NOP;
                 end case;
             when 2 => aluOpcode_i <= NOP; -- j
@@ -241,6 +243,7 @@ begin  -- dlx_cu_rtl
             when 20 => aluOpcode_i <= LLS; -- sll immediate according to instruction set coding
             when 25 => aluOpcode_i <= NOTEQ; -- set if not equal immediate
             when 22 => aluOpcode_i <= LRS; -- srl immediate
+			when 23 => aluOpcode_i <= SHARX; -- sra immediate
             when 10 => aluOpcode_i <= SUBS; -- subi
             when 14 => aluOpcode_i <= XORS; -- xori
             when 35 => aluOpcode_i <= ADDS; -- lw

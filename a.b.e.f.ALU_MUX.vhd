@@ -9,6 +9,7 @@ entity ALU_MUX is
 		SH:	In	std_logic_vector(n_bit-1 downto 0);
 		GENLOG:	In	std_logic_vector(n_bit-1 downto 0);
 		COMP:	In	std_logic_vector(n_bit-1 downto 0);
+		MUL: In std_logic_vector(n_bit-1 downto 0);
 		OpCode:	In	aluOp;
 		RESULT:	Out	std_logic_vector(n_bit-1 downto 0));
 end ALU_MUX;
@@ -33,6 +34,7 @@ case OpCode is
 	when NOTEQ => RESULT <= COMP;
 	when LOEQ => RESULT <= COMP;
 	when GREQ => RESULT <= COMP;
+	when MULS => RESULT <= MUL;
 	when others => RESULT <= (others => '0');
 end case;
 

@@ -61,6 +61,7 @@ architecture structural of ALU is
                SH:	In	std_logic_vector(n_bit-1 downto 0);
                GENLOG:	In	std_logic_vector(n_bit-1 downto 0);
                COMP:	In	std_logic_vector(n_bit-1 downto 0);
+			   MUL: In std_logic_vector(n_bit-1 downto 0);
                OpCode:	In	aluOp;
                RESULT:	Out	std_logic_vector(n_bit-1 downto 0));
     end component;
@@ -73,9 +74,17 @@ architecture structural of ALU is
               shifted : out std_logic_vector(n_bit-1 downto 0)
           );
     end component;
+	
+	component BOOTHMUL is
+	generic (n_bit: integer:= 16);
+
+	Port (	A:	In	std_logic_vector(n_bit-1 downto 0);
+                B:      In      std_logic_vector(n_bit-1 downto 0);
+		P:	Out	std_logic_vector(n_bit-1+n_bit downto 0));
+	end component;
 
     signal control_signal_gen_log: std_logic_vector(3 downto 0);
-    signal res_add, res_genlog, res_comp, res_sh: std_logic_vector(n_bit-1 downto 0);
+    signal res_add, res_genlog, res_comp, res_sh, res_mul: std_logic_vector(n_bit-1 downto 0);
     signal AaB, AaeB, AeB, AneB, AbB, AbeB: std_logic;
     signal ci, cout: std_logic;
     signal input2_s: std_logic_vector(n_bit-1 downto 0);
@@ -98,10 +107,14 @@ begin
              ALU4: shifter
              generic map(n_bit => 32)
     port map(input1, input2(4 downto 0), control, res_sh);
+	
+	ALU5: BOOTHMUL
+	generic map(n_bit =>16)
+	port map(input1(15 downto 0), input2(15 downto 0), res_mul);
 
              SELECTED: ALU_MUX
              generic map(n_bit => 32)
-    port map(res_add, res_sh, res_genlog, res_comp, control, output);
+    port map(res_add, res_sh, res_genlog, res_comp, res_mul, control, output);
 
 --first process, to choose what is the output of the comparator, so if we want A>B, A<B, A=B etc.
 --combinational

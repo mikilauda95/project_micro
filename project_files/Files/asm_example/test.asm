@@ -23,15 +23,17 @@ nop
 nop
 nop
 lw r10,r0(26)
+subi r2,r2,#4
 nop
 nop
-nop
-xor r10, r10, r2
-srli r3,r3,#1
-nop
+xor r10,r10,r2
+sra r5,r5,r2
+addi r2,r2,#3
 nop
 nop
 and r3,r3,r1
-srl r2,r2,r2
+srli r5,r5,#4
+mult r2,r2,r2
+nop
 beqz 32
 

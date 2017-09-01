@@ -6,7 +6,7 @@ use work.all;
 package myTypes is
 
 	type aluOp is (
-		NOP, ADDS, LLS, LRS, SUBS, ANDS, ORS, XORS, NOTEQ, GREQ, LOEQ, SHAR, SHARX, EQU
+		NOP, ADDS, LLS, LRS, SUBS, ANDS, ORS, XORS, NOTEQ, GREQ, LOEQ, SHAR, SHARX, EQU, MULS
 			);
 
 end myTypes;
