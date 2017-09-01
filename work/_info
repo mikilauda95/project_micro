@@ -25,9 +25,15 @@ VY@J0Sba^X2<@c4nR]]]L51
 !s100 hda^_i<4azlCl3M0RUcGh2
 Z10 OV;C;10.5b;63
 32
+<<<<<<< HEAD
 Z11 !s110 1504192642
 !i10b 1
 Z12 !s108 1504192641.000000
+=======
+Z11 !s110 1504191764
+!i10b 1
+Z12 !s108 1504191763.000000
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 Z13 !s90 -reportprogress|300|000-globals.vhd|NAND5.vhd|TB_DLX.vhd|a.DLX.vhd|a.a-CU_HW.vhd|a.b.Datapath.vhd|a.b.a.log.vhd|a.b.b.registerfile.vhd|a.b.c.a.iv.vhd|a.b.c.b.nd2.vhd|a.b.c.mux21.vhd|a.b.d.DRAM.vhd|a.b.e.ALU.vhd|a.b.e.a.shifter.vhd|a.b.e.b.P4ADD.vhd|a.b.e.b.a.carry_select_block.vhd|a.b.e.b.b.G_gen.vhd|a.b.e.b.c.mux21.vhd|a.b.e.b.d.PG.vhd|a.b.e.b.e.PG_0.vhd|a.b.e.b.f.PG_gen.vhd|a.b.e.b.g.rca_gen_s.vhd|a.b.e.b.h.sparse_tree.vhd|a.b.e.b.i.sum_generator.vhd|a.b.e.b.j.types.vhd|a.b.e.c.a.NAND3.vhd|a.b.e.c.b.NAND4.vhd|a.b.e.c.general_logic_block.vhd|a.b.e.d.a.AND2.vhd|a.b.e.d.b.fa.vhd|a.b.e.d.c.INV.vhd|a.b.e.d.comparator.vhd|a.b.e.d.d.NORGEN.vhd|a.b.e.d.e.OR2.vhd|a.b.e.f.ALU_MUX.vhd|a.c.IRAM.vhd|fd.vhd|latch.vhd|rca_gen.vhd|register.vhd|register_beh_gen.vhd|
 Z14 !s107 register_beh_gen.vhd|register.vhd|rca_gen.vhd|latch.vhd|fd.vhd|a.c.IRAM.vhd|a.b.e.f.ALU_MUX.vhd|a.b.e.d.e.OR2.vhd|a.b.e.d.d.NORGEN.vhd|a.b.e.d.comparator.vhd|a.b.e.d.c.INV.vhd|a.b.e.d.b.fa.vhd|a.b.e.d.a.AND2.vhd|a.b.e.c.general_logic_block.vhd|a.b.e.c.b.NAND4.vhd|a.b.e.c.a.NAND3.vhd|a.b.e.b.j.types.vhd|a.b.e.b.i.sum_generator.vhd|a.b.e.b.h.sparse_tree.vhd|a.b.e.b.g.rca_gen_s.vhd|a.b.e.b.f.PG_gen.vhd|a.b.e.b.e.PG_0.vhd|a.b.e.b.d.PG.vhd|a.b.e.b.c.mux21.vhd|a.b.e.b.b.G_gen.vhd|a.b.e.b.a.carry_select_block.vhd|a.b.e.b.P4ADD.vhd|a.b.e.a.shifter.vhd|a.b.e.ALU.vhd|a.b.d.DRAM.vhd|a.b.c.mux21.vhd|a.b.c.b.nd2.vhd|a.b.c.a.iv.vhd|a.b.b.registerfile.vhd|a.b.a.log.vhd|a.b.Datapath.vhd|a.a-CU_HW.vhd|a.DLX.vhd|TB_DLX.vhd|NAND5.vhd|000-globals.vhd|
 !i113 1
@@ -54,6 +60,7 @@ R14
 !i113 1
 R15
 Ealu_mux
+<<<<<<< HEAD
 R1
 R2
 R3
@@ -63,13 +70,28 @@ R7
 R0
 Z17 8a.b.e.f.ALU_MUX.vhd
 Z18 Fa.b.e.f.ALU_MUX.vhd
+=======
+Z16 w1499862216
+R2
+R3
+Z17 DPx4 work 9 constants 0 22 404oI_14WQ_`a0YK>79^11
+R6
+R7
+R0
+Z18 8a.b.e.f.ALU_MUX.vhd
+Z19 Fa.b.e.f.ALU_MUX.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L6
 VeifGe5W`^e;;OcQdC2IWE3
 !s100 ^4@0d;VzdUde6d6<1;Gb82
 R10
 32
+<<<<<<< HEAD
 Z19 !s110 1504192643
+=======
+Z20 !s110 1504191765
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -79,7 +101,11 @@ R15
 Abehavior
 R2
 R3
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R6
 R7
 DEx4 work 7 alu_mux 0 22 eifGe5W`^e;;OcQdC2IWE3
@@ -89,7 +115,11 @@ VQ:;LN<RiOeCN4:KTIaEKD0
 !s100 >Z3hL^KQUanOkVe1zlz1k1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -109,7 +139,11 @@ V8Zj;3K02_:a:]hUg>AJl=3
 !s100 Q]=UHgEgzP>E0LbA]_ZoW0
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -126,7 +160,11 @@ VlMS5`oMnW3i=N5OAKJ8O;2
 !s100 z__IWn7W?L?3;3dZmHkK40
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -134,8 +172,13 @@ R14
 !i113 1
 R15
 Ecarry_select_block
+<<<<<<< HEAD
 R1
 R16
+=======
+Z24 w1499862206
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
@@ -149,7 +192,11 @@ V]OmEjX:iAnbFf_f4@k6B93
 !s100 MaDVV<I:IO>LUI`BJQJd12
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -157,7 +204,11 @@ R14
 !i113 1
 R15
 Astructural
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
@@ -169,7 +220,11 @@ VY7LeO2m4`Z?iCNdHdlhGc2
 !s100 lG>_BOK?@_R2dQPRZjW;F3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -193,7 +248,11 @@ VIR;7dcAc98=80b4NJ^`?e3
 !s100 ILaMdNiCeAn^GdZ^nC0[C1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 0
 R12
 R13
@@ -217,7 +276,11 @@ V6i>:j@VDXGno^H?8`T;N81
 !s100 <e6XkBm65:?3OXb:G]NDl3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 0
 R12
 R13
@@ -227,8 +290,13 @@ R15
 Ccfg_rf_beh
 eregister_file
 abehavioral_basic
+<<<<<<< HEAD
 DAx4 work 13 register_file 16 behavioral_basic 22 M:]4iFR7edDlFD5_l_Q=63
 R16
+=======
+DAx4 work 13 register_file 16 behavioral_basic 22 fm1P4UB6Go]22m0^<3HGf1
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 Z27 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 R4
@@ -270,7 +338,7 @@ Vz6@PM4lNYf2Om@8J:7Pj02
 !s100 MFjcEL52e]]A80dBz^`8F0
 R10
 32
-R11
+Z40 !s110 1504191763
 !i10b 0
 R12
 R13
@@ -278,21 +346,34 @@ R14
 !i113 1
 R15
 Ecomparator
+<<<<<<< HEAD
 R1
+=======
+Z41 w1499862195
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z35 8a.b.e.d.comparator.vhd
 Z36 Fa.b.e.d.comparator.vhd
+=======
+Z42 8a.b.e.d.comparator.vhd
+Z43 Fa.b.e.d.comparator.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L6
 Vf3edP>51oei?k5ES;1DBB2
 !s100 b`35BBgE:GJ1WH]9JPdEl2
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -311,7 +392,11 @@ VG83672:NVmB`<]l@GlTSW2
 !s100 K]W2kIXMGaYb=7=7hlW9?3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -319,17 +404,28 @@ R14
 !i113 1
 R15
 Pconstants
+<<<<<<< HEAD
 R1
 R0
 Z37 8000-globals.vhd
 Z38 F000-globals.vhd
+=======
+Z44 w1499862200
+R0
+Z45 8000-globals.vhd
+Z46 F000-globals.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L14
 VLN@n9QzSMQlZoXUmR55753
 !s100 [JHkc>M2o:eoVzH4cEBBm1
 R10
 32
+<<<<<<< HEAD
 Z39 !s110 1504192641
+=======
+R40
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -337,8 +433,13 @@ R14
 !i113 1
 R15
 Edatapath
+<<<<<<< HEAD
 R1
 R16
+=======
+Z47 w1504188225
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 R3
 R4
@@ -346,15 +447,20 @@ R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z40 8a.b.Datapath.vhd
 Z41 Fa.b.Datapath.vhd
+=======
+Z48 8a.b.Datapath.vhd
+Z49 Fa.b.Datapath.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L11
 V<k_UfK<WS`<e[C4XoYFg32
 !s100 BTeoZ5:aYEUi^7=79mW7Y0
 R10
 32
-R11
+R40
 !i10b 1
 R12
 R13
@@ -362,21 +468,33 @@ R14
 !i113 1
 R15
 Astructure
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 R3
 R4
 R5
 R6
 R7
+<<<<<<< HEAD
 DEx4 work 8 datapath 0 22 <k_UfK<WS`<e[C4XoYFg32
 l195
 L83
 V0a2`]cZhD27TLcFIB3fSM1
 !s100 9?hhT]UmQ<Q31Z`>K7KzV1
+=======
+DEx4 work 8 datapath 0 22 iYAFD^Wa4a6Fj1IV2Uie?1
+l196
+L83
+VgKk?Z585f33VnWN_??YR;0
+!s100 @]7B?5;mj7P@MPeOk3]::1
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R10
 32
-R11
+R40
 !i10b 1
 R12
 R13
@@ -384,8 +502,13 @@ R14
 !i113 1
 R15
 Edlx
+<<<<<<< HEAD
 R32
 R16
+=======
+Z50 w1504175559
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 R3
 R4
@@ -393,15 +516,20 @@ R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z42 8a.DLX.vhd
 Z43 Fa.DLX.vhd
+=======
+Z51 8a.DLX.vhd
+Z52 Fa.DLX.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L10
 VFz>niM;9g__L0WWz33gIX3
 !s100 ]0NiXkMCBHoC=CEoJ8Md:1
 R10
 32
-R11
+R40
 !i10b 1
 R12
 R13
@@ -409,7 +537,11 @@ R14
 !i113 1
 R15
 Astructural
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 R3
 R4
@@ -423,7 +555,7 @@ VU_b1DeK;792=89>:ZhnmT1
 !s100 MjdOZdc;5lnAe4X8HkRa30
 R10
 32
-R11
+R40
 !i10b 1
 R12
 R13
@@ -431,8 +563,13 @@ R14
 !i113 1
 R15
 Edlx_cu
+<<<<<<< HEAD
 Z44 w1504176782
 R16
+=======
+Z53 w1504191036
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 R3
 R4
@@ -440,15 +577,20 @@ R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z45 8a.a-CU_HW.vhd
 Z46 Fa.a-CU_HW.vhd
+=======
+Z54 8a.a-CU_HW.vhd
+Z55 Fa.a-CU_HW.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L10
 VMDnl`So1@JbFIIJ=L3kY23
 !s100 oW0C=MHnbz`JQZTg>71P;1
 R10
 32
-R11
+R40
 !i10b 1
 R12
 R13
@@ -456,7 +598,11 @@ R14
 !i113 1
 R15
 Adlx_cu_hw
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 R3
 R4
@@ -466,11 +612,16 @@ R7
 DEx4 work 6 dlx_cu 0 22 MDnl`So1@JbFIIJ=L3kY23
 l148
 L53
+<<<<<<< HEAD
 VOJWiF2CE]fR@MXeIcNjcL3
 !s100 5A8;];fC?6@Db3iXiNMiz3
+=======
+V>@cdbY6C9maPM4KCVBMhR0
+!s100 ?`U408zPMePJ?WPB5B=Yc0
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R10
 32
-R11
+R40
 !i10b 1
 R12
 R13
@@ -478,13 +629,22 @@ R14
 !i113 1
 R15
 Edram
+<<<<<<< HEAD
 R1
+=======
+Z56 w1499862157
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R6
 R7
 R0
+<<<<<<< HEAD
 Z47 8a.b.d.DRAM.vhd
 Z48 Fa.b.d.DRAM.vhd
+=======
+Z57 8a.b.d.DRAM.vhd
+Z58 Fa.b.d.DRAM.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L5
 V2N0emLkcbATohi[Zi`EdB1
@@ -517,19 +677,32 @@ R14
 !i113 1
 R15
 Efa
+<<<<<<< HEAD
 R1
 R6
 R7
 R0
 Z49 8a.b.e.d.b.fa.vhd
 Z50 Fa.b.e.d.b.fa.vhd
+=======
+Z59 w1499862193
+R6
+R7
+R0
+Z60 8a.b.e.d.b.fa.vhd
+Z61 Fa.b.e.d.b.fa.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L4
 Vgbf`2Y4N^fh:Fz^R^gYUF3
 !s100 ?=7GSNh2i_P381A[`Sd]i2
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -546,7 +719,11 @@ Vj>M<UD`i<;Fbd`@A`g9=h3
 !s100 UOzdNP2aoRCWzh2Z4K>?c1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -566,7 +743,11 @@ V9Pm7@JMBA0DQZP>2WG`W33
 !s100 5Ah>[R?SSFVYK=4UZmM>N2
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -583,7 +764,11 @@ V0n2UPi1gEGM^jn8MPF;jc1
 !s100 fN:l>1]L_ADJ?`iCUMkJ73
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -600,7 +785,11 @@ V^RUSUmBcN=mLD9iFX21b73
 !s100 Y5;?^[hjk3VmofmhKb>^82
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -608,19 +797,32 @@ R14
 !i113 1
 R15
 Eg_gen
+<<<<<<< HEAD
 R1
 R6
 R7
 R0
 Z51 8a.b.e.b.b.G_gen.vhd
 Z52 Fa.b.e.b.b.G_gen.vhd
+=======
+Z62 w1499862219
+R6
+R7
+R0
+Z63 8a.b.e.b.b.G_gen.vhd
+Z64 Fa.b.e.b.b.G_gen.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L4
 VgH]nS968]lY?QzBT<KTM@2
 !s100 k`5YOME3]z2Fnb7?Yn[5F3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -637,7 +839,11 @@ VC@=h]F^73GN<=9n:2@[bC0
 !s100 ZYHU@ocWG[VO>A5;ngiMh1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -645,21 +851,34 @@ R14
 !i113 1
 R15
 Egeneral_logic_block
+<<<<<<< HEAD
 R1
+=======
+Z65 w1499862197
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z53 8a.b.e.c.general_logic_block.vhd
 Z54 Fa.b.e.c.general_logic_block.vhd
+=======
+Z66 8a.b.e.c.general_logic_block.vhd
+Z67 Fa.b.e.c.general_logic_block.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L6
 VV6gPoe8h8oehSZ92li9U10
 !s100 F[Oga3d>>5FTOknWP;h0b2
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -678,7 +897,11 @@ V71foS@g4CR[il]<9e?B9@2
 !s100 7c1A6_VoVQTm5O7UlQ3Xz3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -686,19 +909,32 @@ R14
 !i113 1
 R15
 Einv
+<<<<<<< HEAD
 R1
 R6
 R7
 R0
 Z55 8a.b.e.d.c.INV.vhd
 Z56 Fa.b.e.d.c.INV.vhd
+=======
+Z68 w1499862205
+R6
+R7
+R0
+Z69 8a.b.e.d.c.INV.vhd
+Z70 Fa.b.e.d.c.INV.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L4
 VS:X>SZGMD0_C4VJZ>E;aF0
 !s100 ;H199@<RER[NzFcfPHa2R3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -715,7 +951,11 @@ VzX<_eUUCLAcaB71Z>e4`:1
 !s100 mT_k3JJdabKGV9AcO0hcQ1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -723,21 +963,35 @@ R14
 !i113 1
 R15
 Eiram
+<<<<<<< HEAD
 R1
 Z57 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
+=======
+Z71 w1503520561
+Z72 DPx4 ieee 16 std_logic_textio 0 22 V5TSK`;aJKC<l]CEg1>mz1
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R6
 R7
 R0
+<<<<<<< HEAD
 Z58 8a.c.IRAM.vhd
 Z59 Fa.c.IRAM.vhd
+=======
+Z73 8a.c.IRAM.vhd
+Z74 Fa.c.IRAM.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L11
 VUefzEPb]4KCHG7RSPJ8710
 !s100 lCk^O12_GA:9f080R9PQ?1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -745,7 +999,11 @@ R14
 !i113 1
 R15
 Airam_bhe
+<<<<<<< HEAD
 R57
+=======
+R72
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R6
 R7
@@ -756,7 +1014,11 @@ VYCzdcR_z]Zh_c<gHOQ`o:3
 !s100 7;ioSOeO^<F?oXo00Na]X1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -764,6 +1026,7 @@ R14
 !i113 1
 R15
 Eiv
+<<<<<<< HEAD
 R1
 R16
 R6
@@ -771,6 +1034,15 @@ R7
 R0
 Z60 8a.b.c.a.iv.vhd
 Z61 Fa.b.c.a.iv.vhd
+=======
+Z75 w1499862201
+R17
+R6
+R7
+R0
+Z76 8a.b.c.a.iv.vhd
+Z77 Fa.b.c.a.iv.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L5
 VRR<HHMEQ1TOI4jQa@8Z1I0
@@ -785,7 +1057,11 @@ R14
 !i113 1
 R15
 Abehavioral
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R6
 R7
 DEx4 work 2 iv 0 22 RR<HHMEQ1TOI4jQa@8Z1I0
@@ -803,6 +1079,7 @@ R14
 !i113 1
 R15
 Elatch
+<<<<<<< HEAD
 R1
 R16
 R6
@@ -810,13 +1087,26 @@ R7
 R0
 Z62 8latch.vhd
 Z63 Flatch.vhd
+=======
+R65
+R17
+R6
+R7
+R0
+Z78 8latch.vhd
+Z79 Flatch.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L5
 V0djcMNBb>eVgM2L_1K2`21
 !s100 O2:`hkEO4@5R]?N4<5bU@1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -824,7 +1114,11 @@ R14
 !i113 1
 R15
 Abehaviour
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R6
 R7
 DEx4 work 5 latch 0 22 0djcMNBb>eVgM2L_1K2`21
@@ -834,7 +1128,11 @@ VG[3ELL08@IhjUbHOZO1QI3
 !s100 G>8:3C[k=9C4dQO>NZ6^l1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -844,10 +1142,17 @@ R15
 Plog
 R6
 R7
+<<<<<<< HEAD
 R1
 R0
 Z64 8a.b.a.log.vhd
 Z65 Fa.b.a.log.vhd
+=======
+R62
+R0
+Z80 8a.b.a.log.vhd
+Z81 Fa.b.a.log.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L4
 V=SU@dJ^o;lUK;8nH?Df2B1
@@ -855,7 +1160,7 @@ V=SU@dJ^o;lUK;8nH?Df2B1
 R10
 32
 b1
-R11
+R40
 !i10b 1
 R12
 R13
@@ -868,8 +1173,13 @@ R6
 R7
 l0
 L10
+<<<<<<< HEAD
 Z66 V?`BKoW3Y5^ETS0B0=SQ;c1
 Z67 !s100 MGg?_1Ti1Pb6eJJE_eh9L3
+=======
+Z82 VF]fkAiQTN<T5i0LaK0_M71
+Z83 !s100 MGg?_1Ti1Pb6eJJE_eh9L3
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R10
 32
 R11
@@ -879,6 +1189,7 @@ R13
 R14
 !i113 1
 R15
+<<<<<<< HEAD
 Emux21_generic
 R1
 R16
@@ -887,13 +1198,28 @@ R7
 R0
 Z68 8a.b.e.b.c.mux21.vhd
 Z69 Fa.b.e.b.c.mux21.vhd
+=======
+Z84 nbody
+Emux21_generic
+Z85 w1499862149
+R17
+R6
+R7
+R0
+Z86 8a.b.e.b.c.mux21.vhd
+Z87 Fa.b.e.b.c.mux21.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L5
 Vb_nAWO`BQ@MbVo3QhNcN21
 !s100 6ZA<dZbYaKo0mnEai=Vom3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -901,7 +1227,11 @@ R14
 !i113 1
 R15
 Abehavioral_2
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R6
 R7
 DEx4 work 13 mux21_generic 0 22 b_nAWO`BQ@MbVo3QhNcN21
@@ -911,7 +1241,11 @@ VfT?lW18R7l3nY4_VfHY^@1
 !s100 k[;fO6[jk752cM0W3iUC01
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -919,7 +1253,12 @@ R14
 !i113 1
 R15
 Astructural
+<<<<<<< HEAD
 R16
+=======
+w1499862196
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R6
 R7
 DEx4 work 13 mux21_generic 0 22 6?LBIliiW^d5h=okOjfC21
@@ -942,17 +1281,28 @@ Pmytypes
 R2
 R6
 R7
+<<<<<<< HEAD
 R1
 R0
 R37
 R38
+=======
+R44
+R0
+R45
+R46
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L6
 V<SfA;=9[j[4=Jb:iG7^Bz0
 !s100 dThChoAZUCk<d6i0BjXm10
 R10
 32
+<<<<<<< HEAD
 R39
+=======
+R40
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -960,21 +1310,34 @@ R14
 !i113 1
 R15
 Enand3
+<<<<<<< HEAD
 R1
+=======
+Z88 w1499862198
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z70 8a.b.e.c.a.NAND3.vhd
 Z71 Fa.b.e.c.a.NAND3.vhd
+=======
+Z89 8a.b.e.c.a.NAND3.vhd
+Z90 Fa.b.e.c.a.NAND3.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L6
 Vzo2DWPP9gZGnU[HY0zVkY0
 !s100 OlB=0mP>?WzPIU?YFF`R;3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -993,7 +1356,11 @@ V^mB1f5F?5liz:W@80MC?D2
 !s100 ze9_4QGm@^Z_Zdb[d@koM3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1001,21 +1368,34 @@ R14
 !i113 1
 R15
 Enand4
+<<<<<<< HEAD
 R1
+=======
+Z91 w1499862199
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z72 8a.b.e.c.b.NAND4.vhd
 Z73 Fa.b.e.c.b.NAND4.vhd
+=======
+Z92 8a.b.e.c.b.NAND4.vhd
+Z93 Fa.b.e.c.b.NAND4.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L6
 V[jSad85c`KQ?U>G@z39m`3
 !s100 kWBlNdIFmDHRXRUIh2MQ_0
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1034,7 +1414,11 @@ VLH;ITKlmWAz^6=5D>OO]c3
 !s100 KEDe<ZRQANMi1Zjf0L@6b1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1042,6 +1426,7 @@ R14
 !i113 1
 R15
 End2
+<<<<<<< HEAD
 R1
 R16
 R6
@@ -1049,6 +1434,15 @@ R7
 R0
 Z74 8a.b.c.b.nd2.vhd
 Z75 Fa.b.c.b.nd2.vhd
+=======
+Z94 w1499862164
+R17
+R6
+R7
+R0
+Z95 8a.b.c.b.nd2.vhd
+Z96 Fa.b.c.b.nd2.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L5
 V2z6cG[MSL[:MN?cC7?jMc0
@@ -1063,7 +1457,11 @@ R14
 !i113 1
 R15
 Aarch2
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R6
 R7
 DEx4 work 3 nd2 0 22 2z6cG[MSL[:MN?cC7?jMc0
@@ -1081,19 +1479,32 @@ R14
 !i113 1
 R15
 Enor5
+<<<<<<< HEAD
 R1
 R6
 R7
 R0
 Z76 8NAND5.vhd
 Z77 FNAND5.vhd
+=======
+Z97 w1504095278
+R6
+R7
+R0
+Z98 8NAND5.vhd
+Z99 FNAND5.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L4
 VPUOX[VaR<bc@RWI^HbmFc2
 !s100 F@R6J9OjC]NQbLKTMfIHc3
 R10
 32
+<<<<<<< HEAD
 R39
+=======
+R40
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1110,7 +1521,7 @@ VZMkTG472m[;E6@5c7FPVF3
 !s100 aZkJ8<BjOVePmC4TNUXJg2
 R10
 32
-R11
+R40
 !i10b 1
 R12
 R13
@@ -1118,19 +1529,32 @@ R14
 !i113 1
 R15
 Enorgen
+<<<<<<< HEAD
 R1
 R6
 R7
 R0
 Z78 8a.b.e.d.d.NORGEN.vhd
 Z79 Fa.b.e.d.d.NORGEN.vhd
+=======
+Z100 w1504090795
+R6
+R7
+R0
+Z101 8a.b.e.d.d.NORGEN.vhd
+Z102 Fa.b.e.d.d.NORGEN.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L4
 VUV=R=FZh__U`VGg96H:kD0
 !s100 _QYa?e`K1]2i<b>DnhN_Q2
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1147,7 +1571,11 @@ VL3FUfj=W=2AXh9NI[R;<J0
 !s100 ;a^YUoGb<k=CK8I^?5GK52
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1155,19 +1583,32 @@ R14
 !i113 1
 R15
 Eor2
+<<<<<<< HEAD
 R1
 R6
 R7
 R0
 Z80 8a.b.e.d.e.OR2.vhd
 Z81 Fa.b.e.d.e.OR2.vhd
+=======
+R91
+R6
+R7
+R0
+Z103 8a.b.e.d.e.OR2.vhd
+Z104 Fa.b.e.d.e.OR2.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L4
 V9QL6Qn7b3iEOkdz]JbT9O3
 !s100 ;XPVh5BE5>RUJ0SQcLiiI3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1184,7 +1625,11 @@ VMB[`YHkkcjdc[WGj`4o:m1
 !s100 9z:f3GU?Zag1W[]54KhI>1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1192,22 +1637,35 @@ R14
 !i113 1
 R15
 Ep4add
+<<<<<<< HEAD
 R1
+=======
+Z105 w1503761047
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 R4
 R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z82 8a.b.e.b.P4ADD.vhd
 Z83 Fa.b.e.b.P4ADD.vhd
+=======
+Z106 8a.b.e.b.P4ADD.vhd
+Z107 Fa.b.e.b.P4ADD.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L7
 VGLEaCiL6^<QQTfADY`Dml0
 !s100 4?J=:D`BJV=ZVmfIIEl1V2
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1227,7 +1685,11 @@ V6>`A_:Gkc7T=I@`o`@E=40
 !s100 =>NYFVf_MimOgMEH_OhFo2
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1235,19 +1697,32 @@ R14
 !i113 1
 R15
 Epg
+<<<<<<< HEAD
 R1
 R6
 R7
 R0
 Z84 8a.b.e.b.d.PG.vhd
 Z85 Fa.b.e.b.d.PG.vhd
+=======
+Z108 w1499862189
+R6
+R7
+R0
+Z109 8a.b.e.b.d.PG.vhd
+Z110 Fa.b.e.b.d.PG.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L4
 VSzI^SC3zknH0]ULBj?JK63
 !s100 7CXK:^W1oJliRE]=?T_M<0
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1264,7 +1739,11 @@ V790YMhfV5ZGl?ocn7SY@V3
 !s100 K57Z>EAYgVchzKXL<?WCX3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1272,19 +1751,32 @@ R14
 !i113 1
 R15
 Epg_0
+<<<<<<< HEAD
 R1
 R6
 R7
 R0
 Z86 8a.b.e.b.e.PG_0.vhd
 Z87 Fa.b.e.b.e.PG_0.vhd
+=======
+Z111 w1499862220
+R6
+R7
+R0
+Z112 8a.b.e.b.e.PG_0.vhd
+Z113 Fa.b.e.b.e.PG_0.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L4
 Vh5X0[]@n]P=XUO=k3RTNe2
 !s100 aLZT@?U]1khli`=Ed3U[a2
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1301,7 +1793,11 @@ V1XVKnlX_GS6XG9nWG<2bD3
 !s100 ?b:2@j;c:H^Yi9U1F_A<K3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1309,19 +1805,32 @@ R14
 !i113 1
 R15
 Epg_gen
+<<<<<<< HEAD
 R1
 R6
 R7
 R0
 Z88 8a.b.e.b.f.PG_gen.vhd
 Z89 Fa.b.e.b.f.PG_gen.vhd
+=======
+Z114 w1499862217
+R6
+R7
+R0
+Z115 8a.b.e.b.f.PG_gen.vhd
+Z116 Fa.b.e.b.f.PG_gen.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L5
 VekNb;I86nRoPD@882W=1:0
 !s100 XDK_j;cb<g_E0bhdH?BMU3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1338,7 +1847,11 @@ V>Yj04jP657lAeWbAGOcc;2
 !s100 3<M]<XEa>NTF_>W?gKaE92
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1346,22 +1859,36 @@ R14
 !i113 1
 R15
 Erca
+<<<<<<< HEAD
 R1
 R16
+=======
+Z117 w1503417874
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z90 8rca_gen.vhd
 Z91 Frca_gen.vhd
+=======
+Z118 8rca_gen.vhd
+Z119 Frca_gen.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L5
 VHU3]FFD`7niE_8f?S4;6=2
 !s100 cGIbK2WImzX24N>igXjN@2
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1369,7 +1896,11 @@ R14
 !i113 1
 R15
 Abehavioral
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
@@ -1381,7 +1912,11 @@ VmEK?_B=38j`MVEaSNjHCW2
 !s100 eFf?IUa]<:`eE;EkMM_R=1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1389,22 +1924,36 @@ R14
 !i113 1
 R15
 Erca_s
+<<<<<<< HEAD
 R1
 Z92 DPx4 ieee 9 math_real 0 22 Sk6CSihbPL<f[^Shm]=KX0
+=======
+Z120 w1499862188
+Z121 DPx4 ieee 9 math_real 0 22 Sk6CSihbPL<f[^Shm]=KX0
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z93 8a.b.e.b.g.rca_gen_s.vhd
 Z94 Fa.b.e.b.g.rca_gen_s.vhd
+=======
+Z122 8a.b.e.b.g.rca_gen_s.vhd
+Z123 Fa.b.e.b.g.rca_gen_s.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L6
 V4ib3lfXKL^59lRb8k45@23
 !s100 KLJGP<i_VN;V^fGPGe_:U3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1412,7 +1961,11 @@ R14
 !i113 1
 R15
 Astructural
+<<<<<<< HEAD
 R92
+=======
+R121
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
@@ -1424,7 +1977,11 @@ VD6OiUb:7;b_alM;RVP7=I2
 !s100 hil61TBg2h8f:=;b4l<mY3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1432,8 +1989,13 @@ R14
 !i113 1
 R15
 Eregister_file
+<<<<<<< HEAD
 R1
 R16
+=======
+R33
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 R27
 R4
@@ -1457,7 +2019,11 @@ R14
 !i113 1
 R15
 Abehavioral_basic
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 R27
 R4
@@ -1479,6 +2045,7 @@ R14
 !i113 1
 R15
 Eregister_gen
+<<<<<<< HEAD
 R1
 R16
 R6
@@ -1486,13 +2053,26 @@ R7
 R0
 Z95 8register.vhd
 Z96 Fregister.vhd
+=======
+Z124 w1499862163
+R17
+R6
+R7
+R0
+Z125 8register.vhd
+Z126 Fregister.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L5
 V3_L<g=@Pi_5d@lEDBb@`:0
 !s100 Ll30]Df_Pbd:8^Heh6`?U3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1500,7 +2080,11 @@ R14
 !i113 1
 R15
 Abehaviour
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R6
 R7
 DEx4 work 12 register_gen 0 22 3_L<g=@Pi_5d@lEDBb@`:0
@@ -1510,7 +2094,11 @@ V1d@?DLnQfFO`WUo@RYnDC1
 !s100 RFoQ7z^O9ocSP]Fczi:La3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1518,21 +2106,34 @@ R14
 !i113 1
 R15
 Eregister_gen_en
+<<<<<<< HEAD
 R1
+=======
+Z127 w1503516603
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R5
 R4
 R6
 R7
 R0
+<<<<<<< HEAD
 Z97 8register_beh_gen.vhd
 Z98 Fregister_beh_gen.vhd
+=======
+Z128 8register_beh_gen.vhd
+Z129 Fregister_beh_gen.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L7
 VYZ9BF3;hQ5QC95Da?l:]k3
 !s100 So;Xc_nF?c9onKmBQYAG=1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1551,7 +2152,11 @@ VYcAlJKn10RR51ooochjK]0
 !s100 Dz?6WEhb_KEg@1CSQ858I0
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R20
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1559,7 +2164,11 @@ R14
 !i113 1
 R15
 Eshifter
+<<<<<<< HEAD
 R1
+=======
+Z130 w1504186614
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 R3
 R27
@@ -1568,8 +2177,13 @@ R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z99 8a.b.e.a.shifter.vhd
 Z100 Fa.b.e.a.shifter.vhd
+=======
+Z131 8a.b.e.a.shifter.vhd
+Z132 Fa.b.e.a.shifter.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L7
 V<W>kgz`oEk9fHR]d;Q9nc3
@@ -1594,11 +2208,19 @@ R7
 DEx4 work 7 shifter 0 22 <W>kgz`oEk9fHR]d;Q9nc3
 l42
 L16
+<<<<<<< HEAD
 VSFWSV_T?XfNzO80hhig?i3
 !s100 _:H5S3YCV7^=0TlEX:D9^0
 R10
 32
 R19
+=======
+V4?2aj]jKP5Ud54eed?1_V3
+!s100 5`R4>3Cih2;bHlO_N3lKS1
+R10
+32
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1606,22 +2228,35 @@ R14
 !i113 1
 R15
 Esparse_tree
+<<<<<<< HEAD
 R1
+=======
+Z133 w1499862212
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R2
 R4
 R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z101 8a.b.e.b.h.sparse_tree.vhd
 Z102 Fa.b.e.b.h.sparse_tree.vhd
+=======
+Z134 8a.b.e.b.h.sparse_tree.vhd
+Z135 Fa.b.e.b.h.sparse_tree.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L17
 VgB9R8GQhWGbAZ9XOz`kXK2
 !s100 4J6Eh1^`8Jkf0LQQT2<<_0
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1641,7 +2276,11 @@ VMFKI2DQL8o>ImIc<YOm?P1
 !s100 [2481WY^cE5LH?1@C>Ye82
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1649,22 +2288,36 @@ R14
 !i113 1
 R15
 Esum_generator
+<<<<<<< HEAD
 R1
 R16
+=======
+Z136 w1499862192
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
 R7
 R0
+<<<<<<< HEAD
 Z103 8a.b.e.b.i.sum_generator.vhd
 Z104 Fa.b.e.b.i.sum_generator.vhd
+=======
+Z137 8a.b.e.b.i.sum_generator.vhd
+Z138 Fa.b.e.b.i.sum_generator.vhd
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 l0
 L6
 VX?PTJYH^NA<o0__FZl_ni1
 !s100 ^[ELIK8f^S5D<bB=O9Y>d0
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1672,7 +2325,11 @@ R14
 !i113 1
 R15
 Astructural
+<<<<<<< HEAD
 R16
+=======
+R17
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R4
 R5
 R6
@@ -1684,7 +2341,11 @@ VZ8ZTiSPDJ0lmPnPQOelQU0
 !s100 lJnO55:m::g[gOkjOboah3
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
@@ -1704,7 +2365,7 @@ V?@UiU:BiOQ7eR]nCXj]Oi1
 !s100 gzjjc^PHhe5<_b@dD2[RY2
 R10
 32
-R11
+R40
 !i10b 1
 R12
 R13
@@ -1721,7 +2382,7 @@ VT]MNYaD0V]PTY_ED87lcf1
 !s100 P_?C_b^L0?E?Fd:dRl>ZQ2
 R10
 32
-R11
+R40
 !i10b 1
 R12
 R13
@@ -1732,7 +2393,11 @@ Ptypes
 R2
 R6
 R7
+<<<<<<< HEAD
 R1
+=======
+R44
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 R0
 8a.b.e.b.j.types.vhd
 Fa.b.e.b.j.types.vhd
@@ -1742,7 +2407,11 @@ VoOC^a8F^DCQ?>LkVXA?]W2
 !s100 i9EoPSO4^>5UYH6f0UVmc1
 R10
 32
+<<<<<<< HEAD
 R19
+=======
+R11
+>>>>>>> 035176911d65613ec2a8565b07d470c9e53a3a56
 !i10b 1
 R12
 R13
