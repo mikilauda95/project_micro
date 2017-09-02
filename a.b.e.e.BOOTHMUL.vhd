@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 use ieee.std_logic_signed.all;
 
 entity BOOTHMUL is
-	generic (n_bit: integer:= numBit);
+	generic (n_bit: integer:= 16);
 
 	Port (	A:	In	std_logic_vector(n_bit-1 downto 0);
                 B:      In      std_logic_vector(n_bit-1 downto 0);

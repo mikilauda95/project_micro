@@ -3,7 +3,7 @@ use IEEE.std_logic_1164.all; --  libreria IEEE con definizione tipi standard log
 use WORK.constants.all; -- libreria WORK user-defined
 
 entity MUX81_GENERIC is
-	generic (n_bit: integer:= numBit);
+	generic (n_bit: integer:= 16);
                  
 	Port (	A:	In	std_logic_vector(n_bit-1 downto 0);
 		B:	In	std_logic_vector(n_bit-1 downto 0);
