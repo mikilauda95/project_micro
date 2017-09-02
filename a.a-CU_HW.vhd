@@ -62,7 +62,7 @@ architecture dlx_cu_hw of dlx_cu is
     constant OFFSET_CU4 : integer := 10;
     constant OFFSET_CU5 : integer := 15;
     type mem_array is array (0 to MICROCODE_MEM_SIZE-1) of std_logic_vector(CW_SIZE - 1 downto 0);
-    signal cw_mem : mem_array := ("111100010000111", --0 R type: IS IT CORRECT?
+    signal cw_mem : mem_array := ("11110000100000111", --0 R type: IS IT CORRECT?
     "00000000000000000", --1 	
 	"11001111110011100", --2 J (0X02) instruction encoding corresponds to the address to this ROM
     "00000000000000000", --3 JAL to be filled
@@ -174,12 +174,12 @@ begin  -- dlx_cu_rtl
     DRAM_WE      <= cw4(CW_SIZE - 11);
     LMD_LATCH_EN <= cw4(CW_SIZE - 12);
     JUMP_EN      <= cw4(CW_SIZE - 13);
-    JUMP_branch  <= cw4(CW_SIZE - 13);
-    PC_LATCH_EN  <= cw4(CW_SIZE - 14);
+    JUMP_branch  <= cw4(CW_SIZE - 14);
+    PC_LATCH_EN  <= cw4(CW_SIZE - 15);
 
   -- stage five control signals
-    WB_MUX_SEL <= cw5(CW_SIZE - 15);
-    RF_WE      <= cw5(CW_SIZE - 16);
+    WB_MUX_SEL <= cw5(CW_SIZE - 16);
+    RF_WE      <= cw5(CW_SIZE - 17);
 
 
   -- process to pipeline control words
@@ -199,9 +199,9 @@ begin  -- dlx_cu_rtl
             cw <= cw_mem(conv_integer(IR_opcode));
             --cw1 <= cw;
             cw2 <= cw(CW_SIZE - 1 - 2 downto 0);
-            cw3 <= cw2(CW_SIZE - 1 - 5 downto 0);
-            cw4 <= cw3(CW_SIZE - 1 - 9 downto 0);
-            cw5 <= cw4(CW_SIZE -1 - 13 downto 0);
+            cw3 <= cw2(CW_SIZE - 1 - 6 downto 0);
+            cw4 <= cw3(CW_SIZE - 1 - 10 downto 0);
+            cw5 <= cw4(CW_SIZE -1 - 15 downto 0);
 		--ciao
             aluOpcode1 <= aluOpcode_i;
             aluOpcode2 <= aluOpcode1;

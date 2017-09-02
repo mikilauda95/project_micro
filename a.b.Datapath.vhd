@@ -173,7 +173,7 @@ end component;
 --signals declarations
 
 --used in fetch
-signal ADDPC_out_sig, NPC_out_sig: std_logic_vector(n_bit-1 downto 0);
+signal ADDPC_out_sig, NPC_out_sig, NPC_out_delayed, NPC_out_delayed2: std_logic_vector(n_bit-1 downto 0);
 signal IRout: std_logic_vector(n_bit-1 downto 0);
 signal MUX_BRANCHES_sig, PC_OUT_sig: std_logic_vector(n_bit-1 downto 0);
 
@@ -187,7 +187,8 @@ signal j_imm_cont : std_logic;
 --used in execute
 signal reg_alu_out, ALUout, ALUin1, ALUin2: std_logic_vector(n_bit-1 downto 0);
 signal pc_mux_sig: std_logic_vector(0 downto 0);
-signal not_comp_sig, comp_sig, branch_out_sig : std_logic_vector(0 downto 0);
+signal not_comp_sig, comp_sig  : std_logic_vector(0 downto 0);
+signal branch_out_sig,branch_out_delayed : std_logic_vector(0 downto 0);
 signal sign_ext_delay : std_logic_vector(n_bit -1  downto 0);
 signal regb_bypass : std_logic_vector(n_bit-1 downto 0);
 
@@ -375,6 +376,27 @@ CLK  => clk,
 DOUT  => IRout_delay);
 
 
+reg_delay_npc : register_gen_en
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => NPC_out_sig,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => NPC_out_delayed);
+
+reg_delay_npc2 : register_gen_en
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => NPC_out_delayed,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => NPC_out_delayed2);
+
+
 --latchimm: latch --latch immediate to save the value of the immediate2
 --generic map(n_bit =>32)
 --port map(imm2, RegIMM_LATCH_EN, reset, imm_mux2 );
@@ -386,7 +408,7 @@ not_comp_sig <= not(comp_sig);
 ------------processes----------------
 
 --process to compare the branch register to 0
-process(reg_mux1, clk) 
+process(reg_mux1) 
 begin
 
     if(reg_mux1= 0 ) then
@@ -423,7 +445,7 @@ DOUT  => regb_bypass);
 --ALU part--
 mux1: MUX21_GENERIC   --mux to choose the first operand of the ALU
 generic map (n_bit => 32)
-port map (NPC_out_sig, reg_mux1, MUXA_SEL, ALUin1); --if control is 0 the output is regin1, else it's imm1
+port map (NPC_out_delayed2, reg_mux1, MUXA_SEL, ALUin1); --if control is 0 the output is regin1, else it's imm1
 
 mux2: MUX21_GENERIC   --mux to choose the second operand of the ALU
 generic map (n_bit => 32)  
@@ -455,6 +477,17 @@ DOUT  => reg_alu_out );
 mux_branch: MUX21_GENERIC  --mux to choose bez if controls(?) 1, bnez if controls(?) is 0
 generic map (n_bit => 1) 
 port map (comp_sig, not_comp_sig, EQ_COND, branch_out_sig);
+
+
+reg_alu_1 : register_gen_en
+    generic map (
+            n_bit  => 1 )
+port map (
+DIN  => branch_out_sig,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => branch_out_delayed );
 
 
 
@@ -511,15 +544,15 @@ DOUT  => reg_alu_mem);
 
 mux_pc: MUX21_GENERIC  --mux to choose whether to take NPC or aluoutput as PC, 0 NPC, 1 ALUoutput
 generic map (n_bit => 32) 
-port map (reg_alu_mem, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
+port map (reg_alu_out, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
 
-jump_condition <= JUMP_EN or branch_out_sig(0);
+jump_condition <= JUMP_EN or branch_out_delayed(0);
 pc_mux_sig(0) <= jump_condition and JUMP_BRANCH;
 
 
 ---------------------------------WRITE BACK-------------------------------------------
 
-  -- stage five control signals
+-- stage five control signals
 --alias WB_MUX_SEL :bit is controls(1);
 --alias RF_WE :bit is controls(0);
 

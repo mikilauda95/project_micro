@@ -1,6 +1,8 @@
 addi r1, r0, 100
 xor r2, r2, r2
-
+nop
+nop
+nop
 ciclo:
 lw r3, 0(r2)
 nop

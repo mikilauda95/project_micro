@@ -1,0 +1,13 @@
+Sat Sep 02 16:26:17 CEST 2017
+Trace back: can't read "itk_component(label)": no such element in array
+    while executing
+"$itk_component(label) configure -wraplength $_LAYOUT_TABLE($pos-wrap)"
+    (method "::iwidgets::Labeledframe::_positionLabel" body line 21)
+    invoked from within
+"::.main_pane.wave.interior.cs.body.pw.wf.sig_dlg.nb.canvas.notebook.cs.page2.cs.format_frame _positionLabel now"
+    (in namespace inscope "::iwidgets::Labeledframe" script line 1)
+    invoked from within
+"namespace inscope ::iwidgets::Labeledframe {::.main_pane.wave.interior.cs.body.pw.wf.sig_dlg.nb.canvas.notebook.cs.page2.cs.format_frame _positionLabe..."
+    ("after" script)
+  <2:C:/Modeltech_pe_edu_10.4a/win32pe_edu/tk8.5/bgerror.tcl:92: ::tkerror {can't read "itk_component(label)": no such element in array}
+  <1:eval:1: ::tk::dialog::error::bgerror {can't read "itk_component(label)": no such element in array}
