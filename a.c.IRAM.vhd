@@ -22,7 +22,7 @@ end IRAM;
 
 architecture IRam_Bhe of IRAM is
 
-  type RAMtype is array (0 to RAM_DEPTH - 1) of integer;-- std_logic_vector(I_SIZE - 1 downto 0);
+  type RAMtype is array (0 to RAM_DEPTH - 1) of integer; -- std_logic_vector(I_SIZE - 1 downto 0);
 
   signal IRAM_mem : RAMtype;
 

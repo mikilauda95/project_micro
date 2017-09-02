@@ -34,6 +34,7 @@ component datapath
     RegA_LATCH_EN      : in std_logic;  -- Register A Latch Enable
     RegB_LATCH_EN      : in std_logic;  -- Register B Latch Enable
     RegIMM_LATCH_EN    : in std_logic;  -- Immediate Register Latch Enable
+    MUXJ_SEL           : in std_logic;
 
     -- EX Control Signalsin
     MUXA_SEL           : in std_logic;  -- MUX-A Sel
@@ -47,6 +48,7 @@ component datapath
     DRAM_WE            : in std_logic;  -- Data RAM Write Enable
     LMD_LATCH_EN       : in std_logic;  -- LMD Register Latch Enable
     JUMP_EN            : in std_logic;  -- JUMP Enable Signal for PC input MUX
+    JUMP_branch        : in std_logic;  -- JUMP or branch operation identifier
     PC_LATCH_EN        : in std_logic;  -- Program Counte Latch Enable
 
     -- WB Control signalsin
@@ -81,6 +83,7 @@ component dlx_cu is
     RegA_LATCH_EN      : out std_logic;  -- Register A Latch Enable
     RegB_LATCH_EN      : out std_logic;  -- Register B Latch Enable
     RegIMM_LATCH_EN    : out std_logic;  -- Immediate Register Latch Enable
+    MUXJ_SEL           : out std_logic;
 
     -- EX Control Signals
     MUXA_SEL           : out std_logic;  -- MUX-A Sel
@@ -94,6 +97,7 @@ component dlx_cu is
     DRAM_WE            : out std_logic;  -- Data RAM Write Enable
     LMD_LATCH_EN       : out std_logic;  -- LMD Register Latch Enable
     JUMP_EN            : out std_logic;  -- JUMP Enable Signal for PC input MUX
+    JUMP_branch        : out std_logic;  -- JUMP or branch operation identifier
     PC_LATCH_EN        : out std_logic;  -- Program Counte Latch Enable
 
     -- WB Control signals
@@ -131,6 +135,7 @@ end component;
 signal s_RegA_LATCH_EN : std_logic;
 signal s_RegB_LATCH_EN : std_logic;
 signal s_RegIMM_LATCH_EN : std_logic;
+signal s_MUXJ_SEL : std_logic;
 signal s_MUXA_SEL : std_logic;
 signal s_MUXB_SEL : std_logic;
 signal s_ALU_OUTREG_EN : std_logic;
@@ -138,6 +143,7 @@ end component;
 signal s_ALU_OPCODE : aluOp;
 signal s_DRAM_WE : std_logic;
 signal s_LMD_LATCH_EN : std_logic;
+signal s_JUMP_BRANCH : std_logic;
 signal s_JUMP_EN : std_logic;
 signal s_PC_LATCH_EN : std_logic;
 signal s_WB_MUX_SEL : std_logic;
@@ -163,6 +169,7 @@ datapath_1 : datapath
     RegA_LATCH_EN       => s_RegA_LATCH_EN,
     RegB_LATCH_EN       => s_RegB_LATCH_EN,
     RegIMM_LATCH_EN     => s_RegIMM_LATCH_EN,
+    MUXJ_SEL            => s_MUXJ_SEL,
     -- EX Control Signalsin
     MUXA_SEL            => s_MUXA_SEL,
     MUXB_SEL            => s_MUXB_SEL,
@@ -174,6 +181,7 @@ datapath_1 : datapath
     DRAM_WE             => s_DRAM_WE,
     LMD_LATCH_EN        => s_LMD_LATCH_EN,
     JUMP_EN             => s_JUMP_EN,
+    JUMP_branch         => s_JUMP_BRANCH,
     PC_LATCH_EN         => s_PC_LATCH_EN,
     -- WB Control signalsin
     WB_MUX_SEL          => s_WB_MUX_SEL,
@@ -208,6 +216,7 @@ dlx_cu_0 : dlx_cu
     RegA_latch_en       => s_RegA_LATCH_EN,
     RegB_latch_en       => s_RegB_LATCH_EN,
     RegImm_latch_en     => s_RegIMM_LATCH_EN,
+    MUXJ_SEL            => s_MUXJ_SEL,
     -- Ex control signals
     MUXA_sel            => s_MUXA_SEL,
     MUXB_sel            => s_MUXB_SEL,
@@ -219,6 +228,7 @@ dlx_cu_0 : dlx_cu
     DRAM_we             => s_DRAM_WE,
     LMD_latch_en        => s_LMD_LATCH_EN,
     JUMP_en             => s_JUMP_EN,
+    JUMP_branch         => s_JUMP_BRANCH,
     PC_Latch_en         => s_PC_LATCH_EN,
     -- Wb control signals
     WB_Mux_sel          => s_WB_MUX_SEL,

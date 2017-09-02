@@ -25,6 +25,7 @@ entity datapath is
     RegA_LATCH_EN      : in std_logic;  -- Register A Latch Enable
     RegB_LATCH_EN      : in std_logic;  -- Register B Latch Enable
     RegIMM_LATCH_EN    : in std_logic;  -- Immediate Register Latch Enable
+    MUXJ_SEL : in std_logic;            -- Choose between class immediate and 26 bit jump immediate
 
     -- EX Control Signalsin
     MUXA_SEL           : in std_logic;  -- MUX-A Sel
@@ -38,6 +39,7 @@ entity datapath is
     DRAM_WE            : in std_logic;  -- Data RAM Write Enable
     LMD_LATCH_EN       : in std_logic;  -- LMD Register Latch Enable
     JUMP_EN            : in std_logic;  -- JUMP Enable Signal for PC input MUX
+    JUMP_BRANCH        : in std_logic;
     PC_LATCH_EN        : in std_logic;  -- Program Counte Latch Enable
 
     -- WB Control signalsin
@@ -179,6 +181,8 @@ signal MUX_BRANCHES_sig, PC_OUT_sig: std_logic_vector(n_bit-1 downto 0);
 signal reg_file_in, regin1, reg_mux1, regin2, reg_mux2, imm2, imm_mux2: std_logic_vector(n_bit-1 downto 0);
 signal IRout_delay, ADD_WR_SIG,ADD_WR_DEC,ADD_WR_EX : std_logic_vector(n_bit-1 downto 0);
 signal ADD_WR_SIG_mux : std_logic_vector(4 downto 0);
+signal imm2_sig,imm_j : std_logic_vector(n_bit-1 downto 0);
+signal j_imm_cont : std_logic;
 
 --used in execute
 signal reg_alu_out, ALUout, ALUin1, ALUin2: std_logic_vector(n_bit-1 downto 0);
@@ -189,6 +193,7 @@ signal regb_bypass : std_logic_vector(n_bit-1 downto 0);
 
 --used in memory
 signal DRAMout, LMDout,reg_alu_mem : std_logic_vector(n_bit-1 downto 0);
+signal jump_condition : std_logic;
 
 --used in wb
 signal rt_vs_it : std_logic;
@@ -282,6 +287,15 @@ PC_latch : latch
 imm2(15 downto 0) <= IRout(15 downto 0);
 imm2(31 downto 16) <= (others => IRout(15));
 
+imm_j(23 downto 0) <= IRout(25 downto 2);
+imm_j(31 downto 24) <= (others =>IRout(25));
+
+
+mux_imm_j: MUX21_GENERIC --mux to choose the first operand of the ALU
+generic map (n_bit => 32)
+port map (imm_j, imm2, MUXJ_SEL, imm2_sig); --if control is 0 the output is regin1, else it's imm1
+
+
 ----------processes---------------
 
 ----------interface---------------
@@ -321,7 +335,7 @@ reg_imm : register_gen_en
     generic map (
             n_bit  => 32 )
 port map (
-DIN  => imm2,
+DIN  => imm2_sig,
 ENABLE  => '1',
 RESET  => reset,
 CLK  => clk,
@@ -442,9 +456,12 @@ mux_branch: MUX21_GENERIC  --mux to choose bez if controls(?) 1, bnez if control
 generic map (n_bit => 1) 
 port map (comp_sig, not_comp_sig, EQ_COND, branch_out_sig);
 
-lat1: latch --latch to let pass branch selection signal
-generic map(n_bit =>1)
-port map(branch_out_sig, JUMP_EN, reset, pc_mux_sig);
+
+
+
+--lat1: latch --latch to let pass branch selection signal
+--generic map(n_bit =>1)
+--port map(branch_out_sig, JUMP_EN, reset, pc_mux_sig);
 
 
 ----------------------------------MEMORY----------------------------------------------
@@ -495,6 +512,9 @@ DOUT  => reg_alu_mem);
 mux_pc: MUX21_GENERIC  --mux to choose whether to take NPC or aluoutput as PC, 0 NPC, 1 ALUoutput
 generic map (n_bit => 32) 
 port map (reg_alu_mem, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
+
+jump_condition <= JUMP_EN or branch_out_sig(0);
+pc_mux_sig(0) <= jump_condition and JUMP_BRANCH;
 
 
 ---------------------------------WRITE BACK-------------------------------------------

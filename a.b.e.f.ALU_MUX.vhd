@@ -17,7 +17,7 @@ end ALU_MUX;
 architecture behavior of ALU_MUX is
 
 begin
-process(OpCode, ADD, SH, GENLOG, COMP)
+process(OpCode, ADD, SH, GENLOG, COMP, MUL)
 begin
 
 case OpCode is
