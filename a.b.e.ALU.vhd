@@ -134,7 +134,7 @@ begin
                      when ORS => control_signal_gen_log <= "1110";
                      when XORS => control_signal_gen_log <= "0110";
                      when ADDS => ci <= '0'; input2_s <= input2;
-                 when SUBS => ci <= '0';
+                 when SUBS => ci <= '1';
                  input2_s <= not(input2);
              when others => res_comp(0) <= '0';
              control_signal_gen_log <= (others => '0');

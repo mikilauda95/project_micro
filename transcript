@@ -1,6 +1,6 @@
 do compile.do
 # Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 11:02:15 on Sep 03,2017
+# Start time: 12:06:23 on Sep 04,2017
 # vcom -reportprogress 300 a.b.a.log.vhd 
 # -- Loading package STANDARD
 # -- Loading package TEXTIO
@@ -8,10 +8,10 @@ do compile.do
 # -- Compiling package log
 # -- Compiling package body log
 # -- Loading package log
-# End time: 11:02:15 on Sep 03,2017, Elapsed time: 0:00:00
+# End time: 12:06:23 on Sep 04,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 11:02:15 on Sep 03,2017
+# Start time: 12:06:23 on Sep 04,2017
 # vcom -reportprogress 300 000-globals.vhd 
 # -- Loading package STANDARD
 # -- Loading package TEXTIO
@@ -19,10 +19,10 @@ do compile.do
 # -- Loading package log
 # -- Compiling package myTypes
 # -- Compiling package constants
-# End time: 11:02:15 on Sep 03,2017, Elapsed time: 0:00:00
+# End time: 12:06:23 on Sep 04,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 11:02:15 on Sep 03,2017
+# Start time: 12:06:23 on Sep 04,2017
 # vcom -reportprogress 300 000-globals.vhd NAND5.vhd TB_DLX.vhd a.DLX.vhd a.a-CU_HW.vhd a.b.Datapath.vhd a.b.a.log.vhd a.b.b.registerfile.vhd a.b.c.a.iv.vhd a.b.c.b.nd2.vhd a.b.c.mux21.vhd a.b.d.DRAM.vhd a.b.e.ALU.vhd a.b.e.a.shifter.vhd a.b.e.b.P4ADD.vhd a.b.e.b.a.carry_select_block.vhd a.b.e.b.b.G_gen.vhd a.b.e.b.c.mux21.vhd a.b.e.b.d.PG.vhd a.b.e.b.e.PG_0.vhd a.b.e.b.f.PG_gen.vhd a.b.e.b.g.rca_gen_s.vhd a.b.e.b.h.sparse_tree.vhd a.b.e.b.i.sum_generator.vhd a.b.e.b.j.types.vhd a.b.e.c.a.NAND3.vhd a.b.e.c.b.NAND4.vhd a.b.e.c.general_logic_block.vhd a.b.e.d.a.AND2.vhd a.b.e.d.b.fa.vhd a.b.e.d.c.INV.vhd a.b.e.d.comparator.vhd a.b.e.d.d.NORGEN.vhd a.b.e.d.e.OR2.vhd a.b.e.e.BOOTHMUL.vhd a.b.e.e.a.mux81.vhd a.b.e.f.ALU_MUX.vhd a.c.IRAM.vhd encoder.vhd fd.vhd latch.vhd rca_gen.vhd register.vhd register_beh_gen.vhd 
 # -- Loading package STANDARD
 # -- Loading package TEXTIO
@@ -141,10 +141,10 @@ do compile.do
 # -- Compiling architecture behaviour of register_gen
 # -- Compiling entity register_gen_en
 # -- Compiling architecture behav of register_gen_en
-# End time: 11:02:16 on Sep 03,2017, Elapsed time: 0:00:01
+# End time: 12:06:23 on Sep 04,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vsim work.tb_dlx(test) 
-# Start time: 11:02:16 on Sep 03,2017
+# Start time: 12:06:24 on Sep 04,2017
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
@@ -214,9 +214,9 @@ do compile.do
 # WARNING: No extended dataflow license exists
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: miche  Hostname: DESKTOP-VH1OL77  ProcessID: 2704
-#           Attempting to use alternate WLF file "./wlftam912x".
+#           Attempting to use alternate WLF file "./wlfta1z4ft".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlftam912x
+#           Using alternate file: ./wlfta1z4ft
 # ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
 #    Time: 0 ps  Iteration: 0  Instance: /tb_dlx/DLX_0/IRAM_0
 # ** Warning: CONV_INTEGER: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, and it has been converted to 0.
@@ -2431,5 +2431,5 @@ do compile.do
 #    Time: 0 ps  Iteration: 17  Instance: /tb_dlx/DLX_0/datapath_1/ArithmeticUnit/ALU5
 # ** Error: (vsim-3341) Cannot open file "test.asm.mem"; it is already open.
 #    Time: 16 ns  Iteration: 0  Instance: /tb_dlx/DLX_0/IRAM_0
-# End time: 11:07:07 on Sep 03,2017, Elapsed time: 0:04:51
+# End time: 12:14:15 on Sep 04,2017, Elapsed time: 0:07:51
 # Errors: 1, Warnings: 1118

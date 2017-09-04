@@ -66,8 +66,8 @@ architecture dlx_cu_hw of dlx_cu is
     "00000000000000000", --1 	
 	"11001111110011100", --2 J (0X02) instruction encoding corresponds to the address to this ROM
     "00000000000000000", --3 JAL to be filled
-    "00000000000001000", --4 BEQZ to be filled
-    "00000000000001000", --5 BNEZ
+    "11101011110001100", --4 BEQZ to be filled
+    "11101011100001100", --5 BNEZ
     "00000000000000000", --6 bfpt (not implemented)
     "00000000000000000", --7 bfpf (not implemented)
     "11101001100000111", --8 ADD i
@@ -80,7 +80,7 @@ architecture dlx_cu_hw of dlx_cu is
     "00100000000000000", --15 lhi (not implemented)
     "00100000000000000", --16 rfe (not implemented)
     "00000000000000000", --17 trap (not implemented)
-    "00100000000000000", --18 jr (not implemented)
+    "11010110110011100", --18 jr (not implemented)
     "00100000000000000", --19 jalr(not implemented)
     "11101001100000111", --20 slli 
     "00100000000000000", --21 nop
@@ -151,7 +151,6 @@ begin  -- dlx_cu_rtl
 
     IR_opcode<= IR_IN(31 downto 26);
     IR_func(10 downto 0)  <= IR_IN(FUNC_SIZE - 1 downto 0);
-
 
 
   -- stage one control signals
