@@ -26,6 +26,7 @@ entity datapath is
     RegB_LATCH_EN      : in std_logic;  -- Register B Latch Enable
     RegIMM_LATCH_EN    : in std_logic;  -- Immediate Register Latch Enable
     MUXJ_SEL : in std_logic;            -- Choose between class immediate and 26 bit jump immediate
+MUXBRORJ_SEL : in std_logic;            -- choose between normal op and jump or branch operation
 
     -- EX Control Signalsin
     MUXA_SEL           : in std_logic;  -- MUX-A Sel
@@ -41,6 +42,8 @@ entity datapath is
     JUMP_EN            : in std_logic;  -- JUMP Enable Signal for PC input MUX
     JUMP_BRANCH        : in std_logic;
     PC_LATCH_EN        : in std_logic;  -- Program Counte Latch Enable
+    JAL_SIG            : in std_logic;  -- SIGNAL FOR WRITING RETURN ADDRESS
+
 
     -- WB Control signalsin
     WB_MUX_SEL         : in std_logic;  -- Write Back MUX Sel
@@ -96,7 +99,9 @@ component register_file
            ADD_RD2: 	IN std_logic_vector(logn-1 downto 0);
            DATAIN: 	IN std_logic_vector(n_bit-1 downto 0);
            OUT1: 		OUT std_logic_vector(n_bit-1 downto 0);
-           OUT2: 		OUT std_logic_vector(n_bit-1 downto 0));
+           OUT2: 		OUT std_logic_vector(n_bit-1 downto 0);
+           RET_ADD:      IN std_logic_vector(n_bit-1 downto 0);
+           JAL_SIG:      IN std_logic);
 end component;
 
 component ALU 
@@ -173,7 +178,7 @@ end component;
 --signals declarations
 
 --used in fetch
-signal ADDPC_out_sig, NPC_out_sig, NPC_out_delayed, NPC_out_delayed2: std_logic_vector(n_bit-1 downto 0);
+signal ADDPC_out_sig, NPC_out_sig, NPC_out_delayed, NPC_out_delayed2, ADDPC_jal_sig: std_logic_vector(n_bit-1 downto 0);
 signal IRout: std_logic_vector(n_bit-1 downto 0);
 signal MUX_BRANCHES_sig, PC_OUT_sig: std_logic_vector(n_bit-1 downto 0);
 
@@ -181,7 +186,7 @@ signal MUX_BRANCHES_sig, PC_OUT_sig: std_logic_vector(n_bit-1 downto 0);
 signal reg_file_in, regin1, reg_mux1, regin2, reg_mux2, imm2, imm_mux2: std_logic_vector(n_bit-1 downto 0);
 signal IRout_delay, ADD_WR_SIG,ADD_WR_DEC,ADD_WR_EX : std_logic_vector(n_bit-1 downto 0);
 signal ADD_WR_SIG_mux : std_logic_vector(4 downto 0);
-signal imm2_sig,imm_j : std_logic_vector(n_bit-1 downto 0);
+signal imm2_sig,imm_j, imm_b, imm_brorj : std_logic_vector(n_bit-1 downto 0);
 signal j_imm_cont : std_logic;
 
 --used in execute
@@ -190,7 +195,7 @@ signal pc_mux_sig: std_logic_vector(0 downto 0);
 signal not_comp_sig, comp_sig  : std_logic_vector(0 downto 0);
 signal branch_out_sig,branch_out_delayed : std_logic_vector(0 downto 0);
 signal sign_ext_delay : std_logic_vector(n_bit -1  downto 0);
-signal regb_bypass : std_logic_vector(n_bit-1 downto 0);
+signal regb_bypass, RET_ADD : std_logic_vector(n_bit-1 downto 0);
 
 --used in memory
 signal DRAMout, LMDout,reg_alu_mem : std_logic_vector(n_bit-1 downto 0);
@@ -291,10 +296,17 @@ imm2(31 downto 16) <= (others => IRout(15));
 imm_j(23 downto 0) <= IRout(25 downto 2);
 imm_j(31 downto 24) <= (others =>IRout(25));
 
+imm_b(13 downto 0) <= IRout(15 downto 2);
+imm_b(31 downto 14) <= (others =>IRout(15));
 
 mux_imm_j: MUX21_GENERIC --mux to choose the first operand of the ALU
 generic map (n_bit => 32)
-port map (imm_j, imm2, MUXJ_SEL, imm2_sig); --if control is 0 the output is regin1, else it's imm1
+port map (imm_brorj, imm2, MUXBRORJ_SEL, imm2_sig); --if control is 0 the output is regin1, else it's imm1
+
+
+mux_imm_brorj : MUX21_GENERIC --mux to choose the first operand of the ALU
+generic map (n_bit => 32)
+port map (imm_j, imm_b, MUXJ_SEL, imm_brorj); --if control is 0 the output is regin1, else it's imm1
 
 
 ----------processes---------------
@@ -318,7 +330,9 @@ register_file_0 : register_file  --register file
            ADD_RD2 => IRout(20 downto 16),
            DATAIN => reg_file_in,
            OUT1 => regin1,
-           OUT2 => regin2 );
+           OUT2 => regin2, 
+           RET_ADD => RET_ADD,
+           JAL_SIG => JAL_SIG);
 
 latchA: latch --latch A to save the value from the rf
 generic map(n_bit =>32)
@@ -397,6 +411,7 @@ CLK  => clk,
 DOUT  => NPC_out_delayed2);
 
 
+ADDPC_jal_sig <= NPC_out_delayed2 + 1;
 --latchimm: latch --latch immediate to save the value of the immediate2
 --generic map(n_bit =>32)
 --port map(imm2, RegIMM_LATCH_EN, reset, imm_mux2 );
@@ -429,6 +444,20 @@ end process;
 --alias EQ_COND :bit is controls(6);
 
 --bypass of Regb for store
+
+
+
+reg_jal_exec : register_gen_en
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => ADDPC_jal_sig,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => RET_ADD);
+
+
 
 reg_1 : register_gen_en
     generic map (

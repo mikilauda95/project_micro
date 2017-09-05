@@ -18,7 +18,9 @@ entity register_file is
            ADD_RD2: 	IN std_logic_vector(logn-1 downto 0);
            DATAIN: 	IN std_logic_vector(n_bit-1 downto 0);
            OUT1: 		OUT std_logic_vector(n_bit-1 downto 0);
-           OUT2: 		OUT std_logic_vector(n_bit-1 downto 0));
+           OUT2: 		OUT std_logic_vector(n_bit-1 downto 0);
+           RET_ADD:      IN std_logic_vector(n_bit-1 downto 0);
+           JAL_SIG:      IN std_logic);
 end register_file;
 
 architecture behavioral_basic of register_file is
@@ -53,6 +55,9 @@ begin
                 if WR = '1' then
 
                     REGISTERS(to_integer(unsigned(ADD_WR))) <= DATAIN;
+                end if;
+                if JAL_SIG ='1' then
+                    REGISTERS(31) <= RET_ADD;
                 end if;
 
             end if;

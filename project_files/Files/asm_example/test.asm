@@ -15,7 +15,7 @@ addi r20,r0,#5
 addi r9,r9,#5
 addi r10,r10,#4
 addi r3,r3,#4
-j end 
+jal end 
 nop
 nop
 nop

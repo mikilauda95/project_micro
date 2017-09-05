@@ -20,7 +20,7 @@ end comparator;
 
 architecture structural of comparator is
 
-component RCA_s
+component RCA
 	generic (
 		 n_bit :	integer := 32);
 		 
@@ -55,16 +55,17 @@ component NORGEN
 		S:	Out	std_logic);
 end component; 
 
-signal s: std_logic_vector(n_bit-1 downto 0);
+signal s, B_sig: std_logic_vector(n_bit-1 downto 0);
 signal output_nor: std_logic;
 signal cout,Ci_sig: std_logic;
 signal int1, int2, int3, int4, int5: std_logic;
 
 begin
-Ci_sig <= '0';
-sum: RCA_s
+B_sig <= not(B);
+Ci_sig <= '1';
+sum: RCA
 generic map(n_bit => 32)
-port map (A, B, Ci_sig, s, cout);
+port map (A, B_sig, Ci_sig, s, cout);
 
 nor1: NORGEN
 generic map(n_bit => 32)
