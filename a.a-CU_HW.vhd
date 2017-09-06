@@ -64,7 +64,7 @@ architecture dlx_cu_hw of dlx_cu is
     constant OFFSET_CU4 : integer := 11;
     constant OFFSET_CU5 : integer := 17;
     type mem_array is array (0 to MICROCODE_MEM_SIZE-1) of std_logic_vector(CW_SIZE - 1 downto 0);
-    signal cw_mem : mem_array := ("1111000001000001011", --0 R type: IS IT CORRECT?
+    signal cw_mem : mem_array := ("1111000001000001011", --0 R type
     "0000000000000000000", --1 	
 	"1100111111100111000", --2 J (0X02) instruction encoding corresponds to the address to this ROM
     "1100111111100111100", --3 JAL 
@@ -82,8 +82,8 @@ architecture dlx_cu_hw of dlx_cu is
     "0010000000000000000", --15 lhi (not implemented)
     "0010000000000000000", --16 rfe (not implemented)
     "0000000000000000000", --17 trap (not implemented)
-    "1101010101100111000", --18 jr (not implemented)
-    "0010000000000000000", --19 jalr(not implemented)
+    "1110110011100111000", --18 jr
+    "1110110011100111100", --19 jalr
     "1110100011000001011", --20 slli 
     "0010000000000000000", --21 nop
     "1110100011000001011", --22 srli 
@@ -228,7 +228,9 @@ begin  -- dlx_cu_rtl
                     when 6 => aluOpcode_i <= LRS; -- srl
 					when 7 => aluOpcode_i <= SHARX; -- sra
                     when 32 => aluOpcode_i <= ADDS; -- add
+					when 33 => aluOpcode_i <= ADDS; -- addu
                     when 34 => aluOpcode_i <= SUBS; -- sub
+					when 35 => aluOpcode_i <= SUBS; -- subu
                     when 36 => aluOpcode_i <= ANDS; -- and
                     when 37 => aluOpcode_i <= ORS; -- or
                     when 38 => aluOpcode_i <= XORS; -- xor
@@ -242,7 +244,9 @@ begin  -- dlx_cu_rtl
                     when others => aluOpcode_i <= NOP;
                 end case;
             when 2 => aluOpcode_i <= ADDS; -- j
+			when 18 => aluOpcode_i <= ADDS; --jr
             when 3 => aluOpcode_i <= ADDS; -- jal
+			when 19 => aluOpcode_i <= ADDS; -- jalr
             when 8 => aluOpcode_i <= ADDS; -- addi
             when 12 => aluOpcode_i <= ANDS; -- and
             when 4 => aluOpcode_i <= ADDS; -- branch if equal zero
