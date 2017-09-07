@@ -12,7 +12,7 @@ use IEEE.math_complex.all;
 -- file name is "test.asm.mem"
 entity IRAM is
   generic (
-    RAM_DEPTH : integer := 4*128;
+    RAM_DEPTH : integer := 4*256;
     I_SIZE : integer := 32);
   port (
     Rst  : in  std_logic;

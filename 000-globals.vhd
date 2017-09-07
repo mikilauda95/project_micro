@@ -25,6 +25,6 @@ constant IR_SIZE : integer := 32;
 constant OP_CODE_SIZE : integer := 6;
 constant FUNC_SIZE: integer := 11;
 constant MICROCODE_MEM_SIZE: integer:=64;
-constant RAM_DEPTH: integer:= 128;
+constant RAM_DEPTH: integer:= 4*256;
 
 end constants;

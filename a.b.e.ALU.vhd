@@ -121,7 +121,7 @@ begin
 --input: control
 --output: res_comp(0)
 --NOTEQ, GREQ, LOEQ
-             first: process(control,AneB,AaeB,AbeB,control_signal_gen_log,input2,input1) 
+             first: process(control,AneB,AaeB,AbeB,AaB,AeB,AbB,control_signal_gen_log,input2,input1) 
              begin
                  case control is
 					 when EQU => res_comp(0) <= AeB;

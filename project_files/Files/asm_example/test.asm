@@ -1,30 +1,49 @@
-addi r1, r1,#100
-addi r5, r5,#4
-subi r6,r6,#223
-addi r7,r7,#16
-ciclo:
-subi r1,r1,#20
-addi r3,r3,#4
-nop
-nop
-nop
-bnez r1,ciclo
-nop
-nop
-addi r20,r0,#5
-addi r9,r9,#8
-nop
-nop
-addi r10,r10,#4
-addi r3,r3,#4
-jalr r9 
-nop
-nop
-nop
-addi r2,r2,#40
-end:
-add r1,r1,r3
+addi r1, r0, #16384
+addi r2, r0, #16384
 nop
 nop
 nop
 nop
+addu r3, r2, r1
+addi r1,r0,#1
+addi r2,r0,#31
+nop
+nop
+nop
+nop
+nop
+slli r1,r1,#1
+nop
+nop
+nop
+nop
+subi r2,r2,#1
+bnez r2,#-6
+nop
+nop
+nop
+nop
+nop
+beqz r0,#2
+nop
+j 92
+nop
+addi r4,r0,#128
+nop
+nop
+nop
+nop
+nop
+jr r4
+nop
+nop
+jal #164
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+jalr r31
