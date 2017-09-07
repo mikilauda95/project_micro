@@ -42,6 +42,7 @@ component datapath
     MUXB_SEL           : in std_logic;  -- MUX-B Sel
     ALU_OUTREG_EN      : in std_logic;  -- ALU Output Register Enable
     EQ_COND            : in std_logic;  -- Branch if (not) Equal to Zero
+    STORE_MUX          : in std_logic_vector(1 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR STORES
     -- ALU Operation Codein
     ALU_OPCODE         : in aluOp; -- choose between implicit or exlicit coding, like std_logic_vector(ALU_OPC_SIZE -1 downto 0);
     
@@ -54,6 +55,7 @@ component datapath
     JAL_SIG            : in std_logic;  --SIGNAL to write back return address
 
     -- WB Control signalsin
+    LOAD_MUX           : in std_logic_vector(2 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR LOADS
     WB_MUX_SEL         : in std_logic;  -- Write Back MUX Sel
     RF_WE              : in std_logic;  -- Register File Write Enable		
     IRAMout: in std_logic_vector(IR_SIZE-1 downto 0);
@@ -93,6 +95,8 @@ component dlx_cu is
     MUXB_SEL           : out std_logic;  -- MUX-B Sel
     ALU_OUTREG_EN      : out std_logic;  -- ALU Output Register Enable
     EQ_COND            : out std_logic;  -- Branch if (not) Equal to Zero
+    STORE_MUX          : out std_logic_vector(1 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR STORES
+
     -- ALU Operation Code
     ALU_OPCODE         : out aluOp; -- choose between implicit or exlicit coding, like std_logic_vector(ALU_OPC_SIZE -1 downto 0);
     
@@ -105,6 +109,7 @@ component dlx_cu is
     JAL_SIG            : out std_logic;  --SIGNAL to write back return address
 
     -- WB Control signals
+    LOAD_MUX           : out std_logic_vector(2 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR LOADS
     WB_MUX_SEL         : out std_logic;  -- Write Back MUX Sel
     RF_WE              : out std_logic);  -- Register File Write Enable
 end component;
@@ -145,6 +150,7 @@ signal s_MUXBRORJ_SEL : std_logic;
 signal s_MUXB_SEL : std_logic;
 signal s_ALU_OUTREG_EN : std_logic;
 signal s_EQ_COND : std_logic;
+signal s_STORE_MUX : std_logic_vector(1 downto 0);
 signal s_ALU_OPCODE : aluOp;
 signal s_DRAM_WE : std_logic;
 signal s_LMD_LATCH_EN : std_logic;
@@ -154,6 +160,7 @@ signal s_JUMP_BRANCH : std_logic;
 signal s_JAL_SIG : std_logic;
 signal s_WB_MUX_SEL : std_logic;
 signal s_RF_WE : std_logic;
+signal s_LOAD_MUX : std_logic_vector(2 downto 0);
 signal s_IR_IN: std_logic_vector(IR_SIZE-1 downto 0);
 signal s_PC_out : std_logic_vector(IR_SIZE-1 downto 0);
 
@@ -182,6 +189,7 @@ datapath_1 : datapath
     MUXB_SEL            => s_MUXB_SEL,
     ALU_OUTREG_EN       => s_ALU_OUTREG_EN,
     EQ_COND             => s_EQ_COND,
+    STORE_MUX           => s_STORE_MUX,
     -- ALU Operation Codein
     ALU_OPCODE          => s_ALU_OPCODE,
     -- MEM Control Signalin
@@ -192,6 +200,7 @@ datapath_1 : datapath
     PC_LATCH_EN         => s_PC_LATCH_EN,
     JAL_SIG             => s_JAL_SIG,
     -- WB Control signalsin
+    LOAD_MUX           => s_LOAD_MUX,
     WB_MUX_SEL          => s_WB_MUX_SEL,
     RF_WE               => s_RF_WE,
 	IRAMout            => s_cu_in,
@@ -231,6 +240,7 @@ dlx_cu_0 : dlx_cu
     MUXB_sel            => s_MUXB_SEL,
     ALU_outreg_en       => s_ALU_OUTREG_EN,
     EQ_Cond             => s_EQ_COND,
+    STORE_MUX           => s_STORE_MUX,
     -- Alu operation code
     ALU_opcode          => s_ALU_OPCODE,
     -- Mem control signals
@@ -241,6 +251,7 @@ dlx_cu_0 : dlx_cu
     PC_Latch_en         => s_PC_LATCH_EN,
     JAL_SIG             => s_JAL_SIG,
     -- Wb control signals
+    LOAD_MUX           => s_LOAD_MUX,
     WB_Mux_sel          => s_WB_MUX_SEL,
     RF_We               => s_RF_WE );
 

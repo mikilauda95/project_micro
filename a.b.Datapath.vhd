@@ -33,6 +33,8 @@ entity datapath is
     MUXB_SEL           : in std_logic;  -- MUX-B Sel
     ALU_OUTREG_EN      : in std_logic;  -- ALU Output Register Enable
     EQ_COND            : in std_logic;  -- Branch if (not) Equal to Zero
+    STORE_MUX          : in std_logic_vector(1 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR STORES
+
     -- ALU Operation Codein
     ALU_OPCODE         : in aluOp; -- choose between implicit or exlicit coding, like std_logic_vector(ALU_OPC_SIZE -1 downto 0);
     
@@ -46,6 +48,7 @@ entity datapath is
 
 
     -- WB Control signalsin
+    LOAD_MUX          : in std_logic_vector(2 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR STORES
     WB_MUX_SEL         : in std_logic;  -- Write Back MUX Sel
     RF_WE              : in std_logic;  -- Register File Write Enable
 
@@ -195,7 +198,7 @@ signal pc_mux_sig: std_logic_vector(0 downto 0);
 signal not_comp_sig, comp_sig  : std_logic_vector(0 downto 0);
 signal branch_out_sig,branch_out_delayed : std_logic_vector(0 downto 0);
 signal sign_ext_delay : std_logic_vector(n_bit -1  downto 0);
-signal regb_bypass, RET_ADD : std_logic_vector(n_bit-1 downto 0);
+signal regb_bypass, RET_ADD, store_data : std_logic_vector(n_bit-1 downto 0);
 
 --used in memory
 signal DRAMout, LMDout,reg_alu_mem : std_logic_vector(n_bit-1 downto 0);
@@ -203,6 +206,7 @@ signal jump_condition : std_logic;
 
 --used in wb
 signal rt_vs_it : std_logic;
+signal load_data : std_logic_vector(n_bit-1 downto 0);
 
 begin
 
@@ -371,6 +375,7 @@ port map(regin2, RegB_LATCH_EN, reset, reg_mux2 );
 
 
 
+
 --jump and branch section
 
 reg_wra : register_gen_en --register to store (delay) the instruction
@@ -447,6 +452,25 @@ RESET  => reset,
 CLK  => clk,
 DOUT  => RET_ADD);
 
+
+--process to compare the branch register to 0
+process(reg_mux2, STORE_MUX) 
+begin
+
+    if(STORE_MUX="00" ) then 
+        store_data<=reg_mux2; 
+    elsif(STORE_MUX="01") then
+        store_data(7 downto 0) <= reg_mux2(7 downto 0);
+        store_data(31 downto 8) <= (others =>reg_mux2(7));
+    elsif(STORE_MUX="10") then
+        store_data(15 downto 0) <= reg_mux2(15 downto 0);
+        store_data(31 downto 16) <= (others =>reg_mux2(15));
+    end if;
+       
+end process;
+
+imm_b(15 downto 0) <= IRout(15 downto 0);
+imm_b(31 downto 16) <= (others =>IRout(15));
 
 
 reg_1 : register_gen_en
@@ -611,9 +635,34 @@ pc_mux_sig(0) <= jump_condition and JUMP_BRANCH;
 
 ----------interface---------------
 
+
+--process to compare the branch register to 0
+process(LMDout, LOAD_MUX) 
+begin
+
+    if(LOAD_MUX="000" ) then 
+        load_data<=LMDout; 
+    elsif(LOAD_MUX="001") then
+        load_data(7 downto 0) <= LMDout(7 downto 0);
+        load_data(31 downto 8) <= (others =>LMDout(7));
+    elsif(LOAD_MUX="010") then
+        load_data(7 downto 0) <= LMDout(7 downto 0);
+        load_data(31 downto 8) <= (others =>'0');
+    elsif(LOAD_MUX="011") then
+        load_data(15 downto 0) <= LMDout(15 downto 0);
+        load_data(31 downto 16) <= (others =>LMDout(15));
+    elsif(LOAD_MUX="100") then
+        load_data(15 downto 0) <= LMDout(15 downto 0);
+        load_data(31 downto 16) <= (others =>'0');
+    end if;
+       
+end process;
+
+
+
 mux3: MUX21_GENERIC
 generic map (n_bit => 32)  --mux to choose the second operand of the ALU
-port map (reg_alu_mem, LMDout, WB_MUX_SEL, reg_file_in);
+port map (reg_alu_mem, load_data, WB_MUX_SEL, reg_file_in);
 
 --this nor is used because the destination register is coded in different positions depending on the type of instruction
 --if the ALU_OPCODE is 0, it means that the instruction is r-type, so the signal rt_vs_it is 1, otherwise it's 0

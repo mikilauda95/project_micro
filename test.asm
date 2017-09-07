@@ -1,49 +1,31 @@
-addi r1, r0, #16384
-addi r2, r0, #16384
+myloop:
+
+addi r1, r0, 4
+addi r2, r0, 1840
 nop
 nop
 nop
-nop
-addu r3, r2, r1
-addi r1,r0,#1
-addi r2,r0,#31
+sw 4(r1), r2       ; should forward
+sw 2(r1), r2       ; should forward
 nop
 nop
 nop
-nop
-nop
-slli r1,r1,#1
-nop
-nop
-nop
-nop
-subi r2,r2,#1
-bnez r2,#-6
+lw r3, 4(r1)
+lh r4, 4(r1)
+lhu r5, 4(r1)
+lb r6, 4(r1)
+lbu r7, 4(r1)
 nop
 nop
 nop
-nop
-nop
-beqz r0,#2
-nop
-j 92
-nop
-addi r4,r0,#128
+sb 20(r1), r2       ; should forward
+sh 24(r1), r2       ; should forward
 nop
 nop
 nop
-nop
-nop
-jr r4
-nop
-nop
-jal #164
+addi r4, r3, 15     ; should stall
+addi r7, r0, myloop ;move label into r7
 nop
 nop
 nop
-nop
-nop
-nop
-nop
-nop
-jalr r31
+jalr r7        	    ;jum

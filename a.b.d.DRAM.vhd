@@ -26,7 +26,7 @@ architecture Dram_Beh of DRAM is
 
 begin  -- SRam_Bhe
 
-    DRAM_proc: process (Rst, WR_enable)
+    DRAM_proc: process (Rst, WR_enable, Din)
     begin  -- process FILL_MEM_P
         if (Rst = '0') then
             if (WR_enable = '1' ) then --Writing on the memory
