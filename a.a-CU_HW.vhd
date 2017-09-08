@@ -184,7 +184,7 @@ begin  -- dlx_cu_rtl
     JAL_SIG      <= cw4(CW_SIZE - 19);
 
   -- stage five control signals
-    LOAD_MUX  <= cw3(CW_SIZE - 20 downto CW_SIZE-22);
+    LOAD_MUX  <= cw5(CW_SIZE - 20 downto CW_SIZE-22);
     WB_MUX_SEL <= cw5(CW_SIZE - 23);
     RF_WE      <= cw5(CW_SIZE - 24);
 

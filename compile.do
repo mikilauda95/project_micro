@@ -5,52 +5,8 @@ vcom *.vhd
 
 vsim work.tb_dlx(test)
 
-add wave -position insertpoint  \
-sim:/tb_dlx/DLX_0/datapath_1/n_bit \
-sim:/tb_dlx/DLX_0/datapath_1/CW_SIZE \
-sim:/tb_dlx/DLX_0/datapath_1/clk \
-sim:/tb_dlx/DLX_0/datapath_1/reset \
-sim:/tb_dlx/DLX_0/datapath_1/IR_LATCH_EN \
-sim:/tb_dlx/DLX_0/datapath_1/NPC_LATCH_EN \
-sim:/tb_dlx/DLX_0/datapath_1/RegA_LATCH_EN \
-sim:/tb_dlx/DLX_0/datapath_1/RegB_LATCH_EN \
-sim:/tb_dlx/DLX_0/datapath_1/RegIMM_LATCH_EN \
-sim:/tb_dlx/DLX_0/datapath_1/MUXA_SEL \
-sim:/tb_dlx/DLX_0/datapath_1/MUXB_SEL \
-sim:/tb_dlx/DLX_0/datapath_1/ALU_OUTREG_EN \
-sim:/tb_dlx/DLX_0/datapath_1/EQ_COND \
-sim:/tb_dlx/DLX_0/datapath_1/ALU_OPCODE \
-sim:/tb_dlx/DLX_0/datapath_1/DRAM_WE \
-sim:/tb_dlx/DLX_0/datapath_1/LMD_LATCH_EN \
-sim:/tb_dlx/DLX_0/datapath_1/JUMP_EN \
-sim:/tb_dlx/DLX_0/datapath_1/PC_LATCH_EN \
-sim:/tb_dlx/DLX_0/datapath_1/WB_MUX_SEL \
-sim:/tb_dlx/DLX_0/datapath_1/RF_WE \
-sim:/tb_dlx/DLX_0/datapath_1/IRAMout \
-sim:/tb_dlx/DLX_0/datapath_1/PC_out \
-sim:/tb_dlx/DLX_0/datapath_1/ADDPC_out_sig \
-sim:/tb_dlx/DLX_0/datapath_1/NPC_out_sig \
-sim:/tb_dlx/DLX_0/datapath_1/IRout \
-sim:/tb_dlx/DLX_0/datapath_1/MUX_BRANCHES_sig \
-sim:/tb_dlx/DLX_0/datapath_1/PC_OUT_sig \
-sim:/tb_dlx/DLX_0/datapath_1/reg_file_in \
-sim:/tb_dlx/DLX_0/datapath_1/regin1 \
-sim:/tb_dlx/DLX_0/datapath_1/reg_mux1 \
-sim:/tb_dlx/DLX_0/datapath_1/regin2 \
-sim:/tb_dlx/DLX_0/datapath_1/reg_mux2 \
-sim:/tb_dlx/DLX_0/datapath_1/imm2 \
-sim:/tb_dlx/DLX_0/datapath_1/imm_mux2 \
-sim:/tb_dlx/DLX_0/datapath_1/reg_alu_out \
-sim:/tb_dlx/DLX_0/datapath_1/ALUout \
-sim:/tb_dlx/DLX_0/datapath_1/ALUin1 \
-sim:/tb_dlx/DLX_0/datapath_1/ALUin2 \
-sim:/tb_dlx/DLX_0/datapath_1/pc_mux_sig \
-sim:/tb_dlx/DLX_0/datapath_1/not_comp_sig \
-sim:/tb_dlx/DLX_0/datapath_1/comp_sig \
-sim:/tb_dlx/DLX_0/datapath_1/branch_out_sig \
-sim:/tb_dlx/DLX_0/datapath_1/sign_ext_delay \
-sim:/tb_dlx/DLX_0/datapath_1/DRAMout \
-sim:/tb_dlx/DLX_0/datapath_1/LMDout
+add wave -position insertpoint sim:/tb_dlx/DLX_0/datapath_1/*
+
 add wave -position insertpoint  \
 sim:/tb_dlx/DLX_0/dlx_cu_0/MICROCODE_MEM_SIZE \
 sim:/tb_dlx/DLX_0/dlx_cu_0/FUNC_SIZE \
