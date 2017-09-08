@@ -477,7 +477,7 @@ reg_1 : register_gen_en
     generic map (
             n_bit  => 32 )
 port map (
-DIN  => reg_mux2,
+DIN  => store_data,
 ENABLE  => '1',
 RESET  => reset,
 CLK  => clk,
