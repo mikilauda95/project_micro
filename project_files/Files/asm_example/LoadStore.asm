@@ -9,7 +9,24 @@ sw 4(r1), r2       ; should forward
 nop
 nop
 nop
-lw r2, 4(r1)
+sw 0(r1), r2       ; should forward
+nop
+nop
+nop
+lw r3, 4(r1)
+nop
+nop
+nop
+lh r4, 4(r1)
+nop
+nop
+nop
+lhu r5, 4(r1)
+nop
+nop
+nop
+lb r6, 4(r1)
+lbu r7, 4(r1)
 nop
 nop
 nop
@@ -17,7 +34,7 @@ sb 20(r1), r2       ; should forward
 nop
 nop
 nop
-lh r3, 4(r1)
+sh 24(r1), r2       ; should forward
 nop
 nop
 nop

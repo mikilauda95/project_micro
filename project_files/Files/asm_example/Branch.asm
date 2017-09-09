@@ -1,7 +1,5 @@
-
 addi r1, r0, 100
 xor r2, r2, r2
-
 ciclo:
 lw r3, 0(r2)
 nop
@@ -21,11 +19,9 @@ bnez r1, ciclo
 nop
 nop
 nop
-
 addi r4, r0, 65535 
 ori r5, r4, 100000
 add r6, r4, r5
-
 end:
 j end
 nop

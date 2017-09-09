@@ -35,25 +35,23 @@ architecture behavioral_basic of register_file is
 
 begin 
     -- write your RF code 
-    process(CLK)
+    process(CLK, ADD_RD1, ADD_RD2, reset)
     begin
 
-        if rising_edge(clk) then
-            if reset = '1' then
-                OUT1 <= (others => '0'); 
-                OUT2 <= (others => '0'); 
-                REGISTERS <= (others => (others =>'0')); 
-            elsif ENABLE = '1' then 
-                if RD1 = '1' then
-                    OUT1 <= REGISTERS(to_integer(unsigned(ADD_RD1)));
-                end if;
+        if reset = '1' then
+            OUT1 <= (others => '0'); 
+            OUT2 <= (others => '0'); 
+            REGISTERS <= (others => (others =>'0')); 
+        elsif ENABLE = '1' then 
+            if RD1 = '1' then
+                OUT1 <= REGISTERS(to_integer(unsigned(ADD_RD1)));
+            end if;
 
-                if RD2 = '1' then
-                    OUT2 <= REGISTERS(to_integer(unsigned(ADD_RD2)));
-                end if;
-
+            if RD2 = '1' then
+                OUT2 <= REGISTERS(to_integer(unsigned(ADD_RD2)));
+            end if;
+            if rising_edge(clk) then
                 if WR = '1' then
-
                     REGISTERS(to_integer(unsigned(ADD_WR))) <= DATAIN;
                 end if;
                 if JAL_SIG ='1' then
@@ -63,6 +61,12 @@ begin
             end if;
         end if;
     end process;
+
+    process(ADD_RD1, ADD_RD2)
+    begin
+
+    end process;
+
 
 --    REGISTERS(1) <= "00000101101011111010101010100101";
 --    REGISTERS(2) <= "10100101101011111010101010100101";

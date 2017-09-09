@@ -27,9 +27,13 @@ entity datapath is
     RegIMM_LATCH_EN    : in std_logic;  -- Immediate Register Latch Enable
     MUXJ_SEL 		   : in std_logic;  -- Choose between class immediate and 26 bit jump immediate
 	MUXBRORJ_SEL 	   : in std_logic;  -- choose between normal op and jump or branch operation
+    MUXA_SEL           : in std_logic;  -- MUX-A Sel
+    JUMP_EN            : in std_logic;  -- JUMP Enable Signal for PC input MUX
+    JUMP_BRANCH        : in std_logic;
+    PC_LATCH_EN        : in std_logic;  -- Program Counte Latch Enable
+    JAL_SIG            : in std_logic;  -- SIGNAL FOR WRITING RETURN ADDRESS
 
     -- EX Control Signalsin
-    MUXA_SEL           : in std_logic;  -- MUX-A Sel
     MUXB_SEL           : in std_logic;  -- MUX-B Sel
     ALU_OUTREG_EN      : in std_logic;  -- ALU Output Register Enable
     EQ_COND            : in std_logic;  -- Branch if (not) Equal to Zero
@@ -39,13 +43,9 @@ entity datapath is
     ALU_OPCODE         : in aluOp; -- choose between implicit or exlicit coding, like std_logic_vector(ALU_OPC_SIZE -1 downto 0);
     
     -- MEM Control Signalin
+    dram_re            : in std_logic;  -- data ram write enable
     DRAM_WE            : in std_logic;  -- Data RAM Write Enable
     LMD_LATCH_EN       : in std_logic;  -- LMD Register Latch Enable
-    JUMP_EN            : in std_logic;  -- JUMP Enable Signal for PC input MUX
-    JUMP_BRANCH        : in std_logic;
-    PC_LATCH_EN        : in std_logic;  -- Program Counte Latch Enable
-    JAL_SIG            : in std_logic;  -- SIGNAL FOR WRITING RETURN ADDRESS
-
 
     -- WB Control signalsin
     LOAD_MUX          : in std_logic_vector(2 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR STORES
@@ -151,6 +151,8 @@ component DRAM
     port (
              Rst  : in  std_logic;
              WR_enable  : in  std_logic;
+             R_enable  : in  std_logic;
+             clock : in std_logic;
              Addr : in  std_logic_vector(ADDR_SIZE - 1 downto 0); 
              Din : in  std_logic_vector(WORD_SIZE - 1 downto 0);
              Dout : out std_logic_vector(WORD_SIZE - 1 downto 0)
@@ -178,6 +180,19 @@ component NOR5 is
 end component; 
 
 
+--component P4ADD is 
+    --generic (n_block:	integer := 4; 
+             --n_bit :	integer := 32);
+
+    --Port (	A:	In	std_logic_vector(n_bit-1 downto 0);
+           --B:	In	std_logic_vector(n_bit-1 downto 0);
+           --Ci:	In	std_logic;
+           --S:	Out	std_logic_vector(n_bit-1 downto 0);
+           --Co:	Out	std_logic);
+--end component; 
+
+
+
 --signals declarations
 
 --used in fetch
@@ -191,6 +206,8 @@ signal IRout_delay, ADD_WR_SIG,ADD_WR_DEC,ADD_WR_EX : std_logic_vector(n_bit-1 d
 signal ADD_WR_SIG_mux : std_logic_vector(4 downto 0);
 signal imm2_sig,imm_j, imm_b, imm_brorj : std_logic_vector(n_bit-1 downto 0);
 signal j_imm_cont : std_logic;
+signal usls_co : std_logic;
+signal jump_PC : std_logic_vector(n_bit-1 downto 0);
 
 --used in execute
 signal reg_alu_out, ALUout, ALUin1, ALUin2: std_logic_vector(n_bit-1 downto 0);
@@ -202,7 +219,7 @@ signal regb_bypass, RET_ADD, store_data : std_logic_vector(n_bit-1 downto 0);
 
 --used in memory
 signal DRAMout, LMDout,reg_alu_mem : std_logic_vector(n_bit-1 downto 0);
-signal jump_condition : std_logic;
+signal jump_condition, not_clk : std_logic;
 
 --used in wb
 signal rt_vs_it : std_logic;
@@ -319,6 +336,18 @@ imm_b(31 downto 16) <= (others =>IRout(15));
 
 
 
+--reg_alu_1 : register_gen_en
+    --generic map (
+            --n_bit  => 1 )
+--port map (
+--DIN  => branch_out_sig,
+--ENABLE  => '1',
+--RESET  => reset,
+--CLK  => clk,
+--DOUT  => branch_out_delayed );
+
+
+
 ----------processes---------------
 
 ----------interface---------------
@@ -332,6 +361,54 @@ port map (imm_j, imm_b, MUXJ_SEL, imm_brorj); --if control is 0 the output is im
 mux_imm_j: MUX21_GENERIC --second mux to choose between jump/branch and immediate
 generic map (n_bit => 32)
 port map (imm_brorj, imm2, MUXBRORJ_SEL, imm2_sig); --if control is 0 the output is imm2, else it's imm_brorj
+
+--BRANCH AND JUMP LOGIC
+
+jump_PC <= NPC_out_delayed + imm2_sig;
+
+
+--PC_calculation : P4ADD
+--generic map (
+                --n_block => 4,
+                --n_bit  => 32 )
+--port map (
+             --A => NPC_out_delayed,
+             --B => imm2_sig,
+             --Ci => '0',
+             --S => jump_PC,
+             --Co => usls_co );
+
+
+mux_pc: MUX21_GENERIC  --mux to choose whether to take NPC or aluoutput as PC, 0 NPC, 1 ALUoutput
+generic map (n_bit => 32) 
+port map (jump_PC, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
+
+jump_condition <= JUMP_EN or branch_out_sig(0);
+pc_mux_sig(0) <= jump_condition and JUMP_BRANCH;
+
+--BRANCH part--
+mux_branch: MUX21_GENERIC  --mux to choose bez if EQ_COND is 1, bnez if EQ_COND is 0
+generic map (n_bit => 1) 
+port map (comp_sig, not_comp_sig, EQ_COND, branch_out_sig);
+
+
+not_comp_sig <= not(comp_sig);
+
+ADDPC_jal_sig <= NPC_out_delayed + 4; --used only for the instruction JAL
+
+--process to compare the branch register to 0
+process(regin1) 
+begin
+
+    if(regin1= 0 ) then
+       comp_sig <= "1"; 
+   else
+       comp_sig <= "0";
+   end if;
+       
+end process;
+
+----------------------------------------------------------------------------------------------------
 
 reg_imm : register_gen_en  --register to store the value of the immediate we want
     generic map (
@@ -365,13 +442,37 @@ register_file_0 : register_file  --register file
            RET_ADD => RET_ADD,
            JAL_SIG => JAL_SIG);
 
-latchA: latch --latch A to save the value from the rf
-generic map(n_bit =>32)
-port map(regin1, RegA_LATCH_EN, reset, reg_mux1 );
 
-latchB: latch --latch B to save the value from the rf
-generic map(n_bit =>32)
-port map(regin2, RegB_LATCH_EN, reset, reg_mux2 );
+reg_A : register_gen_en --register to store the value of the immediate we want
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => regin1,
+ENABLE  => RegA_LATCH_EN,
+RESET  => reset,
+CLK  => clk,
+DOUT  => reg_mux1);
+
+reg_B : register_gen_en --register to store the value of the immediate we want
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => regin2,
+ENABLE  => RegB_LATCH_EN,
+RESET  => reset,
+CLK  => clk,
+DOUT  => reg_mux2);
+
+
+
+
+--latchA: latch --latch A to save the value from the rf
+--generic map(n_bit =>32)
+--port map(regin1, RegA_LATCH_EN, reset, reg_mux1 );
+
+--latchB: latch --latch B to save the value from the rf
+--generic map(n_bit =>32)
+--port map(regin2, RegB_LATCH_EN, reset, reg_mux2 );
 
 
 
@@ -412,22 +513,8 @@ DOUT  => NPC_out_delayed);
 ----------------------------------EXECUTE----------------------------------------------
 
 ------------assignments--------------
-not_comp_sig <= not(comp_sig);
-
-ADDPC_jal_sig <= NPC_out_delayed2 + 4; --used only for the instruction JAL
 ------------processes----------------
 
---process to compare the branch register to 0
-process(reg_mux1) 
-begin
-
-    if(reg_mux1= 0 ) then
-       comp_sig <= "1"; 
-   else
-       comp_sig <= "0";
-   end if;
-       
-end process;
 
 ------------interface----------------
 
@@ -496,20 +583,22 @@ RESET  => reset,
 CLK  => clk,
 DOUT  => ADD_WR_EX);
 
-reg_delay_npc2 : register_gen_en  ----register to store (and delay) the next program counter
-    generic map (
-            n_bit  => 32 )
-port map (
-DIN  => NPC_out_delayed,
-ENABLE  => '1',
-RESET  => reset,
-CLK  => clk,
-DOUT  => NPC_out_delayed2);
+--reg_delay_npc2 : register_gen_en  ----register to store (and delay) the next program counter
+    --generic map (
+            --n_bit  => 32 )
+--port map (
+--DIN  => NPC_out_delayed,
+--ENABLE  => '1',
+--RESET  => reset,
+--CLK  => clk,
+--DOUT  => NPC_out_delayed2);
 
 --ALU part--
-mux1: MUX21_GENERIC   --mux to choose the first operand of the ALU
-generic map (n_bit => 32)
-port map (NPC_out_delayed2, reg_mux1, MUXA_SEL, ALUin1); --if control is 0 the output is regin1, else it's imm1
+--mux1: MUX21_GENERIC   mux to choose the first operand of the ALU
+--generic map (n_bit => 32)
+--port map (NPC_out_delayed2, reg_mux1, MUXA_SEL, ALUin1); if control is 0 the output is regin1, else it's imm1
+
+ALUin1 <= reg_mux1;
 
 mux2: MUX21_GENERIC   --mux to choose the second operand of the ALU
 generic map (n_bit => 32)  
@@ -537,22 +626,6 @@ DOUT  => reg_alu_out );
 --generic map(n_bit => 32)
 --port map(ALUout, clk, reset, reg_alu_out);
 
---BRANCH part--
-mux_branch: MUX21_GENERIC  --mux to choose bez if EQ_COND is 1, bnez if EQ_COND is 0
-generic map (n_bit => 1) 
-port map (comp_sig, not_comp_sig, EQ_COND, branch_out_sig);
-
-
-reg_alu_1 : register_gen_en
-    generic map (
-            n_bit  => 1 )
-port map (
-DIN  => branch_out_sig,
-ENABLE  => '1',
-RESET  => reset,
-CLK  => clk,
-DOUT  => branch_out_delayed );
-
 
 
 
@@ -573,10 +646,11 @@ DOUT  => branch_out_delayed );
 --alias LMD_LATCH_EN :bit is controls(3);
 --alias PC_LATCH_EN :bit is controls(2);
 
+not_clk <=not(clk);
 DataRam: DRAM
 generic map(DRAM_DEPTH => 4*32, 
 	    DATA_SIZE => 8)
-port map(reset, DRAM_WE, reg_alu_out, regb_bypass, DRAMout);
+port map(reset, DRAM_WE, dram_re, not_clk, reg_alu_out, regb_bypass, DRAMout);
 
 --LMD: register_gen  --LMD register
 --generic map(n_bit => 32)
@@ -615,12 +689,6 @@ CLK  => clk,
 DOUT  => reg_alu_mem);
 
 
-mux_pc: MUX21_GENERIC  --mux to choose whether to take NPC or aluoutput as PC, 0 NPC, 1 ALUoutput
-generic map (n_bit => 32) 
-port map (reg_alu_out, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
-
-jump_condition <= JUMP_EN or branch_out_delayed(0);
-pc_mux_sig(0) <= jump_condition and JUMP_BRANCH;
 
 
 ---------------------------------WRITE BACK-------------------------------------------

@@ -11,6 +11,8 @@ entity DRAM is
     port (
              Rst  : in  std_logic;
              WR_enable  : in  std_logic;
+             R_enable  : in  std_logic;
+             clock : in std_logic;
              Addr : in  std_logic_vector(ADDR_SIZE - 1 downto 0); 
              Din : in  std_logic_vector(WORD_SIZE - 1 downto 0);
              Dout : out std_logic_vector(WORD_SIZE - 1 downto 0)
@@ -26,20 +28,22 @@ architecture Dram_Beh of DRAM is
 
 begin  -- SRam_Bhe
 
-    DRAM_proc: process (Rst, WR_enable, Din)
+    DRAM_proc: process (clock)
     begin  -- process FILL_MEM_P
         if (Rst = '0') then
+            if(rising_edge(clock)) then
             if (WR_enable = '1' ) then --Writing on the memory
                 DRAM_mem(conv_integer(unsigned(Addr))) <= Din(WORD_SIZE -1 downto WORD_SIZE-8) ;
                 DRAM_mem(conv_integer(unsigned(Addr))+1) <= Din(WORD_SIZE -9 downto WORD_SIZE-16) ;
                 DRAM_mem(conv_integer(unsigned(Addr))+2) <= Din(WORD_SIZE -17 downto WORD_SIZE-24) ;
                 DRAM_mem(conv_integer(unsigned(Addr))+3) <= Din(WORD_SIZE -25 downto WORD_SIZE-32) ;
-            else --Reading from memory (WR = 0)
+            elsif(R_enable = '1')  then --Reading from memory (WR = 0, R_enable=1)
                 Dout(WORD_SIZE-1 downto WORD_SIZE-8) <= DRAM_mem(conv_integer(unsigned(Addr)));
                 Dout(WORD_SIZE -9 downto WORD_SIZE-16) <= DRAM_mem(conv_integer(unsigned(Addr))+1);
                 Dout(WORD_SIZE -17 downto WORD_SIZE-24) <= DRAM_mem(conv_integer(unsigned(Addr))+2);
                 Dout(WORD_SIZE -25 downto WORD_SIZE-32) <= DRAM_mem(conv_integer(unsigned(Addr))+3);
             end if;
+        end if;
         end if;
     end process DRAM_proc;
 

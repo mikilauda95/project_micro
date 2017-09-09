@@ -2,57 +2,59 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
-use work.myTypes.all;
+use work.mytypes.all;
 use work.constants.all;
 --use ieee.numeric_std.all;
 --use work.all;
 
 entity dlx_cu is
     generic (
-                MICROCODE_MEM_SIZE :     integer := MICROCODE_MEM_SIZE;  -- Microcode Memory Size
-                FUNC_SIZE          :     integer := FUNC_SIZE;  -- Func Field Size for R-Type Ops
-                OP_CODE_SIZE       :     integer := OP_CODE_SIZE;  -- Op Code Size
-                                                                   -- ALU_OPC_SIZE       :     integer := 6;  -- ALU Op Code Word Size
-                IR_SIZE            :     integer := IR_SIZE;  -- Instruction Register Size    
-                CW_SIZE            :     integer := CW_SIZE);  -- Control Word Size
+                microcode_mem_size :     integer := microcode_mem_size;  -- microcode memory size
+                func_size          :     integer := func_size;  -- func field size for r-type ops
+                op_code_size       :     integer := op_code_size;  -- op code size
+                                                                   -- alu_opc_size       :     integer := 6;  -- alu op code word size
+                ir_size            :     integer := ir_size;  -- instruction register size    
+                cw_size            :     integer := cw_size);  -- control word size
     port (
-             Clk                : in  std_logic;  -- Clock
-             Rst                : in  std_logic;  -- Reset:Active-Low
-                                                  -- Instruction Register
-             IR_IN              : in  std_logic_vector(IR_SIZE - 1 downto 0);
+             clk                : in  std_logic;  -- clock
+             rst                : in  std_logic;  -- reset:active-low
+                                                  -- instruction register
+             ir_in              : in  std_logic_vector(ir_size - 1 downto 0);
 
-    -- IF Control Signal
-             IR_LATCH_EN        : out std_logic;  -- Instruction Register Latch Enable
-             NPC_LATCH_EN       : out std_logic;
-    -- NextProgramCounter Register Latch Enable
-    -- ID Control Signals
-             RegA_LATCH_EN      : out std_logic;  -- Register A Latch Enable
-             RegB_LATCH_EN      : out std_logic;  -- Register B Latch Enable
-             RegIMM_LATCH_EN    : out std_logic;  -- Immediate Register Latch Enable
-             MUXJ_SEL           : out std_logic;
-            MUXBRORJ_SEL        : out std_logic;
+    -- if control signal
+             ir_latch_en        : out std_logic;  -- instruction register latch enable
+             npc_latch_en       : out std_logic;
+    -- nextprogramcounter register latch enable
+    -- id control signals
+             rega_latch_en      : out std_logic;  -- register a latch enable
+             regb_latch_en      : out std_logic;  -- register b latch enable
+             regimm_latch_en    : out std_logic;  -- immediate register latch enable
+             muxj_sel           : out std_logic;
+            muxbrorj_sel        : out std_logic;
 
-    -- EX Control Signals
-             MUXA_SEL           : out std_logic;  -- MUX-A Sel
-             MUXB_SEL           : out std_logic;  -- MUX-B Sel
-             ALU_OUTREG_EN      : out std_logic;  -- ALU Output Register Enable
-             EQ_COND            : out std_logic;  -- Branch if (not) Equal to Zero
-                                                  -- ALU Operation Code
-             STORE_MUX          : out std_logic_vector(1 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR STORES
-             ALU_OPCODE         : out aluOp; -- choose between implicit or exlicit coding, like std_logic_vector(ALU_OPC_SIZE -1 downto 0);
+             muxa_sel           : out std_logic;  -- mux-a sel 
 
-    -- MEM Control Signals
-             DRAM_WE            : out std_logic;  -- Data RAM Write Enable
-             LMD_LATCH_EN       : out std_logic;  -- LMD Register Latch Enable
-             JUMP_EN            : out std_logic;  -- JUMP unconditioned identifier
-             JUMP_branch        : out std_logic;  -- JUMP or branch operation identifier
-             PC_LATCH_EN        : out std_logic;  -- Program Counte Latch Enable
-             JAL_SIG            : out std_logic;  --SIGNAL to write back return address
+             jump_en            : out std_logic;  -- jump unconditioned identifier
+             jump_branch        : out std_logic;  -- jump or branch operation identifier
+             pc_latch_en        : out std_logic;  -- program counte latch enable
+             jal_sig            : out std_logic;  --signal to write back return address
 
-    -- WB Control signals
-             LOAD_MUX           : out std_logic_vector(2 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR LOADS
-             WB_MUX_SEL         : out std_logic;  -- Write Back MUX Sel
-             RF_WE              : out std_logic);  -- Register File Write Enable
+    -- ex control signals
+             muxb_sel           : out std_logic;  -- mux-b sel
+             alu_outreg_en      : out std_logic;  -- alu output register enable
+             eq_cond            : out std_logic;  -- branch if (not) equal to zero
+             store_mux          : out std_logic_vector(1 downto 0);  -- signals to control the data size for stores
+             alu_opcode         : out aluop; -- choose between implicit or exlicit coding, like std_logic_vector(alu_opc_size -1 downto 0);
+
+    -- mem control signals
+             dram_re            : out std_logic;  -- data ram write enable
+             dram_we            : out std_logic;  -- data ram write enable
+             lmd_latch_en       : out std_logic;  -- lmd register latch enable
+
+    -- wb control signals
+             load_mux           : out std_logic_vector(2 downto 0);  -- signals to control the data size for loads
+             wb_mux_sel         : out std_logic;  -- write back mux sel
+             rf_we              : out std_logic);  -- register file write enable
 
 end dlx_cu;
 
@@ -60,225 +62,228 @@ architecture dlx_cu_hw of dlx_cu is
     constant zero_stage_cwnum : integer :=0;
     constant first_stage_cwnum : integer :=0;
     constant second_stage_cwnum : integer :=0;
+
     constant third_stage_cwnum : integer :=0;
-    constant OFFSET_CU2 : integer := 2;
-    constant OFFSET_CU3 : integer := 7;
-    constant OFFSET_CU4 : integer := 13;
-    constant OFFSET_CU5 : integer := 19;
-    type mem_array is array (0 to MICROCODE_MEM_SIZE-1) of std_logic_vector(CW_SIZE - 1 downto 0);
-    signal cw_mem : mem_array := ("111100000100000001000011", --0 R type
-    "000000000000000000000000", --1 	
-	"110011111110000111000000", --2 J (0X02) instruction encoding corresponds to the address to this ROM
-    "110011111110000111100000", --3 JAL 
-    "111010111110000011000000", --4 BEQZ 
-    "111010111100000011000000", --5 BNEZ
-    "000000000000000000000000", --6 bfpt (not implemented)
-    "000000000000000000000000", --7 bfpf (not implemented)
-    "111010001100000001000011", --8 ADD i
-    "001000000000000000000000", --9 Addui (not implemented)
-    "111010001100000001000011", --10 SUB i 
-    "001000000000000000000000", --11 Subui (not implemented)
-    "111010001100000001000011", --12 AND i 
-    "111010001100000001000011", --13 OR i 
-    "111010001100000001000011", --14 XOR i 
-    "001000000000000000000000", --15 lhi (not implemented)
-    "001000000000000000000000", --16 rfe (not implemented)
-    "000000000000000000000000", --17 trap (not implemented)
-    "111011001110000111000000", --18 jr
-    "111011001110000111100000", --19 jalr
-    "111010001100000001000011", --20 slli 
-    "001000000000000000000000", --21 nop
-    "111010001100000001000011", --22 srli 
-    "111010001100000001000011", --23 srai 
-    "111010001100000001000011", --24 seqi
-    "111010001100000001000011", --25 snei
-    "111010001100000001000011", --26 slti 
-    "111010001100000001000011", --27 sgti 
-    "111010001100000001000011", --28 slei
-    "111010001100000001000011", --29 sgei
-    "001000000000000000000000", --30
-    "001000000000000000000000", --31
-    "111110001100001001000101", --32 lb (not implemented)
-    "111110001100001001001101", --33 lh (not implemented)
-    "001000000000000000000000", --34
-    "111110001100001001000001", --35 lw
-    "111110001100001001001001", --36 lbu(not implemented)
-    "111110001100001001010001", --37 lhu(not implemented) 
-    "001000000000000000000000", --38 lf(not implemented)
-    "001000000000000000000000", --39 ld(not implemented)
-    "111110001100111001000000", --40 sb(not implemented)
-    "111110001100111001000000", --41 sh(not implemented)
-    "001000000000000000000000", --
-    "111110001100111001000000", --43 sw
-    "000000000000000000000000", --
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000",
-    "000000000000000000000000"); -- changed cw(cwsize-3 ) to 1 (latch for the first operand in register)
+    constant offset_cu2 : integer := 2;
+    constant offset_cu3 : integer := 12;
+    constant offset_cu4 : integer := 17;
+    constant offset_cu5 : integer := 20;
+    type mem_array is array (0 to microcode_mem_size-1) of std_logic_vector(cw_size - 1 downto 0);
+    signal cw_mem : mem_array := (
+    "1111000000100100000000011", --0 r type
+    "0000000000000000000000000", --1 	
+	"1100111111101110000000000", --2 j (0x02) instruction encoding corresponds to the address to this rom
+    "1100111111111110000000000", --3 jal 
+    "1110101101101110000000000", --4 beqz 
+    "1110101101101100000000000", --5 bnez
+    "0000000000000000000000000", --6 bfpt (not implemented)
+    "0000000000000000000000000", --7 bfpf (not implemented)
+    "1110100000101100000000011", --8 add i
+    "0010000000000000000000000", --9 addui (not implemented)
+    "1110100000101100000000011", --10 sub i 
+    "0010000000000000000000000", --11 subui (not implemented)
+    "1110100000101100000000011", --12 and i 
+    "1110100000101100000000011", --13 or i 
+    "1110100000101100000000011", --14 xor i 
+    "0010000000000000000000000", --15 lhi (not implemented)
+    "0010000000000000000000000", --16 rfe (not implemented)
+    "0000000000000000000000000", --17 trap (not implemented)
+    "1110110011101110000000000", --18 jr
+    "1110110011111110000000000", --19 jalr
+    "1110100000101100000000011", --20 slli 
+    "0010000000000000000000000", --21 nop
+    "1110100000101100000000011", --22 srli 
+    "1110100000101100000000011", --23 srai 
+    "1110100000101100000000011", --24 seqi
+    "1110100000101100000000011", --25 snei
+    "1110100000101100000000011", --26 slti 
+    "1110100000101100000000011", --27 sgti 
+    "1110100000101100000000011", --28 slei
+    "1110100000101100000000011", --29 sgei
+    "0010000000000000000000000", --30
+    "0010000000000000000000000", --31
+    "1111100000101100010100101", --32 lb (not implemented)
+    "1111100000101100010101101", --33 lh (not implemented)
+    "0010000000000000000000000", --34
+    "1111100000101100010100001", --35 lw
+    "1111100000101100010101001", --36 lbu(not implemented)
+    "1111100000101100010110001", --37 lhu(not implemented) 
+    "0010000000000000000000000", --38 lf(not implemented)
+    "0010000000000000000000000", --39 ld(not implemented)
+    "1111100000101100101100000", --40 sb(not implemented)
+    "1111100000101100101100000", --41 sh(not implemented)
+    "0010000000000000000000000", --
+    "1111100000101100101100000", --43 sw
+    "0000000000000000000000000", --
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000",
+    "0000000000000000000000000"); -- changed cw(cwsize-3 ) to 1 (latch for the first operand in register)
 
 
-    signal IR_opcode: std_logic_vector(OP_CODE_SIZE -1 downto 0);  -- OpCode part of IR
-    signal IR_func : std_logic_vector(FUNC_SIZE-1 downto 0);   -- Func part of IR when Rtype
-    signal cw   : std_logic_vector(CW_SIZE - 1 downto 0); -- full control word read from cw_mem
+    signal ir_opcode: std_logic_vector(op_code_size -1 downto 0);  -- opcode part of ir
+    signal ir_func : std_logic_vector(func_size-1 downto 0);   -- func part of ir when rtype
+    signal cw   : std_logic_vector(cw_size - 1 downto 0); -- full control word read from cw_mem
 
 
   -- control word is shifted to the correct stage
-    signal cw1 : std_logic_vector(CW_SIZE -1 downto 0); -- first stage
-    signal cw2 : std_logic_vector(CW_SIZE - 1 - OFFSET_CU2 downto 0); -- second stage
-    signal cw3 : std_logic_vector(CW_SIZE - 1 - OFFSET_CU3 downto 0); -- third stage
-    signal cw4 : std_logic_vector(CW_SIZE - 1 - OFFSET_CU4 downto 0); -- fourth stage
-    signal cw5 : std_logic_vector(CW_SIZE -1 - OFFSET_CU5 downto 0); -- fifth stage
+    signal cw1 : std_logic_vector(cw_size -1 downto 0); -- first stage
+    signal cw2 : std_logic_vector(cw_size - 1 - offset_cu2 downto 0); -- second stage
+    signal cw3 : std_logic_vector(cw_size - 1 - offset_cu3 downto 0); -- third stage
+    signal cw4 : std_logic_vector(cw_size - 1 - offset_cu4 downto 0); -- fourth stage
+    signal cw5 : std_logic_vector(cw_size -1 - offset_cu5 downto 0); -- fifth stage
 
-    signal aluOpcode_i: aluOp := NOP; -- ALUOP defined in package
-    signal aluOpcode1: aluOp := NOP;
-    signal aluOpcode2: aluOp := NOP;
-    signal aluOpcode3: aluOp := NOP;
+    signal aluopcode_i: aluop := nop; -- aluop defined in package
+    signal aluopcode1: aluop := nop;
+    signal aluopcode2: aluop := nop;
+    signal aluopcode3: aluop := nop;
 
 
 
 begin  -- dlx_cu_rtl
 
-    IR_opcode<= IR_IN(31 downto 26);
-    IR_func(10 downto 0)  <= IR_IN(FUNC_SIZE - 1 downto 0);
+    ir_opcode<= ir_in(31 downto 26);
+    ir_func(10 downto 0)  <= ir_in(func_size - 1 downto 0);
 
 
   -- stage one control signals
-    IR_LATCH_EN  <= cw1(CW_SIZE - 1);
-    NPC_LATCH_EN <= cw1(CW_SIZE - 2);
+    ir_latch_en  <= cw1(cw_size - 1);
+    npc_latch_en <= cw1(cw_size - 2);
 
   -- stage two control signals
-    RegA_LATCH_EN   <= cw2(CW_SIZE - 3);
-    RegB_LATCH_EN   <= cw2(CW_SIZE - 4);
-    RegIMM_LATCH_EN <= cw2(CW_SIZE - 5);
-    MUXJ_SEL        <= cw2(CW_SIZE-6);
-    MUXBRORJ_SEL    <= cw2(CW_SIZE-7);
+    rega_latch_en   <= cw2(cw_size - 3);
+    regb_latch_en   <= cw2(cw_size - 4);
+    regimm_latch_en <= cw2(cw_size - 5);
+    muxj_sel        <= cw2(cw_size-6);
+    muxbrorj_sel    <= cw2(cw_size-7);
+    muxa_sel      <= cw2(cw_size - 8);
+    jump_en      <= cw2(cw_size - 9);
+    jump_branch  <= cw2(cw_size - 10);
+    pc_latch_en  <= cw2(cw_size - 11);
+    jal_sig      <= cw2(cw_size - 12);
 
   -- stage three control signals
-    MUXA_SEL      <= cw3(CW_SIZE - 8);
-    MUXB_SEL      <= cw3(CW_SIZE - 9);
-    ALU_OUTREG_EN <= cw3(CW_SIZE - 10);
-    EQ_COND       <= cw3(CW_SIZE - 11);
-    STORE_MUX     <= cw3(CW_SIZE - 12 downto CW_SIZE-13);
+    muxb_sel      <= cw3(cw_size - 13);
+    alu_outreg_en <= cw3(cw_size - 14);
+    eq_cond       <= cw3(cw_size - 15);
+    store_mux     <= cw3(cw_size - 16 downto cw_size-17);
 
   -- stage four control signals
-    DRAM_WE      <= cw4(CW_SIZE - 14);
-    LMD_LATCH_EN <= cw4(CW_SIZE - 15);
-    JUMP_EN      <= cw4(CW_SIZE - 16);
-    JUMP_branch  <= cw4(CW_SIZE - 17);
-    PC_LATCH_EN  <= cw4(CW_SIZE - 18);
-    JAL_SIG      <= cw4(CW_SIZE - 19);
+    dram_re      <= cw4(cw_size - 18);
+    dram_we      <= cw4(cw_size - 19);
+    lmd_latch_en <= cw4(cw_size - 20);
 
   -- stage five control signals
-    LOAD_MUX  <= cw5(CW_SIZE - 20 downto CW_SIZE-22);
-    WB_MUX_SEL <= cw5(CW_SIZE - 23);
-    RF_WE      <= cw5(CW_SIZE - 24);
+    load_mux  <= cw5(cw_size - 21 downto cw_size-23);
+    wb_mux_sel <= cw5(cw_size - 24);
+    rf_we      <= cw5(cw_size - 25);
 
 
   -- process to pipeline control words
-    CW_PIPE: process (Clk, Rst)
-    begin  -- process Clk
-        if Rst = '1' then                   -- asynchronous reset (active low)
+    cw_pipe: process (clk, rst)
+    begin  -- process clk
+        if rst = '1' then                   -- asynchronous reset (active low)
             cw <= (others => '0');
             cw1 <= (others => '0');
             cw2 <= (others => '0');
             cw3 <= (others => '0');
             cw4 <= (others => '0');
             cw5 <= (others => '0');
-            aluOpcode1 <= NOP;
-            aluOpcode2 <= NOP;
-            aluOpcode3 <= NOP;
-        elsif Clk'event and Clk = '1' then  -- rising clock edge
-            cw <= cw_mem(conv_integer(IR_opcode));
+            aluopcode1 <= nop;
+            aluopcode2 <= nop;
+            aluopcode3 <= nop;
+        elsif clk'event and clk = '1' then  -- rising clock edge
+            cw <= cw_mem(conv_integer(ir_opcode));
             --cw1 <= cw;
-            cw2 <= cw(CW_SIZE - 1 - OFFSET_CU2 downto 0);
-            cw3 <= cw2(CW_SIZE - 1 - OFFSET_CU3 downto 0);
-            cw4 <= cw3(CW_SIZE - 1 - OFFSET_CU4 downto 0);
-            cw5 <= cw4(CW_SIZE -1 - OFFSET_CU5 downto 0);
+            cw2 <= cw(cw_size - 1 - offset_cu2 downto 0);
+            cw3 <= cw2(cw_size - 1 - offset_cu3 downto 0);
+            cw4 <= cw3(cw_size - 1 - offset_cu4 downto 0);
+            cw5 <= cw4(cw_size -1 - offset_cu5 downto 0);
 		--ciao
-            aluOpcode1 <= aluOpcode_i;
-            aluOpcode2 <= aluOpcode1;
-            aluOpcode3 <= aluOpcode2; 
+            aluopcode1 <= aluopcode_i;
+            aluopcode2 <= aluopcode1;
+            aluopcode3 <= aluopcode2; 
         end if;
-    end process CW_PIPE;
+    end process cw_pipe;
 
-    ALU_OPCODE <= aluOpcode3;
+    alu_opcode <= aluopcode3;
 
-   -- purpose: Generation of ALU OpCode
+   -- purpose: generation of alu opcode
    -- type   : combinational
-   -- inputs : IR_i
-   -- outputs: aluOpcode
-    ALU_OP_CODE_P : process (IR_opcode, IR_func)
-    begin  -- process ALU_OP_CODE_P
-        case conv_integer(unsigned(IR_opcode)) is
-        -- case of R type requires analysis of FUNC
+   -- inputs : ir_i
+   -- outputs: aluopcode
+    alu_op_code_p : process (ir_opcode, ir_func)
+    begin  -- process alu_op_code_p
+        case conv_integer(unsigned(ir_opcode)) is
+        -- case of r type requires analysis of func
             when 0 =>
-                case conv_integer(unsigned(IR_func)) is
-                    when 4 => aluOpcode_i <= LLS; -- sll according to instruction set coding
-                    when 6 => aluOpcode_i <= LRS; -- srl
-					when 7 => aluOpcode_i <= SHARX; -- sra
-                    when 32 => aluOpcode_i <= ADDS; -- add
-					when 33 => aluOpcode_i <= ADDS; -- addu
-                    when 34 => aluOpcode_i <= SUBS; -- sub
-					when 35 => aluOpcode_i <= SUBS; -- subu
-                    when 36 => aluOpcode_i <= ANDS; -- and
-                    when 37 => aluOpcode_i <= ORS; -- or
-                    when 38 => aluOpcode_i <= XORS; -- xor
-					when 40 => aluOpcode_i <= EQU; --set if equal
-                    when 41 => aluOpcode_i <= NOTEQ; -- set if not equal
-                    when 45 => aluOpcode_i <= GREQ; -- set of greater or equal
-                    when 44 => aluOpcode_i <= LOEQ; -- set if lower or equal 
-					when 14 => aluOpcode_i <= MULS; --it's the multiplication 
-					when 42 => aluOpcode_i <= LO; --set if lower
-					when 43 => aluOpcode_i <= GR; --set if greater
-                    when others => aluOpcode_i <= NOP;
+                case conv_integer(unsigned(ir_func)) is
+                    when 4 => aluopcode_i <= lls; -- sll according to instruction set coding
+                    when 6 => aluopcode_i <= lrs; -- srl
+					when 7 => aluopcode_i <= sharx; -- sra
+                    when 32 => aluopcode_i <= adds; -- add
+					when 33 => aluopcode_i <= adds; -- addu
+                    when 34 => aluopcode_i <= subs; -- sub
+					when 35 => aluopcode_i <= subs; -- subu
+                    when 36 => aluopcode_i <= ands; -- and
+                    when 37 => aluopcode_i <= ors; -- or
+                    when 38 => aluopcode_i <= xors; -- xor
+					when 40 => aluopcode_i <= equ; --set if equal
+                    when 41 => aluopcode_i <= noteq; -- set if not equal
+                    when 45 => aluopcode_i <= greq; -- set of greater or equal
+                    when 44 => aluopcode_i <= loeq; -- set if lower or equal 
+					when 14 => aluopcode_i <= muls; --it's the multiplication 
+					when 42 => aluopcode_i <= lo; --set if lower
+					when 43 => aluopcode_i <= gr; --set if greater
+                    when others => aluopcode_i <= nop;
                 end case;
-            when 2 => aluOpcode_i <= ADDS; -- j
-			when 18 => aluOpcode_i <= ADDS; --jr
-            when 3 => aluOpcode_i <= ADDS; -- jal
-			when 19 => aluOpcode_i <= ADDS; -- jalr
-            when 8 => aluOpcode_i <= ADDS; -- addi
-            when 12 => aluOpcode_i <= ANDS; -- and
-            when 4 => aluOpcode_i <= ADDS; -- branch if equal zero
-            when 5 => aluOpcode_i <= ADDS; -- branch if not equal zero	
-            when 13 => aluOpcode_i <= ORS; -- ori		
-            when 29 => aluOpcode_i <= GREQ; -- set of greater or equal immediate
-            when 28 => aluOpcode_i <= LOEQ; -- set if lower or equal immediate
-            when 20 => aluOpcode_i <= LLS; -- sll immediate according to instruction set coding
-            when 25 => aluOpcode_i <= NOTEQ; -- set if not equal immediate
-            when 22 => aluOpcode_i <= LRS; -- srl immediate
-			when 24 => aluOpcode_i <= EQU; --set if equal 
-			when 23 => aluOpcode_i <= SHARX; -- sra immediate
-            when 10 => aluOpcode_i <= SUBS; -- subi
-            when 14 => aluOpcode_i <= XORS; -- xori
-            when 35 => aluOpcode_i <= ADDS; -- lw
-            when 32 => aluOpcode_i <= ADDS; -- lb
-            when 33 => aluOpcode_i <= ADDS; -- lh
-            when 36 => aluOpcode_i <= ADDS; -- lbu
-            when 37 => aluOpcode_i <= ADDS; -- lhu
-            when 21 => aluOpcode_i <= NOP; -- nop
-            when 43 => aluOpcode_i <= ADDS; -- sw
-            when 40 => aluOpcode_i <= ADDS; -- sb
-            when 41 => aluOpcode_i <= ADDS; -- sh
-			when 26 => aluOpcode_i <= LO; --set if lower immediate
-			when 27 => aluOpcode_i <= GR; --set if greater immediate
-            when others => aluOpcode_i <= NOP;
+            when 2 => aluopcode_i <= adds; -- j
+			when 18 => aluopcode_i <= adds; --jr
+            when 3 => aluopcode_i <= adds; -- jal
+			when 19 => aluopcode_i <= adds; -- jalr
+            when 8 => aluopcode_i <= adds; -- addi
+            when 12 => aluopcode_i <= ands; -- and
+            when 4 => aluopcode_i <= adds; -- branch if equal zero
+            when 5 => aluopcode_i <= adds; -- branch if not equal zero	
+            when 13 => aluopcode_i <= ors; -- ori		
+            when 29 => aluopcode_i <= greq; -- set of greater or equal immediate
+            when 28 => aluopcode_i <= loeq; -- set if lower or equal immediate
+            when 20 => aluopcode_i <= lls; -- sll immediate according to instruction set coding
+            when 25 => aluopcode_i <= noteq; -- set if not equal immediate
+            when 22 => aluopcode_i <= lrs; -- srl immediate
+			when 24 => aluopcode_i <= equ; --set if equal 
+			when 23 => aluopcode_i <= sharx; -- sra immediate
+            when 10 => aluopcode_i <= subs; -- subi
+            when 14 => aluopcode_i <= xors; -- xori
+            when 35 => aluopcode_i <= adds; -- lw
+            when 32 => aluopcode_i <= adds; -- lb
+            when 33 => aluopcode_i <= adds; -- lh
+            when 36 => aluopcode_i <= adds; -- lbu
+            when 37 => aluopcode_i <= adds; -- lhu
+            when 21 => aluopcode_i <= nop; -- nop
+            when 43 => aluopcode_i <= adds; -- sw
+            when 40 => aluopcode_i <= adds; -- sb
+            when 41 => aluopcode_i <= adds; -- sh
+			when 26 => aluopcode_i <= lo; --set if lower immediate
+			when 27 => aluopcode_i <= gr; --set if greater immediate
+            when others => aluopcode_i <= nop;
         end case;
-    end process ALU_OP_CODE_P;
+    end process alu_op_code_p;
 
 
 end dlx_cu_hw;

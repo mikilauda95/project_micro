@@ -36,9 +36,13 @@ component datapath
     RegIMM_LATCH_EN    : in std_logic;  -- Immediate Register Latch Enable
     MUXJ_SEL           : in std_logic;
     MUXBRORJ_SEL       : in std_logic;
+    MUXA_SEL           : in std_logic;  -- MUX-A Sel
+    JUMP_EN            : in std_logic;  -- JUMP Enable Signal for PC input MUX
+    JUMP_branch        : in std_logic;  -- JUMP or branch operation identifier
+    PC_LATCH_EN        : in std_logic;  -- Program Counte Latch Enable
+    JAL_SIG            : in std_logic;  --SIGNAL to write back return address
 
     -- EX Control Signalsin
-    MUXA_SEL           : in std_logic;  -- MUX-A Sel
     MUXB_SEL           : in std_logic;  -- MUX-B Sel
     ALU_OUTREG_EN      : in std_logic;  -- ALU Output Register Enable
     EQ_COND            : in std_logic;  -- Branch if (not) Equal to Zero
@@ -47,12 +51,9 @@ component datapath
     ALU_OPCODE         : in aluOp; -- choose between implicit or exlicit coding, like std_logic_vector(ALU_OPC_SIZE -1 downto 0);
     
     -- MEM Control Signalin
+    dram_re            : in std_logic;  -- data ram write enable
     DRAM_WE            : in std_logic;  -- Data RAM Write Enable
     LMD_LATCH_EN       : in std_logic;  -- LMD Register Latch Enable
-    JUMP_EN            : in std_logic;  -- JUMP Enable Signal for PC input MUX
-    JUMP_branch        : in std_logic;  -- JUMP or branch operation identifier
-    PC_LATCH_EN        : in std_logic;  -- Program Counte Latch Enable
-    JAL_SIG            : in std_logic;  --SIGNAL to write back return address
 
     -- WB Control signalsin
     LOAD_MUX           : in std_logic_vector(2 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR LOADS
@@ -89,9 +90,13 @@ component dlx_cu is
     RegIMM_LATCH_EN    : out std_logic;  -- Immediate Register Latch Enable
     MUXJ_SEL           : out std_logic;
     MUXBRORJ_SEL       : out std_logic;
+    MUXA_SEL           : out std_logic;  -- MUX-A Sel
+    JUMP_EN            : out std_logic;  -- JUMP Enable Signal for PC input MUX
+    JUMP_branch        : out std_logic;  -- JUMP or branch operation identifier
+    PC_LATCH_EN        : out std_logic;  -- Program Counte Latch Enable
+    JAL_SIG            : out std_logic;  --SIGNAL to write back return address
 
     -- EX Control Signals
-    MUXA_SEL           : out std_logic;  -- MUX-A Sel
     MUXB_SEL           : out std_logic;  -- MUX-B Sel
     ALU_OUTREG_EN      : out std_logic;  -- ALU Output Register Enable
     EQ_COND            : out std_logic;  -- Branch if (not) Equal to Zero
@@ -101,12 +106,9 @@ component dlx_cu is
     ALU_OPCODE         : out aluOp; -- choose between implicit or exlicit coding, like std_logic_vector(ALU_OPC_SIZE -1 downto 0);
     
     -- MEM Control Signals
+    dram_re            : out std_logic;  -- data ram write enable
     DRAM_WE            : out std_logic;  -- Data RAM Write Enable
     LMD_LATCH_EN       : out std_logic;  -- LMD Register Latch Enable
-    JUMP_EN            : out std_logic;  -- JUMP Enable Signal for PC input MUX
-    JUMP_branch        : out std_logic;  -- JUMP or branch operation identifier
-    PC_LATCH_EN        : out std_logic;  -- Program Counte Latch Enable
-    JAL_SIG            : out std_logic;  --SIGNAL to write back return address
 
     -- WB Control signals
     LOAD_MUX           : out std_logic_vector(2 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR LOADS
@@ -152,6 +154,7 @@ signal s_MUXBRORJ_SEL : std_logic;
 signal s_EQ_COND : std_logic;
 signal s_STORE_MUX : std_logic_vector(1 downto 0);
 signal s_ALU_OPCODE : aluOp;
+signal s_DRAM_RE : std_logic;
 signal s_DRAM_WE : std_logic;
 signal s_LMD_LATCH_EN : std_logic;
 signal s_JUMP_BRANCH : std_logic;
@@ -184,8 +187,12 @@ datapath_1 : datapath
     RegIMM_LATCH_EN     => s_RegIMM_LATCH_EN,
     MUXJ_SEL            => s_MUXJ_SEL,
     MUXBRORJ_SEL        => s_MUXBRORJ_SEL,
-    -- EX Control Signalsin
     MUXA_SEL            => s_MUXA_SEL,
+    JUMP_EN             => s_JUMP_EN,
+    JUMP_branch         => s_JUMP_BRANCH,
+    PC_LATCH_EN         => s_PC_LATCH_EN,
+    JAL_SIG             => s_JAL_SIG,
+    -- EX Control Signalsin
     MUXB_SEL            => s_MUXB_SEL,
     ALU_OUTREG_EN       => s_ALU_OUTREG_EN,
     EQ_COND             => s_EQ_COND,
@@ -193,12 +200,9 @@ datapath_1 : datapath
     -- ALU Operation Codein
     ALU_OPCODE          => s_ALU_OPCODE,
     -- MEM Control Signalin
+    DRAM_RE             => s_DRAM_RE,
     DRAM_WE             => s_DRAM_WE,
     LMD_LATCH_EN        => s_LMD_LATCH_EN,
-    JUMP_EN             => s_JUMP_EN,
-    JUMP_branch         => s_JUMP_BRANCH,
-    PC_LATCH_EN         => s_PC_LATCH_EN,
-    JAL_SIG             => s_JAL_SIG,
     -- WB Control signalsin
     LOAD_MUX           => s_LOAD_MUX,
     WB_MUX_SEL          => s_WB_MUX_SEL,
@@ -235,8 +239,12 @@ dlx_cu_0 : dlx_cu
     RegImm_latch_en     => s_RegIMM_LATCH_EN,
     MUXJ_SEL            => s_MUXJ_SEL,
     MUXBRORJ_SEL        => s_MUXBRORJ_SEL,
-    -- Ex control signals
     MUXA_sel            => s_MUXA_SEL,
+    JUMP_en             => s_JUMP_EN,
+    JUMP_branch         => s_JUMP_BRANCH,
+    PC_Latch_en         => s_PC_LATCH_EN,
+    JAL_SIG             => s_JAL_SIG,
+    -- Ex control signals
     MUXB_sel            => s_MUXB_SEL,
     ALU_outreg_en       => s_ALU_OUTREG_EN,
     EQ_Cond             => s_EQ_COND,
@@ -244,12 +252,9 @@ dlx_cu_0 : dlx_cu
     -- Alu operation code
     ALU_opcode          => s_ALU_OPCODE,
     -- Mem control signals
+    DRAM_re             => s_DRAM_RE,
     DRAM_we             => s_DRAM_WE,
     LMD_latch_en        => s_LMD_LATCH_EN,
-    JUMP_en             => s_JUMP_EN,
-    JUMP_branch         => s_JUMP_BRANCH,
-    PC_Latch_en         => s_PC_LATCH_EN,
-    JAL_SIG             => s_JAL_SIG,
     -- Wb control signals
     LOAD_MUX           => s_LOAD_MUX,
     WB_Mux_sel          => s_WB_MUX_SEL,

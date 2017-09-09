@@ -18,7 +18,7 @@ package constants is
     constant n_bit : integer := 32;
     constant n : integer := 32;
     constant logn : integer := 5;
-constant CW_SIZE : integer := 24;
+constant CW_SIZE : integer := 25;
 constant DATA_SIZE : integer := 32;
 constant ADDR_SIZE : integer := 32;
 constant IR_SIZE : integer := 32;
