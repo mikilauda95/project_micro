@@ -602,7 +602,7 @@ ALUin1 <= reg_mux1;
 
 mux2: MUX21_GENERIC   --mux to choose the second operand of the ALU
 generic map (n_bit => 32)  
-port map (imm_mux2, regin2, MUXB_SEL, ALUin2);  --immediate when controls() is 1
+port map (imm_mux2, reg_mux2, MUXB_SEL, ALUin2);  --immediate when controls() is 1
 
 
 ArithmeticUnit: ALU
