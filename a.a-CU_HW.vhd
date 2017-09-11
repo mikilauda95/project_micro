@@ -32,7 +32,7 @@ entity dlx_cu is
              muxj_sel           : out std_logic;
             muxbrorj_sel        : out std_logic;
 
-             muxa_sel           : out std_logic;  -- mux-a sel 
+             R_VS_IMM_J         : out std_logic;  -- control signal to select the register of the immediate for the calculation of npc
 
              jump_en            : out std_logic;  -- jump unconditioned identifier
              jump_branch        : out std_logic;  -- jump or branch operation identifier
@@ -72,10 +72,10 @@ architecture dlx_cu_hw of dlx_cu is
     signal cw_mem : mem_array := (
     "1111000000100100000000011", --0 r type
     "0000000000000000000000000", --1 	
-	"1100111111101110000000000", --2 j (0x02) instruction encoding corresponds to the address to this rom
-    "1100111111111110000000000", --3 jal 
-    "1110101101101110000000000", --4 beqz 
-    "1110101101101100000000000", --5 bnez
+	"1100111011101110000000000", --2 j (0x02) instruction encoding corresponds to the address to this rom
+    "1100111011111110000000000", --3 jal 
+    "1110101001101110000000000", --4 beqz 
+    "1110101001101100000000000", --5 bnez
     "0000000000000000000000000", --6 bfpt (not implemented)
     "0000000000000000000000000", --7 bfpf (not implemented)
     "1110100000101100000000011", --8 add i
@@ -88,8 +88,8 @@ architecture dlx_cu_hw of dlx_cu is
     "0010000000000000000000000", --15 lhi (not implemented)
     "0010000000000000000000000", --16 rfe (not implemented)
     "0000000000000000000000000", --17 trap (not implemented)
-    "1110110011101110000000000", --18 jr
-    "1110110011111110000000000", --19 jalr
+    "1110110111101110000000000", --18 jr
+    "1110110111111110000000000", --19 jalr
     "1110100000101100000000011", --20 slli 
     "0010000000000000000000000", --21 nop
     "1110100000101100000000011", --22 srli 
@@ -171,7 +171,7 @@ begin  -- dlx_cu_rtl
     regimm_latch_en <= cw2(cw_size - 5);
     muxj_sel        <= cw2(cw_size-6);
     muxbrorj_sel    <= cw2(cw_size-7);
-    muxa_sel      <= cw2(cw_size - 8);
+    r_vs_imm_j      <= cw2(cw_size - 8);
     jump_en      <= cw2(cw_size - 9);
     jump_branch  <= cw2(cw_size - 10);
     pc_latch_en  <= cw2(cw_size - 11);

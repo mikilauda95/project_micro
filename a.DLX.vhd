@@ -36,7 +36,7 @@ component datapath
     RegIMM_LATCH_EN    : in std_logic;  -- Immediate Register Latch Enable
     MUXJ_SEL           : in std_logic;
     MUXBRORJ_SEL       : in std_logic;
-    MUXA_SEL           : in std_logic;  -- MUX-A Sel
+    R_VS_IMM_J         : in std_logic;  -- control signal to select the register of the immediate for the calculation of npc
     JUMP_EN            : in std_logic;  -- JUMP Enable Signal for PC input MUX
     JUMP_branch        : in std_logic;  -- JUMP or branch operation identifier
     PC_LATCH_EN        : in std_logic;  -- Program Counte Latch Enable
@@ -90,7 +90,7 @@ component dlx_cu is
     RegIMM_LATCH_EN    : out std_logic;  -- Immediate Register Latch Enable
     MUXJ_SEL           : out std_logic;
     MUXBRORJ_SEL       : out std_logic;
-    MUXA_SEL           : out std_logic;  -- MUX-A Sel
+    R_VS_IMM_J         : out std_logic;  -- control signal to select the register of the immediate for the calculation of npc
     JUMP_EN            : out std_logic;  -- JUMP Enable Signal for PC input MUX
     JUMP_branch        : out std_logic;  -- JUMP or branch operation identifier
     PC_LATCH_EN        : out std_logic;  -- Program Counte Latch Enable
@@ -123,6 +123,7 @@ component IRAM is
     I_SIZE : integer := IR_SIZE);
   port (
     Rst  : in  std_logic;
+    clock  : in  std_logic;
     Addr : in  std_logic_vector(I_SIZE - 1 downto 0);
     Dout : out std_logic_vector(I_SIZE - 1 downto 0)
     );
@@ -141,6 +142,7 @@ DOUT : OUT STD_LOGIC_vector)
 end component;
 
 
+signal not_clock : std_logic;
 signal s_IR_LATCH_EN : std_logic;
 signal s_NPC_LATCH_EN : std_logic;
 signal s_RegA_LATCH_EN : std_logic;
@@ -148,7 +150,7 @@ end component;
 signal s_RegIMM_LATCH_EN : std_logic;
 signal s_MUXJ_SEL : std_logic;
 signal s_MUXBRORJ_SEL : std_logic;
-signal s_MUXA_SEL : std_logic;
+signal s_R_VS_IMM_J : std_logic;
 signal s_MUXB_SEL : std_logic;
 signal s_ALU_OUTREG_EN : std_logic;
 signal s_EQ_COND : std_logic;
@@ -187,7 +189,7 @@ datapath_1 : datapath
     RegIMM_LATCH_EN     => s_RegIMM_LATCH_EN,
     MUXJ_SEL            => s_MUXJ_SEL,
     MUXBRORJ_SEL        => s_MUXBRORJ_SEL,
-    MUXA_SEL            => s_MUXA_SEL,
+    R_VS_IMM_J            => s_R_VS_IMM_J,
     JUMP_EN             => s_JUMP_EN,
     JUMP_branch         => s_JUMP_BRANCH,
     PC_LATCH_EN         => s_PC_LATCH_EN,
@@ -239,7 +241,7 @@ dlx_cu_0 : dlx_cu
     RegImm_latch_en     => s_RegIMM_LATCH_EN,
     MUXJ_SEL            => s_MUXJ_SEL,
     MUXBRORJ_SEL        => s_MUXBRORJ_SEL,
-    MUXA_sel            => s_MUXA_SEL,
+    R_VS_IMM_J            => s_R_VS_IMM_J,
     JUMP_en             => s_JUMP_EN,
     JUMP_branch         => s_JUMP_BRANCH,
     PC_Latch_en         => s_PC_LATCH_EN,
@@ -261,12 +263,15 @@ dlx_cu_0 : dlx_cu
     RF_We               => s_RF_WE );
 
 
+not_clock <= not(clock);
+
 IRAM_0 : iram
   generic map (
     RAM_DEPTH  => RAM_DEPTH,
     I_SIZE  => IR_SIZE )
   port map (
     Rst   => Reset,
+    clock  => not_clock,
     Addr  => s_PC_OUT,
     Dout  => s_IR_IN
     );

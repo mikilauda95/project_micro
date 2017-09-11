@@ -1,4 +1,3 @@
-
 vcom "a.b.a.log.vhd"
 vcom "000-globals.vhd"
 vcom *.vhd
@@ -13,4 +12,4 @@ add wave -position insertpoint sim:/tb_dlx/DLX_0/IRAM_0/*
 
 
 
-run 200 ns
+run 250 ns

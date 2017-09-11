@@ -27,7 +27,7 @@ entity datapath is
     RegIMM_LATCH_EN    : in std_logic;  -- Immediate Register Latch Enable
     MUXJ_SEL 		   : in std_logic;  -- Choose between class immediate and 26 bit jump immediate
 	MUXBRORJ_SEL 	   : in std_logic;  -- choose between normal op and jump or branch operation
-    MUXA_SEL           : in std_logic;  -- MUX-A Sel
+    R_VS_IMM_J         : in std_logic;  -- control signal to select the register of the immediate for the calculation of npc
     JUMP_EN            : in std_logic;  -- JUMP Enable Signal for PC input MUX
     JUMP_BRANCH        : in std_logic;
     PC_LATCH_EN        : in std_logic;  -- Program Counte Latch Enable
@@ -207,7 +207,7 @@ signal ADD_WR_SIG_mux : std_logic_vector(4 downto 0);
 signal imm2_sig,imm_j, imm_b, imm_brorj : std_logic_vector(n_bit-1 downto 0);
 signal j_imm_cont : std_logic;
 signal usls_co : std_logic;
-signal jump_PC : std_logic_vector(n_bit-1 downto 0);
+signal jump_PC, offset_j : std_logic_vector(n_bit-1 downto 0);
 
 --used in execute
 signal reg_alu_out, ALUout, ALUin1, ALUin2: std_logic_vector(n_bit-1 downto 0);
@@ -366,6 +366,16 @@ port map (imm_brorj, imm2, MUXBRORJ_SEL, imm2_sig); --if control is 0 the output
 
 jump_PC <= NPC_out_delayed + imm2_sig;
 
+process (jump_PC, regin1, r_vs_imm_j)
+begin
+    case r_vs_imm_j is
+        when '0' => offset_j <= jump_PC;
+        when '1' => offset_j <= regin1;
+        when others => offset_j <= (others => '0');
+    end case;
+    
+end process;
+
 
 --PC_calculation : P4ADD
 --generic map (
@@ -381,7 +391,7 @@ jump_PC <= NPC_out_delayed + imm2_sig;
 
 mux_pc: MUX21_GENERIC  --mux to choose whether to take NPC or aluoutput as PC, 0 NPC, 1 ALUoutput
 generic map (n_bit => 32) 
-port map (jump_PC, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
+port map (offset_j, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
 
 jump_condition <= JUMP_EN or branch_out_sig(0);
 pc_mux_sig(0) <= jump_condition and JUMP_BRANCH;

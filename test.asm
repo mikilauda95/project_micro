@@ -28,6 +28,13 @@ nop
 addi r4, r0, 65535 
 ori r5, r4, 100000
 add r6, r4, r5
+addi r9,r0,#154
+nop
+nop
+nop
+jr r9
+nop
+add r10,r0,#121
 end:
 j end
 addi r7, r0, 65535 
@@ -35,3 +42,15 @@ addi r8, r0, 65535
 nop
 nop
 nop
+jal coglione
+nop
+j end
+nop
+addi r10, r0, 65535 
+coglione:
+addi r11, r0, 65535 
+addi r12, r0, 65535 
+nop
+nop
+nop
+jalr r31
