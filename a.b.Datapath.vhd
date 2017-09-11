@@ -32,11 +32,12 @@ entity datapath is
     JUMP_BRANCH        : in std_logic;
     PC_LATCH_EN        : in std_logic;  -- Program Counte Latch Enable
     JAL_SIG            : in std_logic;  -- SIGNAL FOR WRITING RETURN ADDRESS
+    EQ_COND            : in std_logic;  -- Branch if (not) Equal to Zero
+    will_modify        : in std_logic;  -- signal that tells whether a register is modified or not;
 
     -- EX Control Signalsin
     MUXB_SEL           : in std_logic;  -- MUX-B Sel
     ALU_OUTREG_EN      : in std_logic;  -- ALU Output Register Enable
-    EQ_COND            : in std_logic;  -- Branch if (not) Equal to Zero
     STORE_MUX          : in std_logic_vector(1 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR STORES
 
     -- ALU Operation Codein
@@ -180,16 +181,22 @@ component NOR5 is
 end component; 
 
 
---component P4ADD is 
-    --generic (n_block:	integer := 4; 
-             --n_bit :	integer := 32);
 
-    --Port (	A:	In	std_logic_vector(n_bit-1 downto 0);
-           --B:	In	std_logic_vector(n_bit-1 downto 0);
-           --Ci:	In	std_logic;
-           --S:	Out	std_logic_vector(n_bit-1 downto 0);
-           --Co:	Out	std_logic);
---end component; 
+component forwarder is
+    generic (
+                n_bit: integer := 5;
+                ADDbit: integer := 2);  -- Control Word Size
+
+    port (
+             clk: in std_logic;
+             reset: in std_logic;
+             RegA      : in std_logic_vector(n_bit-1 downto 0);  
+             RegB      : in std_logic_vector(n_bit-1 downto 0);  
+             Regout    : in std_logic_vector(n_bit-1 downto 0);  
+             ADD_A      : out pipe_pos_type;
+             ADD_B      : out pipe_pos_type
+         );
+end component ;
 
 
 
@@ -202,12 +209,16 @@ signal MUX_BRANCHES_sig, PC_OUT_sig: std_logic_vector(n_bit-1 downto 0);
 
 --used in decode
 signal reg_file_in, regin1, reg_mux1, regin2, reg_mux2, imm2, imm_mux2: std_logic_vector(n_bit-1 downto 0);
-signal IRout_delay, ADD_WR_SIG,ADD_WR_DEC,ADD_WR_EX : std_logic_vector(n_bit-1 downto 0);
+signal ADD_WR_SIG,ADD_WR_DEC,ADD_WR_EX, ADD_WR_fetch : std_logic_vector(4 downto 0);
 signal ADD_WR_SIG_mux : std_logic_vector(4 downto 0);
 signal imm2_sig,imm_j, imm_b, imm_brorj : std_logic_vector(n_bit-1 downto 0);
 signal j_imm_cont : std_logic;
 signal usls_co : std_logic;
 signal jump_PC, offset_j : std_logic_vector(n_bit-1 downto 0);
+signal s_ADD_A, s_ADD_B : pipe_pos_type;
+signal valid_out : std_logic_vector(4 downto 0);
+signal validate_out : std_logic_vector(4 downto 0);
+signal real_aluin1, real_aluin2 : std_logic_vector(n_bit-1 downto 0);
 
 --used in execute
 signal reg_alu_out, ALUout, ALUin1, ALUin2: std_logic_vector(n_bit-1 downto 0);
@@ -242,6 +253,25 @@ PC_out <= PC_OUT_sig;
 ---------processes---------------
 
 ---------interface---------------
+
+
+--------------------DESTINATION REGISTER ADDRES CALCULATION--------------------
+
+--this nor is used because the destination register is coded in different positions depending on the type of instruction
+--if the ALU_OPCODE is 0, it means that the instruction is r-type, so the signal rt_vs_it is 1, otherwise it's 0
+NOR5_0 : NOR5
+	generic map (
+		 n_bit  => 6 )
+	port map (
+	        	A => IRout(31 downto 26),
+		S => rt_vs_it );
+		
+mux_wb: MUX21_GENERIC --mux to choose the where to write in case of Itype or Rtype
+generic map (n_bit => 5)
+port map (IRout(15 downto 11), IRout(20 downto 16), rt_vs_it, ADD_WR_fetch); --if control is 0 (itype), 1 for Rtype
+
+
+
 
 NPC : register_gen_en
     generic map (
@@ -351,6 +381,51 @@ imm_b(31 downto 16) <= (others =>IRout(15));
 ----------processes---------------
 
 ----------interface---------------
+
+--------------------FORWARDING LOGIC--------------------
+valid_out <= (others => will_modify);
+validate_out <= ADD_WR_fetch and valid_out; 
+            
+
+forwarder_0 : forwarder
+    generic map (
+                n_bit => 5,
+                ADDbit => 2 )
+    port map (
+             clk => clk,
+             reset => reset,
+             RegA       => IRout(25 downto 21),
+             RegB       => IRout(20 downto 16),
+             Regout     => ADD_WR_fetch,
+             ADD_A       => s_ADD_A,
+             ADD_B       => s_ADD_B
+         );
+
+
+
+    process (s_ADD_A, aluin1, reg_alu_out, reg_alu_mem)
+    begin
+        case s_ADD_A is
+            when RF      =>  real_aluin1 <= aluin1;
+            when EXEC    =>  real_aluin1 <= reg_alu_out;
+            when MEM     =>  real_aluin1 <= reg_alu_mem; 
+        end case;
+        
+    end process;
+
+    process (s_ADD_B, reg_mux2, reg_alu_out, reg_alu_mem)
+    begin
+        case s_ADD_B is
+            when RF   =>  aluin2 <= reg_mux2;
+            when EXEC =>  aluin2 <= reg_alu_out;
+            when MEM  =>  aluin2 <= reg_alu_mem; 
+        end case;
+        
+    end process;
+
+
+
+
 
 --choose the type of immediate
 
@@ -491,10 +566,10 @@ DOUT  => reg_mux2);
 
 reg_wra : register_gen_en --register to store (delay) the instruction
     generic map (
-            n_bit  => 32 )
+            n_bit  => 5 )
 port map (
 
-DIN  => IRout,
+DIN  => ADD_WR_fetch,
 ENABLE  => '1',
 RESET  => reset,
 CLK  => clk,
@@ -585,7 +660,7 @@ DOUT  => regb_bypass);
 
 reg_wra2 : register_gen_en  --register to store (delay) the instruction
     generic map (
-            n_bit  => 32 )
+            n_bit  => 5 )
 port map (
 DIN  => ADD_WR_DEC,
 ENABLE  => '1',
@@ -612,12 +687,12 @@ ALUin1 <= reg_mux1;
 
 mux2: MUX21_GENERIC   --mux to choose the second operand of the ALU
 generic map (n_bit => 32)  
-port map (imm_mux2, reg_mux2, MUXB_SEL, ALUin2);  --immediate when controls() is 1
+port map (imm_mux2, aluin2, MUXB_SEL, real_aluin2);  --immediate when controls() is 1 (during decode stage)
 
 
 ArithmeticUnit: ALU
 generic map (n_bit => 32)
-port map (ALU_opCode, ALUin1, ALUin2, ALUout);
+port map (ALU_opCode, real_aluin1, real_aluin2, ALUout);
 
 
 --ACHTUNG ATTENZIONE, this register is different from others because it has enable and it is behavioral
@@ -668,13 +743,13 @@ port map(reset, DRAM_WE, dram_re, not_clk, reg_alu_out, regb_bypass, DRAMout);
 
 reg_3 : register_gen_en   --register to store (and delay) the instruction
     generic map (
-            n_bit  => 32 )
+            n_bit  => 5 )
 port map (
 DIN  => ADD_WR_EX,
 ENABLE  => '1',
 RESET  => reset,
 CLK  => clk,
-DOUT  => IRout_delay);
+DOUT  => ADD_WR_SIG_mux);
 
 
 LMD : register_gen_en
@@ -742,18 +817,6 @@ mux3: MUX21_GENERIC
 generic map (n_bit => 32)  --mux to choose the second operand of the ALU
 port map (reg_alu_mem, load_data, WB_MUX_SEL, reg_file_in);
 
---this nor is used because the destination register is coded in different positions depending on the type of instruction
---if the ALU_OPCODE is 0, it means that the instruction is r-type, so the signal rt_vs_it is 1, otherwise it's 0
-NOR5_0 : NOR5
-	generic map (
-		 n_bit  => 6 )
-	port map (
-	        	A => IRout_delay(31 downto 26),
-		S => rt_vs_it );
-		
-mux_wb: MUX21_GENERIC --mux to choose the where to write in case of Itype or Rtype
-generic map (n_bit => 5)
-port map (IRout_delay(15 downto 11), IRout_delay(20 downto 16), rt_vs_it, ADD_WR_SIG_mux); --if control is 0 (itype), 1 for Rtype
 
 
 

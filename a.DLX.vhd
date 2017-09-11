@@ -41,11 +41,12 @@ component datapath
     JUMP_branch        : in std_logic;  -- JUMP or branch operation identifier
     PC_LATCH_EN        : in std_logic;  -- Program Counte Latch Enable
     JAL_SIG            : in std_logic;  --SIGNAL to write back return address
+    EQ_COND            : in std_logic;  -- Branch if (not) Equal to Zero
+    will_modify        : in std_logic;  -- signal that tells whether a register is modified or not;
 
     -- EX Control Signalsin
     MUXB_SEL           : in std_logic;  -- MUX-B Sel
     ALU_OUTREG_EN      : in std_logic;  -- ALU Output Register Enable
-    EQ_COND            : in std_logic;  -- Branch if (not) Equal to Zero
     STORE_MUX          : in std_logic_vector(1 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR STORES
     -- ALU Operation Codein
     ALU_OPCODE         : in aluOp; -- choose between implicit or exlicit coding, like std_logic_vector(ALU_OPC_SIZE -1 downto 0);
@@ -95,11 +96,12 @@ component dlx_cu is
     JUMP_branch        : out std_logic;  -- JUMP or branch operation identifier
     PC_LATCH_EN        : out std_logic;  -- Program Counte Latch Enable
     JAL_SIG            : out std_logic;  --SIGNAL to write back return address
+    EQ_COND            : out std_logic;  -- Branch if (not) Equal to Zero
+    will_modify        : out std_logic;  -- signal that tells whether a register is modified or not;
 
     -- EX Control Signals
     MUXB_SEL           : out std_logic;  -- MUX-B Sel
     ALU_OUTREG_EN      : out std_logic;  -- ALU Output Register Enable
-    EQ_COND            : out std_logic;  -- Branch if (not) Equal to Zero
     STORE_MUX          : out std_logic_vector(1 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR STORES
 
     -- ALU Operation Code
@@ -154,6 +156,7 @@ signal s_MUXBRORJ_SEL : std_logic;
 signal s_MUXB_SEL : std_logic;
 signal s_ALU_OUTREG_EN : std_logic;
 signal s_EQ_COND : std_logic;
+signal s_will_modify : std_logic;
 signal s_STORE_MUX : std_logic_vector(1 downto 0);
 signal s_ALU_OPCODE : aluOp;
 signal s_DRAM_RE : std_logic;
@@ -194,10 +197,11 @@ datapath_1 : datapath
     JUMP_branch         => s_JUMP_BRANCH,
     PC_LATCH_EN         => s_PC_LATCH_EN,
     JAL_SIG             => s_JAL_SIG,
+    EQ_COND             => s_EQ_COND,
+    will_modify         => s_will_modify,
     -- EX Control Signalsin
     MUXB_SEL            => s_MUXB_SEL,
     ALU_OUTREG_EN       => s_ALU_OUTREG_EN,
-    EQ_COND             => s_EQ_COND,
     STORE_MUX           => s_STORE_MUX,
     -- ALU Operation Codein
     ALU_OPCODE          => s_ALU_OPCODE,
@@ -246,10 +250,11 @@ dlx_cu_0 : dlx_cu
     JUMP_branch         => s_JUMP_BRANCH,
     PC_Latch_en         => s_PC_LATCH_EN,
     JAL_SIG             => s_JAL_SIG,
+    EQ_Cond             => s_EQ_COND,
+    will_modify         => s_will_modify,
     -- Ex control signals
     MUXB_sel            => s_MUXB_SEL,
     ALU_outreg_en       => s_ALU_OUTREG_EN,
-    EQ_Cond             => s_EQ_COND,
     STORE_MUX           => s_STORE_MUX,
     -- Alu operation code
     ALU_opcode          => s_ALU_OPCODE,

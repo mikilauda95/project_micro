@@ -31,18 +31,18 @@ entity dlx_cu is
              regimm_latch_en    : out std_logic;  -- immediate register latch enable
              muxj_sel           : out std_logic;
             muxbrorj_sel        : out std_logic;
-
              R_VS_IMM_J         : out std_logic;  -- control signal to select the register of the immediate for the calculation of npc
-
              jump_en            : out std_logic;  -- jump unconditioned identifier
              jump_branch        : out std_logic;  -- jump or branch operation identifier
              pc_latch_en        : out std_logic;  -- program counte latch enable
              jal_sig            : out std_logic;  --signal to write back return address
+             eq_cond            : out std_logic;  -- branch if (not) equal to zero
+             will_modify        : out std_logic;  -- signal that tells whether a register is modified or not;
+
 
     -- ex control signals
              muxb_sel           : out std_logic;  -- mux-b sel
              alu_outreg_en      : out std_logic;  -- alu output register enable
-             eq_cond            : out std_logic;  -- branch if (not) equal to zero
              store_mux          : out std_logic_vector(1 downto 0);  -- signals to control the data size for stores
              alu_opcode         : out aluop; -- choose between implicit or exlicit coding, like std_logic_vector(alu_opc_size -1 downto 0);
 
@@ -65,75 +65,76 @@ architecture dlx_cu_hw of dlx_cu is
 
     constant third_stage_cwnum : integer :=0;
     constant offset_cu2 : integer := 2;
-    constant offset_cu3 : integer := 12;
-    constant offset_cu4 : integer := 17;
-    constant offset_cu5 : integer := 20;
+    constant offset_cu3 : integer := 14;
+    constant offset_cu4 : integer := 18;
+    constant offset_cu5 : integer := 21;
     type mem_array is array (0 to microcode_mem_size-1) of std_logic_vector(cw_size - 1 downto 0);
     signal cw_mem : mem_array := (
-    "1111000000100100000000011", --0 r type
-    "0000000000000000000000000", --1 	
-	"1100111011101110000000000", --2 j (0x02) instruction encoding corresponds to the address to this rom
-    "1100111011111110000000000", --3 jal 
-    "1110101001101110000000000", --4 beqz 
-    "1110101001101100000000000", --5 bnez
-    "0000000000000000000000000", --6 bfpt (not implemented)
-    "0000000000000000000000000", --7 bfpf (not implemented)
-    "1110100000101100000000011", --8 add i
-    "0010000000000000000000000", --9 addui (not implemented)
-    "1110100000101100000000011", --10 sub i 
-    "0010000000000000000000000", --11 subui (not implemented)
-    "1110100000101100000000011", --12 and i 
-    "1110100000101100000000011", --13 or i 
-    "1110100000101100000000011", --14 xor i 
-    "0010000000000000000000000", --15 lhi (not implemented)
-    "0010000000000000000000000", --16 rfe (not implemented)
-    "0000000000000000000000000", --17 trap (not implemented)
-    "1110110111101110000000000", --18 jr
-    "1110110111111110000000000", --19 jalr
-    "1110100000101100000000011", --20 slli 
-    "0010000000000000000000000", --21 nop
-    "1110100000101100000000011", --22 srli 
-    "1110100000101100000000011", --23 srai 
-    "1110100000101100000000011", --24 seqi
-    "1110100000101100000000011", --25 snei
-    "1110100000101100000000011", --26 slti 
-    "1110100000101100000000011", --27 sgti 
-    "1110100000101100000000011", --28 slei
-    "1110100000101100000000011", --29 sgei
-    "0010000000000000000000000", --30
-    "0010000000000000000000000", --31
-    "1111100000101100010100101", --32 lb (not implemented)
-    "1111100000101100010101101", --33 lh (not implemented)
-    "0010000000000000000000000", --34
-    "1111100000101100010100001", --35 lw
-    "1111100000101100010101001", --36 lbu(not implemented)
-    "1111100000101100010110001", --37 lhu(not implemented) 
-    "0010000000000000000000000", --38 lf(not implemented)
-    "0010000000000000000000000", --39 ld(not implemented)
-    "1111100000101100101100000", --40 sb(not implemented)
-    "1111100000101100101100000", --41 sh(not implemented)
-    "0010000000000000000000000", --
-    "1111100000101100101100000", --43 sw
-    "0000000000000000000000000", --
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000",
-    "0000000000000000000000000"); -- changed cw(cwsize-3 ) to 1 (latch for the first operand in register)
+    "11"&"110000001001"&"0100"&"000"&"00011", --0 r type
+    "00"&"000000000000"&"0000"&"000"&"00000", --1 	
+	"11"&"001110111010"&"1100"&"000"&"00000", --2 j (0x02) instruction encoding corresponds to the address to this rom
+    "11"&"001110111110"&"1100"&"000"&"00000", --3 jal 
+    "11"&"101010011010"&"1100"&"000"&"00000", --4 beqz 
+    "11"&"101010011000"&"1100"&"000"&"00000", --5 bnez
+    "00"&"000000000000"&"0000"&"000"&"00000", --6 bfpt (not implemented)
+    "00"&"000000000000"&"0000"&"000"&"00000", --7 bfpf (not implemented)
+    "11"&"101000001001"&"1100"&"000"&"00011", --8 add i
+    "00"&"100000000001"&"0000"&"000"&"00000", --9 addui (not implemented)
+    "11"&"101000001001"&"1100"&"000"&"00011", --10 sub i 
+    "00"&"100000000001"&"0000"&"000"&"00000", --11 subui (not implemented)
+    "11"&"101000001001"&"1100"&"000"&"00011", --12 and i 
+    "11"&"101000001001"&"1100"&"000"&"00011", --13 or i 
+    "11"&"101000001001"&"1100"&"000"&"00011", --14 xor i 
+    "00"&"100000000000"&"0000"&"000"&"00000", --15 lhi (not implemented)
+    "00"&"100000000000"&"0000"&"000"&"00000", --16 rfe (not implemented)
+    "00"&"000000000000"&"0000"&"000"&"00000", --17 trap (not implemented)
+    "11"&"101101111010"&"1100"&"000"&"00000", --18 jr
+    "11"&"101101111110"&"1100"&"000"&"00000", --19 jalr
+    "11"&"101000001001"&"1100"&"000"&"00011", --20 slli 
+    "00"&"100000000000"&"0000"&"000"&"00000", --21 nop
+    "11"&"101000001001"&"1100"&"000"&"00011", --22 srli 
+    "11"&"101000001001"&"1100"&"000"&"00011", --23 srai 
+    "11"&"101000001001"&"1100"&"000"&"00011", --24 seqi
+    "11"&"101000001001"&"1100"&"000"&"00011", --25 snei
+    "11"&"101000001001"&"1100"&"000"&"00011", --26 slti 
+    "11"&"101000001001"&"1100"&"000"&"00011", --27 sgti 
+    "11"&"101000001001"&"1100"&"000"&"00011", --28 slei
+    "11"&"101000001001"&"1100"&"000"&"00011", --29 sgei
+    "00"&"100000000000"&"0000"&"000"&"00000", --30
+    "00"&"100000000000"&"0000"&"000"&"00000", --31
+    "11"&"111000001001"&"1100"&"101"&"00101", --32 lb 
+    "11"&"111000001001"&"1100"&"101"&"01101", --33 lh 
+    "00"&"100000000000"&"0000"&"000"&"00000", --34
+    "11"&"111000001001"&"1100"&"101"&"00001", --35 lw
+    "11"&"111000001001"&"1100"&"101"&"01001", --36 lbu
+    "11"&"111000001001"&"1100"&"101"&"10001", --37 lhu
+    "00"&"100000000000"&"0000"&"000"&"00000", --38 lf(not implemented)
+    "00"&"100000000000"&"0000"&"000"&"00000", --39 ld
+    "11"&"111000001000"&"1101"&"011"&"00000", --40 sb
+    "11"&"111000001000"&"1101"&"011"&"00000", --41 sh
+    "00"&"100000000000"&"0000"&"000"&"00000", --
+    "11"&"111000001000"&"1101"&"011"&"00000", --43 sw
+    "00"&"000000000000"&"0000"&"000"&"00000", --
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000",
+    "00"&"000000000000"&"0000"&"000"&"00000"); -- changed cw(cwsize-3 ) to 1 (latch for the first operand in register)
+
 
 
     signal ir_opcode: std_logic_vector(op_code_size -1 downto 0);  -- opcode part of ir
@@ -176,22 +177,23 @@ begin  -- dlx_cu_rtl
     jump_branch  <= cw2(cw_size - 10);
     pc_latch_en  <= cw2(cw_size - 11);
     jal_sig      <= cw2(cw_size - 12);
+    eq_cond       <= cw2(cw_size - 13);
+    will_modify   <= cw2(cw_size - 14);
 
   -- stage three control signals
-    muxb_sel      <= cw3(cw_size - 13);
-    alu_outreg_en <= cw3(cw_size - 14);
-    eq_cond       <= cw3(cw_size - 15);
-    store_mux     <= cw3(cw_size - 16 downto cw_size-17);
+    muxb_sel      <= cw3(cw_size - 15);
+    alu_outreg_en <= cw3(cw_size - 16);
+    store_mux     <= cw3(cw_size - 17 downto cw_size-18);
 
   -- stage four control signals
-    dram_re      <= cw4(cw_size - 18);
-    dram_we      <= cw4(cw_size - 19);
-    lmd_latch_en <= cw4(cw_size - 20);
+    dram_re      <= cw4(cw_size - 19);
+    dram_we      <= cw4(cw_size - 20);
+    lmd_latch_en <= cw4(cw_size - 21);
 
   -- stage five control signals
-    load_mux  <= cw5(cw_size - 21 downto cw_size-23);
-    wb_mux_sel <= cw5(cw_size - 24);
-    rf_we      <= cw5(cw_size - 25);
+    load_mux  <= cw5(cw_size - 22 downto cw_size-24);
+    wb_mux_sel <= cw5(cw_size - 25);
+    rf_we      <= cw5(cw_size - 26);
 
 
   -- process to pipeline control words
