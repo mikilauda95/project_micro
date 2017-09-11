@@ -9,6 +9,10 @@ sw 8(r2), r1
 sw 12(r2), r1
 nop
 ciclo:
+addi r6,r6,5
+nop
+nop
+nop
 lw r3, 0(r2)
 nop
 nop
@@ -21,14 +25,16 @@ sw 0(r2), r3
 nop
 nop
 nop
-subi r1, r1, 1
+subi r1, r1, 4
 addi r2, r2, 4
-bnez r1, ciclo
+nop
+nop
+beqz r1, ciclo
 nop
 addi r4, r0, 65535 
 ori r5, r4, 100000
 add r6, r4, r5
-addi r9,r0,#154
+addi r9,r0,#180
 nop
 nop
 nop
