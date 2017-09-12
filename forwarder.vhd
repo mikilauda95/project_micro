@@ -9,7 +9,7 @@ use work.constants.all;
 entity forwarder is
     generic (
                 n_bit: integer := 5;
-                ADDbit: integer := 2);  -- Control Word Size
+                ADDbit: integer := 3);  -- Control Word Size
 
     port (
              clk: in std_logic;
@@ -24,12 +24,12 @@ end entity ;
 
 architecture behavioural of forwarder is
 
-    type forward_conn is array (1 downto 0) of std_logic_vector((n_bit-1) downto 0);
+    type forward_conn is array (2 downto 0) of std_logic_vector((n_bit-1) downto 0);
     signal connections : forward_conn;
     signal intermediateA : forward_conn;
     signal intermediateB : forward_conn;
-    signal precodeA : std_logic_vector(1 downto 0);
-    signal precodeB : std_logic_vector(1 downto 0);
+    signal precodeA : std_logic_vector(2 downto 0);
+    signal precodeB : std_logic_vector(2 downto 0);
 
     component register_gen_en IS
 
@@ -54,7 +54,7 @@ architecture behavioural of forwarder is
 
 begin
 
-    registers_declaration: for i in 0 to 1 generate 
+    registers_declaration: for i in 0 to 2 generate 
         first_register: if(i=0) generate
             register_gen_en_0 : register_gen_en
             generic map (
@@ -82,12 +82,12 @@ begin
     end generate registers_declaration;
 
 
-    xoring: for i in 0 to 1 generate
+    xoring: for i in 0 to 2 generate
         intermediateA(i)<= REGA xor connections(i);
         intermediateB(i)<= REGB xor connections(i);
     end generate;
 
-    noringA: for i in 0 to 1 generate
+    noringA: for i in 0 to 2 generate
 
         NOR5_A : NOR5
         generic map (
@@ -98,7 +98,7 @@ begin
 
     end generate;
 
-    noringB: for i in 0 to 1 generate
+    noringB: for i in 0 to 2 generate
 
         NOR5_B : NOR5
         generic map (
@@ -112,19 +112,28 @@ begin
 DECODER_A:process (precodeA)
 begin
      case precodeA  is
-         when "01" => ADD_A <=      EXEC;
-         when "11" => ADD_A <=      EXEC;
-         when "10" => ADD_A <=      MEM; 
+         when "001" => ADD_A <=      EXEC;
+         when "011" => ADD_A <=      EXEC;
+         when "111" => ADD_A <=      EXEC;
+         when "101" => ADD_A <=      EXEC;
+         when "010" => ADD_A <=      MEM; 
+         when "110" => ADD_A <=      MEM; 
+         when "100" => ADD_A <=      WB; 
          when others => ADD_A <=    RF;
      end case;
 end process;
 
-DECODER_B: process (precodeB)
+
+DECODER_B:process (precodeA)
 begin
      case precodeB  is
-         when "01" => ADD_B <=      EXEC;
-         when "11" => ADD_B <=      EXEC;
-         when "10" => ADD_B <=      MEM; 
+         when "001" => ADD_B <=      EXEC;
+         when "011" => ADD_B <=      EXEC;
+         when "111" => ADD_B <=      EXEC;
+         when "101" => ADD_B <=      EXEC;
+         when "010" => ADD_B <=      MEM; 
+         when "110" => ADD_B <=      MEM; 
+         when "100" => ADD_B <=      WB; 
          when others => ADD_B <=    RF;
      end case;
 end process;

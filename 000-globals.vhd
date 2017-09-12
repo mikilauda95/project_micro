@@ -9,7 +9,7 @@ package myTypes is
     NOP, ADDS, LLS, LRS, SUBS, ANDS, ORS, XORS, NOTEQ, GREQ, GR, LO, LOEQ, SHAR, SHARX, EQU, MULS
     );
     type pipe_pos_type is (
-    RF, EXEC, MEM);
+    RF, EXEC, MEM, WB);
 
 end myTypes;
 

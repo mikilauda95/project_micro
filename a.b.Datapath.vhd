@@ -218,7 +218,7 @@ signal jump_PC, offset_j : std_logic_vector(n_bit-1 downto 0);
 signal s_ADD_A, s_ADD_B : pipe_pos_type;
 signal valid_out : std_logic_vector(4 downto 0);
 signal validate_out : std_logic_vector(4 downto 0);
-signal real_aluin1, real_aluin2 : std_logic_vector(n_bit-1 downto 0);
+signal real_register1, real_register2 : std_logic_vector(n_bit-1 downto 0);
 
 --used in execute
 signal reg_alu_out, ALUout, ALUin1, ALUin2: std_logic_vector(n_bit-1 downto 0);
@@ -403,25 +403,38 @@ forwarder_0 : forwarder
 
 
 
-    process (s_ADD_A, aluin1, reg_alu_out, reg_alu_mem)
+    process (s_ADD_A, regin1, reg_alu_out, reg_alu_mem, ALUout)
     begin
         case s_ADD_A is
-            when RF      =>  real_aluin1 <= aluin1;
-            when EXEC    =>  real_aluin1 <= reg_alu_out;
-            when MEM     =>  real_aluin1 <= reg_alu_mem; 
+            when RF      =>  real_register1 <= regin1;
+            when EXEC    =>  real_register1 <= ALUout;
+            when MEM     =>  real_register1 <= reg_alu_out; 
+            when WB      =>  real_register1 <= reg_alu_mem; 
         end case;
         
     end process;
 
-    process (s_ADD_B, reg_mux2, reg_alu_out, reg_alu_mem)
+    process (s_ADD_B, regin2, reg_alu_out, reg_alu_mem, ALUout)
     begin
         case s_ADD_B is
-            when RF   =>  aluin2 <= reg_mux2;
-            when EXEC =>  aluin2 <= reg_alu_out;
-            when MEM  =>  aluin2 <= reg_alu_mem; 
+            when RF      =>  real_register2 <= regin2;
+            when EXEC    =>  real_register2 <= ALUout;
+            when MEM     =>  real_register2 <= reg_alu_out; 
+            when WB     =>   real_register2 <= reg_alu_mem; 
         end case;
         
     end process;
+
+
+    --process (s_ADD_B, reg_mux2, reg_alu_out, reg_alu_mem)
+    --begin
+        --case s_ADD_B is
+            --when RF   =>  aluin2 <= reg_mux2;
+            --when EXEC =>  aluin2 <= reg_alu_out;
+            --when MEM  =>  aluin2 <= reg_alu_mem; 
+        --end case;
+        
+    --end process;
 
 
 
@@ -441,11 +454,11 @@ port map (imm_brorj, imm2, MUXBRORJ_SEL, imm2_sig); --if control is 0 the output
 
 jump_PC <= NPC_out_delayed + imm2_sig;
 
-process (jump_PC, regin1, r_vs_imm_j)
+process (jump_PC, real_register1, r_vs_imm_j)
 begin
     case r_vs_imm_j is
         when '0' => offset_j <= jump_PC;
-        when '1' => offset_j <= regin1;
+        when '1' => offset_j <= real_register1;
         when others => offset_j <= (others => '0');
     end case;
     
@@ -482,10 +495,10 @@ not_comp_sig <= not(comp_sig);
 ADDPC_jal_sig <= NPC_out_delayed + 4; --used only for the instruction JAL
 
 --process to compare the branch register to 0
-process(regin1) 
+process(real_register1) 
 begin
 
-    if(regin1= 0 ) then
+    if(real_register1= 0 ) then
        comp_sig <= "1"; 
    else
        comp_sig <= "0";
@@ -532,7 +545,7 @@ reg_A : register_gen_en --register to store the value of the immediate we want
     generic map (
             n_bit  => 32 )
 port map (
-DIN  => regin1,
+DIN  => real_register1,
 ENABLE  => RegA_LATCH_EN,
 RESET  => reset,
 CLK  => clk,
@@ -542,7 +555,7 @@ reg_B : register_gen_en --register to store the value of the immediate we want
     generic map (
             n_bit  => 32 )
 port map (
-DIN  => regin2,
+DIN  => real_register2,
 ENABLE  => RegB_LATCH_EN,
 RESET  => reset,
 CLK  => clk,
@@ -687,12 +700,12 @@ ALUin1 <= reg_mux1;
 
 mux2: MUX21_GENERIC   --mux to choose the second operand of the ALU
 generic map (n_bit => 32)  
-port map (imm_mux2, aluin2, MUXB_SEL, real_aluin2);  --immediate when controls() is 1 (during decode stage)
+port map (imm_mux2, reg_mux2, MUXB_SEL, ALUin2);  --immediate when controls() is 1 (during decode stage)
 
 
 ArithmeticUnit: ALU
 generic map (n_bit => 32)
-port map (ALU_opCode, real_aluin1, real_aluin2, ALUout);
+port map (ALU_opCode, ALUin1, ALUin2, ALUout);
 
 
 --ACHTUNG ATTENZIONE, this register is different from others because it has enable and it is behavioral
