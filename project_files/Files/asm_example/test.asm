@@ -1,62 +1,9 @@
-addi r1, r0, 4
-xor r2, r2, r2
-nop
-nop
-nop
-sw 0(r2), r1
-sw 4(r2), r1
-sw 8(r2), r1
-sw 12(r2), r1
-nop
+addi r6,r0,4
+addi r1,r7,24
+subi r2,r1,18
+and r3,r2,r1
+xor r3,r2,r1
 ciclo:
-addi r6,r6,5
-nop
-nop
-nop
-lw r3, 0(r2)
-nop
-nop
-nop
-addi r3, r3, 10
-nop
-nop
-nop
-sw 0(r2), r3
-nop
-nop
-nop
-subi r1, r1, 4
-addi r2, r2, 4
-nop
-nop
-beqz r1, ciclo
-nop
-addi r4, r0, 65535 
-ori r5, r4, 100000
-add r6, r4, r5
-addi r9,r0,#180
-nop
-nop
-nop
-jr r9
-nop
-add r10,r0,#121
-end:
-j end
-addi r7, r0, 65535 
-addi r8, r0, 65535 
-nop
-nop
-nop
-jal coglione
-nop
-j end
-nop
-addi r10, r0, 65535 
-coglione:
-addi r11, r0, 65535 
-addi r12, r0, 65535 
-nop
-nop
-nop
-jalr r31
+mult r6,r3,r6
+sll r5,r4,r6
+j ciclo
