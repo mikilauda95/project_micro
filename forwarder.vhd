@@ -109,34 +109,42 @@ begin
 
     end generate;
 
-DECODER_A:process (precodeA)
-begin
-     case precodeA  is
-         when "001" => ADD_A <=      EXEC;
-         when "011" => ADD_A <=      EXEC;
-         when "111" => ADD_A <=      EXEC;
-         when "101" => ADD_A <=      EXEC;
-         when "010" => ADD_A <=      MEM; 
-         when "110" => ADD_A <=      MEM; 
-         when "100" => ADD_A <=      WB; 
-         when others => ADD_A <=    RF;
-     end case;
-end process;
+    DECODER_A:process (precodeA)
+    begin
+        if (REGA="00000") then
+            ADD_A <=    RF;
+        else
+            case precodeA  is
+                when "001" => ADD_A <=      EXEC;
+                when "011" => ADD_A <=      EXEC;
+                when "111" => ADD_A <=      EXEC;
+                when "101" => ADD_A <=      EXEC;
+                when "010" => ADD_A <=      MEM; 
+                when "110" => ADD_A <=      MEM; 
+                when "100" => ADD_A <=      WB; 
+                when others => ADD_A <=    RF;
+            end case;
+        end if;
+    end process;
 
 
-DECODER_B:process (precodeA)
-begin
-     case precodeB  is
-         when "001" => ADD_B <=      EXEC;
-         when "011" => ADD_B <=      EXEC;
-         when "111" => ADD_B <=      EXEC;
-         when "101" => ADD_B <=      EXEC;
-         when "010" => ADD_B <=      MEM; 
-         when "110" => ADD_B <=      MEM; 
-         when "100" => ADD_B <=      WB; 
-         when others => ADD_B <=    RF;
-     end case;
-end process;
+    DECODER_B:process (precodeA)
+    begin
+        if (REGB="00000") then
+            ADD_B <=    RF;
+        else 
+            case precodeB  is
+                when "001" => ADD_B <=      EXEC;
+                when "011" => ADD_B <=      EXEC;
+                when "111" => ADD_B <=      EXEC;
+                when "101" => ADD_B <=      EXEC;
+                when "010" => ADD_B <=      MEM; 
+                when "110" => ADD_B <=      MEM; 
+                when "100" => ADD_B <=      WB; 
+                when others => ADD_B <=    RF;
+            end case;
+        end if;
+    end process;
 
 --precodeA(i) <= intermediateA(i)(0) nor intermediateA(i)(1) nor intermediateA(i)(2) nor intermediateA(i)(3) nor intermediateA(i)(4);
 --precodeB(i) <= intermediateB(i)(0) nor intermediateB(i)(1) nor intermediateB(i)(2) nor intermediateB(i)(3) nor intermediateB(i)(4);

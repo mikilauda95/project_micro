@@ -3,6 +3,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
+use ieee.std_logic_misc.all;
 use work.myTypes.all;
 use work.constants.all;
 --use ieee.numeric_std.all;
@@ -259,13 +260,16 @@ PC_out <= PC_OUT_sig;
 
 --this nor is used because the destination register is coded in different positions depending on the type of instruction
 --if the ALU_OPCODE is 0, it means that the instruction is r-type, so the signal rt_vs_it is 1, otherwise it's 0
-NOR5_0 : NOR5
-	generic map (
-		 n_bit  => 6 )
-	port map (
-	        	A => IRout(31 downto 26),
-		S => rt_vs_it );
+
+--NOR5_0 : NOR5
+	--generic map (
+		 --n_bit  => 6 )
+	--port map (
+				--A => IRout(31 downto 26),
+		--S => rt_vs_it );
 		
+rt_vs_it <= nor_reduce(IRout(31 downto 26));
+
 mux_wb: MUX21_GENERIC --mux to choose the where to write in case of Itype or Rtype
 generic map (n_bit => 5)
 port map (IRout(15 downto 11), IRout(20 downto 16), rt_vs_it, ADD_WR_fetch); --if control is 0 (itype), 1 for Rtype
