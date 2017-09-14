@@ -400,7 +400,7 @@ forwarder_0 : forwarder
              reset => reset,
              RegA       => IRout(25 downto 21),
              RegB       => IRout(20 downto 16),
-             Regout     => ADD_WR_fetch,
+             Regout     => validate_out,
              ADD_A       => s_ADD_A,
              ADD_B       => s_ADD_B
          );
