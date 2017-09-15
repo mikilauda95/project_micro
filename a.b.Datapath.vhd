@@ -254,14 +254,7 @@ CLK  => clk,
 DOUT  =>  IRout);
 
 
-PC_latch : latch
-	generic map (
-	        n_bit => 32 )
-	port map (
-	        	D => MUX_BRANCHES_sig,
-		EN => '1',
-		RESET => reset,
-		Q => PC_OUT_sig);
+
 
 
 
@@ -338,7 +331,14 @@ mux_pc: MUX21_GENERIC  --mux to choose whether to take NPC or aluoutput as PC, 0
 generic map (n_bit => 32) 
 port map (offset_j, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
 
-
+PC_latch : latch  --latch to move the MUX_BRANCHES_sig into the PC_OUT_sig
+	generic map (
+	        n_bit => 32 )
+	port map (
+	        	D => MUX_BRANCHES_sig,
+		EN => '1',
+		RESET => reset,
+		Q => PC_OUT_sig);
 
 --BRANCH part--
 mux_branch: MUX21_GENERIC  --mux to choose bez if EQ_COND is 1, bnez if EQ_COND is 0
