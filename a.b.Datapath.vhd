@@ -1,4 +1,3 @@
---to comment with Beppe: pc register (not a latch), memory stage mux, how to manage conflicts in ram and ram input signals.
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
@@ -6,8 +5,6 @@ use ieee.std_logic_arith.all;
 use ieee.std_logic_misc.all;
 use work.myTypes.all;
 use work.constants.all;
---use ieee.numeric_std.all;
---use work.all;
 
 entity datapath is
   generic (
@@ -17,7 +14,6 @@ entity datapath is
 	clk: in std_logic;
 	reset: in std_logic;
 
-    --controls: in std_logic_vector(CW_SIZE-1 downto 0); --previous implementation
     -- IF Control Signal
     IR_LATCH_EN        : in std_logic;  -- Instruction Register Latch Enable
     NPC_LATCH_EN       : in std_logic;  -- Next program counter Latch ENABLE
@@ -57,37 +53,6 @@ entity datapath is
 	IRAMout: in std_logic_vector(IR_SIZE-1 downto 0);
 	PC_out : out std_logic_vector(IR_SIZE-1 downto 0));
 end datapath;
-
-
-
-  -- stage one control signals
---alias IR_LATCH_EN :bit is controls(14);
---alias NPC_LATCH_EN :bit is controls(13);
-
-  ---- stage two control signals
---alias RegA_LATCH_EN :bit is controls(12);
---alias RegB_LATCH_EN :bit is controls(11);
---alias RegIMM_LATCH_EN :bit is controls(10);
-
-  ---- stage three control signals
---alias MUXA_SEL :bit is controls(9);
---alias MUXB_SEL :bit is controls(8);
---alias ALU_OUTREG_EN :bit is controls(7);
---alias EQ_COND :bit is controls(6);
---alias JUMP_EN :bit is controls(5);
-
-  ---- stage four control signals
---alias DRAM_WE :bit is controls(4);
---alias LMD_LATCH_EN :bit is controls(3);
---alias PC_LATCH_EN :bit is controls(2);
-
-  ---- stage five control signals
---alias WB_MUX_SEL :bit is controls(1);
---alias RF_WE :bit is controls(0);
-
-
-
-
 
 
 architecture structure of datapath is
@@ -250,25 +215,15 @@ ADDPC_out_sig <= PC_OUT_sig + 4;
 --get output of PC
 PC_out <= PC_OUT_sig;
 
-
+--this nor is used because the destination register is coded in different positions depending on the type of instruction
+--if the ALU_OPCODE is 0, it means that the instruction is r-type, so the signal rt_vs_it is 1, otherwise it's 0
+rt_vs_it <= nor_reduce(IRout(31 downto 26));
 ---------processes---------------
 
 ---------interface---------------
 
 
 --------------------DESTINATION REGISTER ADDRES CALCULATION--------------------
-
---this nor is used because the destination register is coded in different positions depending on the type of instruction
---if the ALU_OPCODE is 0, it means that the instruction is r-type, so the signal rt_vs_it is 1, otherwise it's 0
-
---NOR5_0 : NOR5
-	--generic map (
-		 --n_bit  => 6 )
-	--port map (
-				--A => IRout(31 downto 26),
-		--S => rt_vs_it );
-		
-rt_vs_it <= nor_reduce(IRout(31 downto 26));
 
 mux_wb: MUX21_GENERIC --mux to choose the where to write in case of Itype or Rtype
 generic map (n_bit => 5)
@@ -277,7 +232,7 @@ port map (IRout(15 downto 11), IRout(20 downto 16), rt_vs_it, ADD_WR_fetch); --i
 
 
 
-NPC : register_gen_en
+NPC : register_gen_en --next program counter register
     generic map (
             n_bit  => 32 )
 port map (
@@ -288,7 +243,7 @@ CLK  => clk,
 DOUT  => NPC_out_sig );
 
 
-instr_latch : register_gen_en
+instr_latch : register_gen_en --instruction register 
     generic map (
             n_bit  => 32 )
 port map (
@@ -297,30 +252,6 @@ ENABLE  => '1', --IR_LATCH_EN,
 RESET  => reset,
 CLK  => clk,
 DOUT  =>  IRout);
-
-
---NPC: latch  --Next program counter LATCH
---generic map(n_bit => 32)
---port map(ADDPC_out_sig, NPC_LATCH_EN, reset, NPC_out_sig);
---
---instr_latch: latch --Istruction Register
---generic map(n_bit => 32)
---port map(IRAMout, IR_LATCH_EN, reset, IRout);
-
---PC_register: register_gen --register to implement the PC
---generic map(n_bit =>32)
---port map(MUX_BRANCHES_sig, clock, reset, PC_OUT_sig ); --to be completed, PC enable is always 1, no control
-
-
---reg_pc : register_gen_en
---    generic map (
---            n_bit  => 32 )
---port map (
---DIN  => MUX_BRANCHES_sig,
---ENABLE  => '1', --PC_LATCH_EN eliminated because during first instructions it does not update the pc
---RESET  => reset,
---CLK  => clk,
---DOUT  => PC_OUT_sig );
 
 
 PC_latch : latch
@@ -335,57 +266,6 @@ PC_latch : latch
 
 
 -------------------------------------DECODE-------------------------------------------------
-
-
-
-----------assignments-------------
-
-
---sign extention
-
---immediate needed for the i-type operation
-imm2(15 downto 0) <= IRout(15 downto 0);
-imm2(31 downto 16) <= (others => IRout(15));
-
---immediate needed for the j-type operation
-imm_j(25 downto 0) <= IRout(25 downto 0);
-imm_j(31 downto 26) <= (others =>IRout(25));
-
---immediate needed for conditional branches
-imm_b(15 downto 0) <= IRout(15 downto 0);
-imm_b(31 downto 16) <= (others =>IRout(15));
-
---immediate needed for the i-type operation
---imm2(15 downto 0) <= IRout(15 downto 0);
---imm2(31 downto 16) <= (others => IRout(15));
-
---immediate needed for the j-type operation
---imm_j(23 downto 0) <= IRout(25 downto 2);
---imm_j(31 downto 24) <= (others =>IRout(25));
-
---immediate needed for conditional branches
---imm_b(13 downto 0) <= IRout(15 downto 2);
---imm_b(31 downto 14) <= (others =>IRout(15));
-
-
-
-
---reg_alu_1 : register_gen_en
-    --generic map (
-            --n_bit  => 1 )
---port map (
---DIN  => branch_out_sig,
---ENABLE  => '1',
---RESET  => reset,
---CLK  => clk,
---DOUT  => branch_out_delayed );
-
-
-
-----------processes---------------
-
-----------interface---------------
-
 --------------------FORWARDING LOGIC--------------------
 valid_out <= (others => will_modify);
 validate_out <= ADD_WR_fetch and valid_out; 
@@ -430,35 +310,19 @@ forwarder_0 : forwarder
     end process;
 
 
-    --process (s_ADD_B, reg_mux2, reg_alu_out, reg_alu_mem)
-    --begin
-        --case s_ADD_B is
-            --when RF   =>  aluin2 <= reg_mux2;
-            --when EXEC =>  aluin2 <= reg_alu_out;
-            --when MEM  =>  aluin2 <= reg_alu_mem; 
-        --end case;
-        
-    --end process;
+------------------BRANCH AND JUMP LOGIC-----------------------------
 
+jump_PC <= NPC_out_delayed + imm2_sig; --used for jump
 
+jump_condition <= JUMP_EN or branch_out_sig(0); 
 
+pc_mux_sig(0) <= jump_condition and JUMP_BRANCH;
 
+not_comp_sig <= not(comp_sig); --used for the branch
 
---choose the type of immediate
+ADDPC_jal_sig <= NPC_out_delayed + 4; --used only for the instruction JAL
 
-mux_imm_brorj : MUX21_GENERIC --first mux to choose between jump and branch 
-generic map (n_bit => 32)
-port map (imm_j, imm_b, MUXJ_SEL, imm_brorj); --if control is 0 the output is imm_b, else it's imm_j
-
-mux_imm_j: MUX21_GENERIC --second mux to choose between jump/branch and immediate
-generic map (n_bit => 32)
-port map (imm_brorj, imm2, MUXBRORJ_SEL, imm2_sig); --if control is 0 the output is imm2, else it's imm_brorj
-
---BRANCH AND JUMP LOGIC
-
-jump_PC <= NPC_out_delayed + imm2_sig;
-
-process (jump_PC, real_register1, r_vs_imm_j)
+process (jump_PC, real_register1, r_vs_imm_j) --used to choose between the normal jump operation (j, jal) and the register jump operation (jr, jalr)
 begin
     case r_vs_imm_j is
         when '0' => offset_j <= jump_PC;
@@ -469,34 +333,18 @@ begin
 end process;
 
 
---PC_calculation : P4ADD
---generic map (
-                --n_block => 4,
-                --n_bit  => 32 )
---port map (
-             --A => NPC_out_delayed,
-             --B => imm2_sig,
-             --Ci => '0',
-             --S => jump_PC,
-             --Co => usls_co );
-
 
 mux_pc: MUX21_GENERIC  --mux to choose whether to take NPC or aluoutput as PC, 0 NPC, 1 ALUoutput
 generic map (n_bit => 32) 
 port map (offset_j, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
 
-jump_condition <= JUMP_EN or branch_out_sig(0);
-pc_mux_sig(0) <= jump_condition and JUMP_BRANCH;
+
 
 --BRANCH part--
 mux_branch: MUX21_GENERIC  --mux to choose bez if EQ_COND is 1, bnez if EQ_COND is 0
 generic map (n_bit => 1) 
 port map (comp_sig, not_comp_sig, EQ_COND, branch_out_sig);
 
-
-not_comp_sig <= not(comp_sig);
-
-ADDPC_jal_sig <= NPC_out_delayed + 4; --used only for the instruction JAL
 
 --process to compare the branch register to 0
 process(real_register1) 
@@ -511,6 +359,41 @@ begin
 end process;
 
 ----------------------------------------------------------------------------------------------------
+
+----------assignments-------------
+
+
+--sign extention
+
+--immediate needed for the i-type operation
+imm2(15 downto 0) <= IRout(15 downto 0);
+imm2(31 downto 16) <= (others => IRout(15));
+
+--immediate needed for the j-type operation
+imm_j(25 downto 0) <= IRout(25 downto 0);
+imm_j(31 downto 26) <= (others =>IRout(25));
+
+--immediate needed for conditional branches
+imm_b(15 downto 0) <= IRout(15 downto 0);
+imm_b(31 downto 16) <= (others =>IRout(15));
+
+
+
+----------processes---------------
+
+
+----------interface---------------
+
+--choose the type of immediate
+
+mux_imm_brorj : MUX21_GENERIC --first mux to choose between jump and branch 
+generic map (n_bit => 32)
+port map (imm_j, imm_b, MUXJ_SEL, imm_brorj); --if control is 0 the output is imm_b, else it's imm_j
+
+mux_imm_j: MUX21_GENERIC --second mux to choose between jump/branch and immediate
+generic map (n_bit => 32)
+port map (imm_brorj, imm2, MUXBRORJ_SEL, imm2_sig); --if control is 0 the output is imm2, else it's imm_brorj
+
 
 reg_imm : register_gen_en  --register to store the value of the immediate we want
     generic map (
@@ -545,7 +428,7 @@ register_file_0 : register_file  --register file
            JAL_SIG => JAL_SIG);
 
 
-reg_A : register_gen_en --register to store the value of the immediate we want
+reg_A : register_gen_en --register to store the value of the register 1 we want
     generic map (
             n_bit  => 32 )
 port map (
@@ -555,7 +438,7 @@ RESET  => reset,
 CLK  => clk,
 DOUT  => reg_mux1);
 
-reg_B : register_gen_en --register to store the value of the immediate we want
+reg_B : register_gen_en --register to store the value of the register 2 we want
     generic map (
             n_bit  => 32 )
 port map (
@@ -565,21 +448,6 @@ RESET  => reset,
 CLK  => clk,
 DOUT  => reg_mux2);
 
-
-
-
---latchA: latch --latch A to save the value from the rf
---generic map(n_bit =>32)
---port map(regin1, RegA_LATCH_EN, reset, reg_mux1 );
-
---latchB: latch --latch B to save the value from the rf
---generic map(n_bit =>32)
---port map(regin2, RegB_LATCH_EN, reset, reg_mux2 );
-
-
-
-
---jump and branch section
 
 reg_wra : register_gen_en --register to store (delay) the instruction
     generic map (
@@ -603,46 +471,14 @@ RESET  => reset,
 CLK  => clk,
 DOUT  => NPC_out_delayed);
 
-
-
-
-
-
---latchimm: latch --latch immediate to save the value of the immediate2
---generic map(n_bit =>32)
---port map(imm2, RegIMM_LATCH_EN, reset, imm_mux2 );
-
 ----------------------------------EXECUTE----------------------------------------------
 
 ------------assignments--------------
+
+ALUin1 <= reg_mux1;
+
 ------------processes----------------
-
-
-------------interface----------------
-
-
-   --stage three control signals
---alias MUXA_SEL :bit is controls(9);
---alias MUXB_SEL :bit is controls(8);
---alias ALU_OUTREG_EN :bit is controls(7);
---alias EQ_COND :bit is controls(6);
-
---bypass of Regb for store
-
-
-
-reg_jal_exec : register_gen_en 
-    generic map (
-            n_bit  => 32 )
-port map (
-DIN  => ADDPC_jal_sig,
-ENABLE  => '1',
-RESET  => reset,
-CLK  => clk,
-DOUT  => RET_ADD);
-
-
---process to compare the branch register to 0
+--process to perform the different kinds of store operations
 process(reg_mux2, STORE_MUX) 
 begin
 
@@ -658,11 +494,21 @@ begin
        
 end process;
 
-imm_b(15 downto 0) <= IRout(15 downto 0);
-imm_b(31 downto 16) <= (others =>IRout(15));
+------------interface----------------
 
 
-reg_1 : register_gen_en
+reg_jal_exec : register_gen_en   --register used for the instruction jal, to save the return address
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => ADDPC_jal_sig,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => RET_ADD);
+
+
+reg_1 : register_gen_en  --register to store (delay) the value coming from the store operation
     generic map (
             n_bit  => 32 )
 port map (
@@ -671,9 +517,6 @@ ENABLE  => '1',
 RESET  => reset,
 CLK  => clk,
 DOUT  => regb_bypass);
-
-
--- jump and branch section
 
 reg_wra2 : register_gen_en  --register to store (delay) the instruction
     generic map (
@@ -685,35 +528,19 @@ RESET  => reset,
 CLK  => clk,
 DOUT  => ADD_WR_EX);
 
---reg_delay_npc2 : register_gen_en  ----register to store (and delay) the next program counter
-    --generic map (
-            --n_bit  => 32 )
---port map (
---DIN  => NPC_out_delayed,
---ENABLE  => '1',
---RESET  => reset,
---CLK  => clk,
---DOUT  => NPC_out_delayed2);
 
---ALU part--
---mux1: MUX21_GENERIC   mux to choose the first operand of the ALU
---generic map (n_bit => 32)
---port map (NPC_out_delayed2, reg_mux1, MUXA_SEL, ALUin1); if control is 0 the output is regin1, else it's imm1
-
-ALUin1 <= reg_mux1;
 
 mux2: MUX21_GENERIC   --mux to choose the second operand of the ALU
 generic map (n_bit => 32)  
 port map (imm_mux2, reg_mux2, MUXB_SEL, ALUin2);  --immediate when controls() is 1 (during decode stage)
 
 
-ArithmeticUnit: ALU
+ArithmeticUnit: ALU  --ALU
 generic map (n_bit => 32)
 port map (ALU_opCode, ALUin1, ALUin2, ALUout);
 
 
---ACHTUNG ATTENZIONE, this register is different from others because it has enable and it is behavioral
-reg_alu_o : register_gen_en 
+reg_alu_o : register_gen_en  --register to store the result of the ALU
     generic map (
             n_bit  => 32 )
 port map (
@@ -723,40 +550,23 @@ RESET  => reset,
 CLK  => clk,
 DOUT  => reg_alu_out );
 
---old implementation
---reg_alu_o: register_gen --register of the ALU output
---generic map(n_bit => 32)
---port map(ALUout, clk, reset, reg_alu_out);
-
-
-
-
---lat1: latch --latch to let pass branch selection signal
---generic map(n_bit =>1)
---port map(branch_out_sig, JUMP_EN, reset, pc_mux_sig);
-
 
 ----------------------------------MEMORY----------------------------------------------
 
 ----------assignments-------------
 
+not_clk <=not(clk);
+
 ----------processes---------------
 
 ----------interface---------------
-  -- stage four control signals
---alias DRAM_WE :bit is controls(4);
---alias LMD_LATCH_EN :bit is controls(3);
---alias PC_LATCH_EN :bit is controls(2);
 
-not_clk <=not(clk);
+
 DataRam: DRAM
 generic map(DRAM_DEPTH => 4*32, 
 	    DATA_SIZE => 8)
 port map(reset, DRAM_WE, dram_re, not_clk, reg_alu_out, regb_bypass, DRAMout);
 
---LMD: register_gen  --LMD register
---generic map(n_bit => 32)
---port map(DRAMout, clk, reset, LMDout);
 
 reg_3 : register_gen_en   --register to store (and delay) the instruction
     generic map (
@@ -769,7 +579,7 @@ CLK  => clk,
 DOUT  => ADD_WR_SIG_mux);
 
 
-LMD : register_gen_en
+LMD : register_gen_en  --register to store the output of the DRAM
     generic map (
             n_bit  => 32 )
 port map (
@@ -780,7 +590,7 @@ CLK  => clk,
 DOUT  => LMDout);
 
 
-ALU_output_mem : register_gen_en
+ALU_output_mem : register_gen_en  --register to store (delay) the result of the ALU
     generic map (
             n_bit  => 32 )
 port map (
@@ -795,16 +605,10 @@ DOUT  => reg_alu_mem);
 
 ---------------------------------WRITE BACK-------------------------------------------
 
--- stage five control signals
---alias WB_MUX_SEL :bit is controls(1);
---alias RF_WE :bit is controls(0);
 
 ----------assignments-------------
 
 ----------processes---------------
-
-----------interface---------------
-
 
 --process to compare the branch register to 0
 process(LMDout, LOAD_MUX) 
@@ -828,10 +632,12 @@ begin
        
 end process;
 
+----------interface---------------
 
 
-mux3: MUX21_GENERIC
-generic map (n_bit => 32)  --mux to choose the second operand of the ALU
+
+mux3: MUX21_GENERIC --mux to chose between the DRAM output and the ALU output (depending on store and load operation)
+generic map (n_bit => 32)
 port map (reg_alu_mem, load_data, WB_MUX_SEL, reg_file_in);
 
 
