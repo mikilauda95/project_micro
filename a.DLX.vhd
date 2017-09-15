@@ -9,7 +9,19 @@ use work.constants.all;
 
 entity DLX is
 port(clock : in std_logic;
-reset : in std_logic
+reset : in std_logic;
+
+DRAM_RE_byp            : out std_logic;  -- Data RAM read enable
+DRAM_WE_byp            : out std_logic;  -- Data RAM Write Enable
+DRAM_ADD_byp             : out std_logic_vector(n_bit-1 downto 0);
+DRAM_DIN_byp             : out std_logic_vector(n_bit-1 downto 0);
+
+DRAM_Dout_byp             : in std_logic_vector(n_bit-1 downto 0);
+
+
+IRAMout : in std_logic_vector(IR_SIZE-1 downto 0);
+PC_out  : out std_logic_vector(IR_SIZE-1 downto 0)
+
 );
 end DLX;
 
@@ -60,8 +72,17 @@ component datapath
     LOAD_MUX           : in std_logic_vector(2 downto 0);  -- SIGNALS TO CONTROL THE DATA SIZE FOR LOADS
     WB_MUX_SEL         : in std_logic;  -- Write Back MUX Sel
     RF_WE              : in std_logic;  -- Register File Write Enable		
+
     IRAMout: in std_logic_vector(IR_SIZE-1 downto 0);
-    PC_out : out std_logic_vector(IR_SIZE-1 downto 0)
+    PC_out : out std_logic_vector(IR_SIZE-1 downto 0);
+
+
+    DRAM_RE_byp            : out std_logic;  -- Data RAM read enable
+    DRAM_WE_byp            : out std_logic;  -- Data RAM Write Enable
+    DRAM_ADD_byp             : out std_logic_vector(n_bit-1 downto 0);
+    DRAM_DIN_byp             : out std_logic_vector(n_bit-1 downto 0);
+    DRAM_Dout_byp             : in std_logic_vector(n_bit-1 downto 0)
+
  );
 
 end component;
@@ -119,17 +140,17 @@ component dlx_cu is
 end component;
 
 
-component IRAM is
-  generic (
-    RAM_DEPTH : integer := RAM_DEPTH;
-    I_SIZE : integer := IR_SIZE);
-  port (
-    Rst  : in  std_logic;
-    clock  : in  std_logic;
-    Addr : in  std_logic_vector(I_SIZE - 1 downto 0);
-    Dout : out std_logic_vector(I_SIZE - 1 downto 0)
-    );
-end component;
+--component IRAM is
+  --generic (
+    --RAM_DEPTH : integer := RAM_DEPTH;
+    --I_SIZE : integer := IR_SIZE);
+  --port (
+    --Rst  : in  std_logic;
+    --clock  : in  std_logic;
+    --Addr : in  std_logic_vector(I_SIZE - 1 downto 0);
+    --Dout : out std_logic_vector(I_SIZE - 1 downto 0)
+    --);
+--end component;
 
 
 component register_gen_en
@@ -142,6 +163,21 @@ CLK : IN STD_LOGIC; -- clock.
 DOUT : OUT STD_LOGIC_vector)
 ; -- output.
 end component;
+
+--------------------DRAM_BYPASS--------------------    
+
+signal DRAM_RE_byp_sig       : std_logic;
+signal DRAM_WE_byp_sig       : std_logic;
+signal DRAM_ADD_byp_sig      : std_logic_vector(n_bit-1 downto 0);
+signal DRAM_DIN_byp_sig      : std_logic_vector(n_bit-1 downto 0);
+signal DRAM_Dout_byp_sig     : std_logic_vector(n_bit-1 downto 0);
+
+
+--------------------IRAM_BYPASS--------------------    
+
+signal IRAMout_sig : std_logic_vector(n_bit-1 downto 0);
+signal PC_out_sig  : std_logic_vector(n_bit-1 downto 0);
+
 
 
 signal not_clock : std_logic;
@@ -175,6 +211,23 @@ signal s_LOAD_MUX : std_logic_vector(2 downto 0);
 signal s_cu_in : std_logic_vector(IR_SIZE-1 downto 0);
 
 begin
+
+
+--------------------DRAM_BYPASS--------------------    
+
+    DRAM_RE_byp  <= DRAM_RE_byp_sig   ;     
+    DRAM_WE_byp  <= DRAM_WE_byp_sig   ;  
+    DRAM_ADD_byp <= DRAM_ADD_byp_sig  ;  
+    DRAM_DIN_byp <= DRAM_DIN_byp_sig  ;  
+    DRAM_Dout_byp_sig <= DRAM_Dout_byp ;
+
+--------------------IRAM_BYPASS--------------------    
+    PC_out_sig <= s_PC_out;
+
+    s_IR_in     <= IRAMout; 
+    PC_out          <= PC_out_sig;
+
+
 datapath_1 : datapath
   generic map (
     n_bit => 32,
@@ -214,7 +267,15 @@ datapath_1 : datapath
     WB_MUX_SEL          => s_WB_MUX_SEL,
     RF_WE               => s_RF_WE,
 	IRAMout            => s_cu_in,
-	PC_OUT              => s_PC_OUT);
+	PC_OUT              => s_PC_OUT,
+
+    DRAM_RE_byp     =>      DRAM_RE_byp_sig  ,
+    DRAM_WE_byp     =>      DRAM_WE_byp_sig  ,
+    DRAM_ADD_byp    =>      DRAM_ADD_byp_sig ,
+    DRAM_DIN_byp    =>      DRAM_DIN_byp_sig ,
+    DRAM_Dout_byp   =>      DRAM_Dout_byp_sig
+
+);
         
 
 
@@ -270,23 +331,23 @@ dlx_cu_0 : dlx_cu
 
 not_clock <= not(clock);
 
-IRAM_0 : iram
-  generic map (
-    RAM_DEPTH  => RAM_DEPTH,
-    I_SIZE  => IR_SIZE )
-  port map (
-    Rst   => Reset,
-    clock  => not_clock,
-    Addr  => s_PC_OUT,
-    Dout  => s_IR_IN
-    );
+--IRAM_0 : iram
+  --generic map (
+    --RAM_DEPTH  => RAM_DEPTH,
+    --I_SIZE  => IR_SIZE )
+  --port map (
+    --Rst   => Reset,
+    --clock  => not_clock,
+    --Addr  => s_PC_OUT,
+    --Dout  => s_IR_IN
+    --);
 
 
 register_input_cw : register_gen_en
     generic map (
             n_bit  => IR_SIZE)
 port map (
-DIN  => s_IR_IN,
+DIN  => IRAMout,
 ENABLE  => '1',
 RESET  => reset,
 CLK  => clock,

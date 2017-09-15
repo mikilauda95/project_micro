@@ -51,7 +51,18 @@ entity datapath is
     RF_WE              : in std_logic;  -- Register File Write Enable
 
 	IRAMout: in std_logic_vector(IR_SIZE-1 downto 0);
-	PC_out : out std_logic_vector(IR_SIZE-1 downto 0));
+	PC_out : out std_logic_vector(IR_SIZE-1 downto 0);
+
+    -- dram signals bypassing
+
+    DRAM_RE_byp            : out std_logic;  -- Data RAM read enable
+    DRAM_WE_byp            : out std_logic;  -- Data RAM Write Enable
+    DRAM_ADD_byp             : out std_logic_vector(n_bit-1 downto 0);
+    DRAM_DIN_byp             : out std_logic_vector(n_bit-1 downto 0);
+
+    DRAM_Dout_byp             : in std_logic_vector(n_bit-1 downto 0)
+
+);
 end datapath;
 
 
@@ -109,23 +120,23 @@ component MUX21_GENERIC
 		Y:	Out	std_logic_vector(n_bit-1 downto 0));
 end component;
 
-component DRAM 
-    generic (
-                DRAM_DEPTH : integer := 4*32;
-                DATA_SIZE : integer := 8;
-                WORD_SIZE : integer := 32;
-                ADDR_SIZE : integer := 32);
-    port (
-             Rst  : in  std_logic;
-             WR_enable  : in  std_logic;
-             R_enable  : in  std_logic;
-             clock : in std_logic;
-             Addr : in  std_logic_vector(ADDR_SIZE - 1 downto 0); 
-             Din : in  std_logic_vector(WORD_SIZE - 1 downto 0);
-             Dout : out std_logic_vector(WORD_SIZE - 1 downto 0)
-         );
+--component DRAM 
+    --generic (
+                --DRAM_DEPTH : integer := 4*32;
+                --DATA_SIZE : integer := 8;
+                --WORD_SIZE : integer := 32;
+                --ADDR_SIZE : integer := 32);
+    --port (
+             --Rst  : in  std_logic;
+             --WR_enable  : in  std_logic;
+             --R_enable  : in  std_logic;
+             --clock : in std_logic;
+             --Addr : in  std_logic_vector(ADDR_SIZE - 1 downto 0); 
+             --Din : in  std_logic_vector(WORD_SIZE - 1 downto 0);
+             --Dout : out std_logic_vector(WORD_SIZE - 1 downto 0)
+         --);
 
-end component;
+--end component;
 
 component register_gen_en
     generic(n_bit : integer := 32);
@@ -169,7 +180,7 @@ end component ;
 --signals declarations
 
 --used in fetch
-signal ADDPC_out_sig, NPC_out_sig, NPC_out_delayed, NPC_out_delayed2, ADDPC_jal_sig: std_logic_vector(n_bit-1 downto 0);
+signal ADDPC_out_sig, real_PC_out_sig, NPC_out_sig, NPC_out_delayed, NPC_out_delayed2, ADDPC_jal_sig: std_logic_vector(n_bit-1 downto 0);
 signal IRout: std_logic_vector(n_bit-1 downto 0);
 signal MUX_BRANCHES_sig, PC_OUT_sig: std_logic_vector(n_bit-1 downto 0);
 
@@ -204,6 +215,20 @@ signal load_data : std_logic_vector(n_bit-1 downto 0);
 
 begin
 
+------------------------------ DRAM BYPASS------------------------------- 
+
+DRAM_RE_byp         <=  dram_re;
+DRAM_WE_byp         <=  DRAM_WE;
+DRAM_ADD_byp        <=  reg_alu_out;
+DRAM_DIN_byp        <=  regb_bypass;
+
+DRAMout      <=  DRAM_Dout_byp;
+
+--DataRam: DRAM
+--generic map(DRAM_DEPTH => 4*32, 
+		--DATA_SIZE => 8)
+--port map(reset, DRAM_WE, dram_re, not_clk, reg_alu_out, regb_bypass, DRAMout);
+
 
 --------------------------------------FETCH-----------------------------------------------
 
@@ -236,8 +261,8 @@ NPC : register_gen_en --next program counter register
     generic map (
             n_bit  => 32 )
 port map (
-DIN  => ADDPC_out_sig,
-ENABLE  => '1',--NPC_LATCH_EN,
+DIN  => real_PC_out_sig,
+ENABLE  => '1',         --NPC_LATCH_EN,
 RESET  => reset,
 CLK  => clk,
 DOUT  => NPC_out_sig );
@@ -313,18 +338,18 @@ pc_mux_sig(0) <= jump_condition and JUMP_BRANCH;
 
 not_comp_sig <= not(comp_sig); --used for the branch
 
+
 ADDPC_jal_sig <= NPC_out_delayed + 4; --used only for the instruction JAL
 
-process (jump_PC, real_register1, r_vs_imm_j) --used to choose between the normal jump operation (j, jal) and the register jump operation (jr, jalr)
+process (ADDPC_out_sig, real_register1, r_vs_imm_j) --used to choose between the normal jump operation (j, jal) and the register jump operation (jr, jalr)
 begin
     case r_vs_imm_j is
-        when '0' => offset_j <= jump_PC;
-        when '1' => offset_j <= real_register1;
+        when '0' => real_PC_out_sig <= ADDPC_out_sig;
+        when '1' => real_PC_out_sig <= real_register1;
         when others => offset_j <= (others => '0');
     end case;
     
 end process;
-
 
 
 mux_pc: MUX21_GENERIC  --mux to choose whether to take NPC or aluoutput as PC, 0 NPC, 1 ALUoutput
@@ -561,11 +586,6 @@ not_clk <=not(clk);
 
 ----------interface---------------
 
-
-DataRam: DRAM
-generic map(DRAM_DEPTH => 4*32, 
-	    DATA_SIZE => 8)
-port map(reset, DRAM_WE, dram_re, not_clk, reg_alu_out, regb_bypass, DRAMout);
 
 
 reg_3 : register_gen_en   --register to store (and delay) the instruction

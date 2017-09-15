@@ -1,32 +1,40 @@
-addi r1,r0,100
-addi r2,r0,-1
-sw 16(r0),r2
-addi r3,r0,3
-sra r5,r2,r3
-loop:
-sw 4(r0),r1
+l1: 
+add r9,r20,r10
+addi r1,r2,#-5
+and r9,r3,r10
+andi r20,r9,#8
+lw r19, 63(r8)
 nop
-lw r6,4(r0)
-subi r1,r1,20
-bnez r1,loop
-nop
-addi r25,r25,8
-addi r24,r24,5
-xor r26,r24,r25
-mult r26,r24,r25
-jal end
-nop
-add r1,r1,r2
-nop
-andi r2,r1,r2
-nop
-sgti r30,r25,1
-nop
-nop
-nop
-nop
-end:
-sub r24,r25,r26
-nop
-lbu r29, 16(r0)
-
+ori r5, r3, #342
+sge r1,r2,r10
+sgei r9,r20,#6
+sle r13,r2,r4
+slei r1,r3,#-4
+sll r1,r2,r3
+slli r4,r1,#5
+sne r1,r2,r3
+snei r3,r5,#4
+srl r5,r7,r8
+srli r7,r5,#2
+sub r6,r12,r15
+subi r7,r9,#-30
+xor r6,r12,r15
+xori r6,r12,#1
+addi r2,r0,#1
+lb r1,3-4(r2)
+lbu r3,5-4(r4)
+lhi r1,#-40
+lhu r2,32(r6)
+mult r5,r2,r4
+sb 41(r3), r2
+seq r13,r1,r4
+seqi r29,r20,#1
+sgt r1,r2,r3
+sgti r4,r1,#15
+slt r5,r7,r8
+slti r9,r10,#30
+sra r1,r2,r3
+srai r25,r26,#10
+subu r13,r2,r4
+or r5, r3, r4
+j l1

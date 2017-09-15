@@ -109,7 +109,7 @@ begin
 
     end generate;
 
-    DECODER_A:process (precodeA)
+    DECODER_A:process (precodeA, REGA)
     begin
         if (REGA="00000") then
             ADD_A <=    RF;
@@ -128,7 +128,7 @@ begin
     end process;
 
 
-    DECODER_B:process (precodeA)
+    DECODER_B:process (precodeB, REGB)
     begin
         if (REGB="00000") then
             ADD_B <=    RF;
