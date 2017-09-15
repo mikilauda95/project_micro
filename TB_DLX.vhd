@@ -1,5 +1,9 @@
-library IEEE;
-
+library ieee;
+use ieee.std_logic_arith.all;
+use std.textio.all;
+use ieee.std_logic_textio.all;
+use IEEE.math_real.all;
+use IEEE.math_complex.all;
 use IEEE.std_logic_1164.all;
 use work.myTypes.all;
 use work.constants.all;
@@ -15,8 +19,25 @@ architecture TEST of tb_dlx is
     constant SIZE_PC      : integer := 32;       -- Program Counter Size
     constant SIZE_ALU_OPC : integer := 6;        -- ALU Op Code Word Size in case explicit coding is used
 
+signal endOfCode : std_logic;
+signal terminate : std_logic;
+
+
+--------------------DEBUGGING OPTIONS--------------------
+
+ FILE timing_file: TEXT open WRITE_MODE is "timingData.txt";
+    FILE ram_data_file: TEXT open WRITE_MODE is "ramData.txt";
+    FILE mem_access_file: TEXT open WRITE_MODE is "memAccess.txt";
+    type debugData is array(0 to 39) of std_logic_vector(7 downto 0);
+    signal debugD : debugData;
+
+
+--------------------------------------------------
+
     signal Clock, not_clock : std_logic := '0';
     signal Reset: std_logic := '1';
+
+
 
 signal s_DRAM_RE_byp : std_logic;
 signal s_DRAM_WE_byp : std_logic;
@@ -150,8 +171,37 @@ IRAM_0 : IRAM
 	
 	Reset <= '1', '0' after 6 ns, '1' after 11 ns, '0' after 16 ns;
        
+    process (s_IRAMout)
+    begin
+        if (s_IRAMout = "00000000000000000000000000100000") then
+            endOfCode <= '1';
+        end if;
+        
+
+    end process;
+
+
+process(endOfCode)
+    variable L : LINE;
+    variable count_mem : integer :=0;
+begin
+    if (endOfCode = '1') then
+        write(L, time'image(now)); --write the simulation time
+        writeline(timing_file, L);
+
+        write(L, count_mem);      --write the count of load and store
+        writeline(mem_access_file, L);
+        
+        for i in 0 to 39 loop
+            write(L, debugD(i));
+            writeline(ram_data_file, L);
+        end loop ;
+        terminate <= '1';
+    end if;  
+end process;
 
 end TEST;
+
 
 -------------------------------
 
