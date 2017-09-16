@@ -140,19 +140,6 @@ component dlx_cu is
 end component;
 
 
---component IRAM is
-  --generic (
-    --RAM_DEPTH : integer := RAM_DEPTH;
-    --I_SIZE : integer := IR_SIZE);
-  --port (
-    --Rst  : in  std_logic;
-    --clock  : in  std_logic;
-    --Addr : in  std_logic_vector(I_SIZE - 1 downto 0);
-    --Dout : out std_logic_vector(I_SIZE - 1 downto 0)
-    --);
---end component;
-
-
 component register_gen_en
     generic(n_bit : integer := 32);
 PORT(

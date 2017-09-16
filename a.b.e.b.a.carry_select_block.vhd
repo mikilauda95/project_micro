@@ -23,7 +23,8 @@ architecture STRUCTURAL of carry_select_block is
  signal cin2: std_logic;
 
   component RCA  
-	generic (--DRCAS : 	Time := 0 ns;
+	generic (
+             --DRCAS : 	Time := 0 ns;
 	         --DRCAC : 	Time := 0 ns;
 		 n_bit :	integer := numbit);
 		 

@@ -1,5 +1,5 @@
-vcom "a.b.a.log.vhd"
-vcom "000-globals.vhd"
+vcom "000.log.vhd"
+vcom "001.globals.vhd"
 vcom *.vhd
 
 vsim work.tb_dlx(test)

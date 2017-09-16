@@ -96,14 +96,6 @@ component ALU
 
 end component;
 
-component register_gen 
-	generic(n_bit : integer := 32);
-	Port (	D:	In	std_logic_vector(n_bit-1 downto 0);
-		CK:	In	std_logic;
-		RESET:	In	std_logic;
-		Q:	Out	std_logic_vector(n_bit-1 downto 0));
-end component;
-
 component latch 
 	generic(n_bit: integer:=32);
 	Port (	D:	In	std_logic_vector(n_bit-1 downto 0);
@@ -120,23 +112,6 @@ component MUX21_GENERIC
 		Y:	Out	std_logic_vector(n_bit-1 downto 0));
 end component;
 
---component DRAM 
-    --generic (
-                --DRAM_DEPTH : integer := 4*32;
-                --DATA_SIZE : integer := 8;
-                --WORD_SIZE : integer := 32;
-                --ADDR_SIZE : integer := 32);
-    --port (
-             --Rst  : in  std_logic;
-             --WR_enable  : in  std_logic;
-             --R_enable  : in  std_logic;
-             --clock : in std_logic;
-             --Addr : in  std_logic_vector(ADDR_SIZE - 1 downto 0); 
-             --Din : in  std_logic_vector(WORD_SIZE - 1 downto 0);
-             --Dout : out std_logic_vector(WORD_SIZE - 1 downto 0)
-         --);
-
---end component;
 
 component register_gen_en
     generic(n_bit : integer := 32);
@@ -148,15 +123,6 @@ CLK : IN STD_LOGIC; -- clock.
 DOUT : OUT STD_LOGIC_vector)
 ; -- output.
 end component;
-
-
-component NOR5 is
-	generic (
-		 n_bit :	integer := 6); 
-	Port (	A:	In	std_logic_vector(n_bit-1 downto 0);
-		S:	Out	std_logic);
-end component; 
-
 
 
 component forwarder is
@@ -240,6 +206,18 @@ ADDPC_out_sig <= PC_OUT_sig + 4;
 --get output of PC
 PC_out <= PC_OUT_sig;
 
+--TODO MULTIPLEXER ON PC_OUT_SIG: it is the normal PC_out_sig when with immediate and it is the real register when a jump with register
+
+--process ()
+--begin
+    --case reg_jump 
+--when '0' => PC_OUT_SIG <= ;
+--when '1' => PC_OUT_SIG <= ;
+--end case;
+
+--end process;
+
+
 --this nor is used because the destination register is coded in different positions depending on the type of instruction
 --if the ALU_OPCODE is 0, it means that the instruction is r-type, so the signal rt_vs_it is 1, otherwise it's 0
 rt_vs_it <= nor_reduce(IRout(31 downto 26));
@@ -261,7 +239,7 @@ NPC : register_gen_en --next program counter register
     generic map (
             n_bit  => 32 )
 port map (
-DIN  => real_PC_out_sig,
+DIN  => ADDPC_out_sig,
 ENABLE  => '1',         --NPC_LATCH_EN,
 RESET  => reset,
 CLK  => clk,
@@ -344,8 +322,8 @@ ADDPC_jal_sig <= NPC_out_delayed + 4; --used only for the instruction JAL
 process (ADDPC_out_sig, real_register1, r_vs_imm_j) --used to choose between the normal jump operation (j, jal) and the register jump operation (jr, jalr)
 begin
     case r_vs_imm_j is
-        when '0' => real_PC_out_sig <= ADDPC_out_sig;
-        when '1' => real_PC_out_sig <= real_register1;
+        when '0' => offset_j <= jump_PC;
+        when '1' => offset_j <= real_register1;
         when others => offset_j <= (others => '0');
     end case;
     
