@@ -9,12 +9,12 @@ use work.constants.all;
 
 entity dlx_cu is
     generic (
-                microcode_mem_size :     integer := microcode_mem_size;  -- microcode memory size
-                func_size          :     integer := func_size;  -- func field size for r-type ops
-                op_code_size       :     integer := op_code_size;  -- op code size
+                microcode_mem_size :     integer := 64;  -- microcode memory size
+                func_size          :     integer := 11;  -- func field size for r-type ops
+                op_code_size       :     integer := 6 ;  -- op code size
                                                                    -- alu_opc_size       :     integer := 6;  -- alu op code word size
-                ir_size            :     integer := ir_size;  -- instruction register size    
-                cw_size            :     integer := cw_size);  -- control word size
+                ir_size            :     integer := 32;  -- instruction register size    
+                cw_size            :     integer := 26);  -- control word size
     port (
              clk                : in  std_logic;  -- clock
              rst                : in  std_logic;  -- reset:active-low

@@ -412,8 +412,6 @@ DOUT  => imm_mux2);
 --working with register file
 
 register_file_0 : register_file  --register file
-    generic map (
-            n_bit  => s_n_bit )
     port map (
              CLK => clk,
            RESET => reset,

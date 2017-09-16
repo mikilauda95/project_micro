@@ -272,12 +272,12 @@ datapath_1 : datapath
 
 dlx_cu_0 : dlx_cu
   generic map (
-    MICRocode_mem_size  => MICROCODE_MEM_SIZE,
-    FUNC_size           => FUNC_SIZE,
-    OP_Code_size        => OP_CODE_SIZE,
-    -- Alu_opc_size       :     integer := 6  -- ALU Op Code Word Size
-    IR_Size             => IR_SIZE,
-    CW_Size             => CW_SIZE )
+    MICRocode_mem_size  => 64,
+    FUNC_size           => 11,
+    OP_Code_size        => 6,
+    -- Alu_opc_size       :       integer := 6  -- ALU Op Code Word Size
+    IR_Size             => 32,
+    CW_Size             => 26)
   port map (
     Clk                 => clock,
     Rst                 => reset,
