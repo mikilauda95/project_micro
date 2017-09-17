@@ -1,58 +1,30 @@
 addi r1,r0,#1
-addi r2,r0,#31
+addi r2,r0,#4
+loop:
 addi r1,r1,#1
-nop
 add r3,r1,r0
-bnez r2,#-3
+add r4,r2,r0
+addr r2,r0,#-1
+bnez r2,loop
 subi r2,r2,#1
+addi r2,r2,#1
+beqz r0,first_stage
 nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-beqz r0,#10
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-j 140
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
+addi r23,#55
+first_stage:
+j next_stage
+addi r24,#55
+next_stage:
 addi r4,r0,#184
-jr r4
+bnez next_stage2
 nop
+addi r25,r0,#55
+next_stage2:
+jal end
 nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-jal #224
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
+j real_end
+end:
 jalr r31
 nop
+real_end:
+addi r22, #100

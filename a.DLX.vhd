@@ -253,7 +253,7 @@ datapath_1 : datapath
     LOAD_MUX           => s_LOAD_MUX,
     WB_MUX_SEL          => s_WB_MUX_SEL,
     RF_WE               => s_RF_WE,
-	IRAMout            => s_cu_in,
+	IRAMout            => s_IR_in,
 	PC_OUT              => s_PC_OUT,
 
     DRAM_RE_byp     =>      DRAM_RE_byp_sig  ,
@@ -277,7 +277,7 @@ dlx_cu_0 : dlx_cu
     OP_Code_size        => 6,
     -- Alu_opc_size       :       integer := 6  -- ALU Op Code Word Size
     IR_Size             => 32,
-    CW_Size             => 26)
+    CW_Size             => 24)
   port map (
     Clk                 => clock,
     Rst                 => reset,
@@ -330,15 +330,15 @@ not_clock <= not(clock);
     --);
 
 
-register_input_cw : register_gen_en
-    generic map (
-            n_bit  => IR_SIZE)
-port map (
-DIN  => IRAMout,
-ENABLE  => '1',
-RESET  => reset,
-CLK  => clock,
-DOUT  => s_cu_in);
+--register_input_cw : register_gen_en
+    --generic map (
+            --n_bit  => IR_SIZE)
+--port map (
+--DIN  => IRAMout,
+--ENABLE  => '1',
+--RESET  => reset,
+--CLK  => clock,
+--DOUT  => s_cu_in);
 
 
 end structural;

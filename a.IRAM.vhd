@@ -31,15 +31,15 @@ architecture IRam_Bhe of IRAM is
     signal IRAM_mem : RAMtype;
 
 begin  -- IRam_Bhe
-    process(clock)
-    begin 
-        if (rising_edge(clock)) then
+    --process(clock)
+    --begin 
+        --if (rising_edge(clock)) then
             Dout(31 downto 24) <= conv_std_logic_vector(IRAM_mem(conv_integer(unsigned(Addr))),I_SIZE/4);
             Dout(23 downto 16)  <= conv_std_logic_vector(IRAM_mem(conv_integer(unsigned(Addr)+1)),I_SIZE/4);
             Dout(15 downto 8) <= conv_std_logic_vector(IRAM_mem(conv_integer(unsigned(Addr)+2)),I_SIZE/4);
             Dout(7 downto 0) <= conv_std_logic_vector(IRAM_mem(conv_integer(unsigned(Addr)+3)),I_SIZE/4);
-        end if;
-    end process;
+        --end if;
+    --end process;
 
   -- purpose: This process is in charge of filling the Instruction RAM with the firmware
   -- type   : combinational

@@ -1,11 +1,30 @@
-seq r25, r25, r25 ; r25 <= 1
-sne r20, r25, r20 ; just to try 
-myloop:
-add r1, r1, r25     ; r1 <= 1, 17 , 145
-add r1, r25, r1     ; r1 <= 2, 18 , 146
-add r1, r1, r1      ; r1 <= 4, 36 , 292
-add r1, r1, r1      ; r1 <= 8, 72 , 584
-add r1, r1, r1      ; r1 <= 16,144, 1168
-xor r20, r20, r25   ; toggle lsb of r20.
-addi r7, r0, myloop ;move label into r7
-j myloop        	    ;jump
+addi r1,r0,#1
+addi r2,r0,#4
+loop:
+addi r1,r1,#1
+add r3,r1,r0
+add r4,r2,r0
+addi r2,r2,#-1
+bnez r2,loop
+subi r3,r3,#1
+addi r2,r2,#1
+beqz r0,first_stage
+nop
+addi r23,r0,#55
+first_stage:
+j next_stage
+addi r24,r0,#55
+next_stage:
+addi r4,r0,#184
+bnez r4,next_stage2
+nop
+addi r25,r0,#55
+next_stage2:
+jal end
+nop
+j real_end
+end:
+jalr r31
+nop
+real_end:
+addi r22,r0, #100

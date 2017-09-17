@@ -125,6 +125,15 @@ DOUT : OUT STD_LOGIC_vector)
 end component;
 
 
+component FD is
+	Port (	D:	In	std_logic;
+		CK:	In	std_logic;
+		RESET:	In	std_logic;
+		Q:	Out	std_logic);
+end component;
+
+
+
 component forwarder is
     generic (
                 n_bit: integer := 5;
@@ -148,7 +157,8 @@ end component ;
 --used in fetch
 signal ADDPC_out_sig, real_PC_out_sig, NPC_out_sig, NPC_out_delayed, NPC_out_delayed2, ADDPC_jal_sig: std_logic_vector(n_bit-1 downto 0);
 signal IRout: std_logic_vector(n_bit-1 downto 0);
-signal MUX_BRANCHES_sig, PC_OUT_sig: std_logic_vector(n_bit-1 downto 0);
+signal MUX_BRANCHES_sig, PC_OUT_sig, PC_OUT_sig2: std_logic_vector(n_bit-1 downto 0);
+signal pc_mux_sig_delayed : std_logic;
 
 --used in decode
 signal reg_file_in, regin1, reg_mux1, regin2, reg_mux2, imm2, imm_mux2: std_logic_vector(n_bit-1 downto 0);
@@ -157,7 +167,7 @@ signal ADD_WR_SIG_mux : std_logic_vector(4 downto 0);
 signal imm2_sig,imm_j, imm_b, imm_brorj : std_logic_vector(n_bit-1 downto 0);
 signal j_imm_cont : std_logic;
 signal usls_co : std_logic;
-signal jump_PC, offset_j : std_logic_vector(n_bit-1 downto 0);
+signal jump_PC, offset_j, offset_j_sig : std_logic_vector(n_bit-1 downto 0);
 signal s_ADD_A, s_ADD_B : pipe_pos_type;
 signal valid_out : std_logic_vector(4 downto 0);
 signal validate_out : std_logic_vector(4 downto 0);
@@ -203,19 +213,21 @@ DRAMout      <=  DRAM_Dout_byp;
 --increase program counter
 ADDPC_out_sig <= PC_OUT_sig + 4;
 
+
+
+--NPC_0 : register_gen_en --next program counter register
+    --generic map (
+            --n_bit  => 32 )
+--port map (
+--DIN  => PC_OUT_sig,
+--ENABLE  => '1',         --NPC_LATCH_EN,
+--RESET  => reset,
+--CLK  => clk,
+--DOUT  => PC_OUT_sig2 );
+
+
 --get output of PC
 PC_out <= PC_OUT_sig;
-
---TODO MULTIPLEXER ON PC_OUT_SIG: it is the normal PC_out_sig when with immediate and it is the real register when a jump with register
-
---process ()
---begin
-    --case reg_jump 
---when '0' => PC_OUT_SIG <= ;
---when '1' => PC_OUT_SIG <= ;
---end case;
-
---end process;
 
 
 --this nor is used because the destination register is coded in different positions depending on the type of instruction
@@ -308,31 +320,56 @@ forwarder_0 : forwarder
 
 ------------------BRANCH AND JUMP LOGIC-----------------------------
 
-jump_PC <= NPC_out_delayed + imm2_sig; --used for jump
+jump_PC <= NPC_out_sig + imm2_sig; --used for jump
 
 jump_condition <= JUMP_EN or branch_out_sig(0); 
 
 pc_mux_sig(0) <= jump_condition and JUMP_BRANCH;
 
+
+
 not_comp_sig <= not(comp_sig); --used for the branch
 
 
-ADDPC_jal_sig <= NPC_out_delayed + 4; --used only for the instruction JAL
 
-process (ADDPC_out_sig, real_register1, r_vs_imm_j) --used to choose between the normal jump operation (j, jal) and the register jump operation (jr, jalr)
+ADDPC_jal_sig <= ADDPC_out_sig + 4; --used only for the instruction JAL
+
+process (jump_PC, real_register1, r_vs_imm_j) --used to choose between the normal jump operation (j, jal) and the register jump operation (jr, jalr)
 begin
     case r_vs_imm_j is
-        when '0' => offset_j <= jump_PC;
-        when '1' => offset_j <= real_register1;
-        when others => offset_j <= (others => '0');
+        when '0' => offset_j_sig <= jump_PC;
+        when '1' => offset_j_sig <= real_register1;
+        when others => offset_j_sig <= (others => '0');
     end case;
     
 end process;
 
 
+FD_J : FD
+	port map (
+	        	D => pc_mux_sig(0),
+		CK => clk,
+		RESET => reset,
+		Q => pc_mux_sig_delayed);
+
+
+
+register_decode_jump : register_gen_en --register to keep the value from the jump computation result, in order to separate the jump logic from the fetch logic
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => offset_j_sig,
+ENABLE  => '1',
+RESET  => reset,
+CLK  => clk,
+DOUT  => offset_j);
+
+
+
+
 mux_pc: MUX21_GENERIC  --mux to choose whether to take NPC or aluoutput as PC, 0 NPC, 1 ALUoutput
 generic map (n_bit => 32) 
-port map (offset_j, NPC_out_sig, pc_mux_sig(0), MUX_BRANCHES_sig);
+port map (offset_j, NPC_out_sig, pc_mux_sig_delayed, MUX_BRANCHES_sig);
 
 PC_latch : latch  --latch to move the MUX_BRANCHES_sig into the PC_OUT_sig
 	generic map (
