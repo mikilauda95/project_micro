@@ -128,10 +128,10 @@ architecture dlx_cu_hw of dlx_cu is
     "000000000000"&"0000"&"000"&"00000",
     "000000000000"&"0000"&"000"&"00000",
     "000000000000"&"0000"&"000"&"00000",
-    "000000000000"&"0000"&"000"&"00000",
-    "000000000000"&"0000"&"000"&"00000",
-    "000000000000"&"0000"&"000"&"00000",
-    "000000000000"&"0000"&"000"&"00000",
+    "101100001001"&"1100"&"000"&"00011", --58 sltui
+    "101100001001"&"1100"&"000"&"00011", --59 sgtui
+    "101000001001"&"1100"&"000"&"00011", --60 sleui
+    "101000001001"&"1100"&"000"&"00011", --61 sgeui
     "000000000000"&"0000"&"000"&"00000",
     "000000000000"&"0000"&"000"&"00000"); -- changed cw(cwsize-3 ) to 1 (latch for the first operand in register)
 
@@ -252,6 +252,10 @@ begin  -- dlx_cu_rtl
 					when 14 => aluopcode_i <= muls; --it's the multiplication 
 					when 42 => aluopcode_i <= lo; --set if lower
 					when 43 => aluopcode_i <= gr; --set if greater
+					when 58 => aluopcode_i <= lo; --set if lower unsigned
+					when 59 => aluopcode_i <= gr; --set if greater unsigned
+					when 60 => aluopcode_i <= loeq; --set if lower or equal unsigned
+					when 61 => aluopcode_i <= greq; --set if greater or equal unsigned
                     when others => aluopcode_i <= nop;
                 end case;
             when 2 => aluopcode_i <= adds; -- j
@@ -285,6 +289,10 @@ begin  -- dlx_cu_rtl
 			when 27 => aluopcode_i <= gr; --set if greater immediate
 			when 9 => aluopcode_i <= adds; --addui
 			when 11 => aluopcode_i <= subs; --subui
+			when 58 => aluopcode_i <= lo; --set if lower immediate unsigned
+			when 59 => aluopcode_i <= gr; --set if greater immediate unsigned
+			when 60 => aluopcode_i <= loeq; --set if lower or equal immediate unsigned
+			when 61 => aluopcode_i <= greq; --set if bigger or equal immediate unsigned
             when others => aluopcode_i <= nop;
         end case;
     end process alu_op_code_p;
