@@ -22,8 +22,8 @@ entity datapath is
     RegA_LATCH_EN      : in std_logic;  -- Register A Latch Enable
     RegB_LATCH_EN      : in std_logic;  -- Register B Latch Enable
     RegIMM_LATCH_EN    : in std_logic;  -- Immediate Register Latch Enable
-    MUXJ_SEL 		   : in std_logic;  -- Choose between class immediate and 26 bit jump immediate
-	MUXBRORJ_SEL 	   : in std_logic;  -- choose between normal op and jump or branch operation
+    muxsign_sel 	   : in std_logic;  -- Choose between class immediate and 26 bit jump immediate
+	muximm_jvsimm 	   : in std_logic;  -- choose between normal op and jump or branch operation
     R_VS_IMM_J         : in std_logic;  -- control signal to select the register of the immediate for the calculation of npc
     JUMP_EN            : in std_logic;  -- JUMP Enable Signal for PC input MUX
     JUMP_BRANCH        : in std_logic;
@@ -161,10 +161,10 @@ signal MUX_BRANCHES_sig, PC_OUT_sig, PC_OUT_sig2: std_logic_vector(n_bit-1 downt
 signal pc_mux_sig_delayed : std_logic;
 
 --used in decode
-signal reg_file_in, regin1, reg_mux1, regin2, reg_mux2, imm2, imm_mux2: std_logic_vector(n_bit-1 downto 0);
+signal reg_file_in, regin1, reg_mux1, regin2, reg_mux2, imm_sign, imm2, imm_mux2: std_logic_vector(n_bit-1 downto 0);
 signal ADD_WR_SIG,ADD_WR_DEC,ADD_WR_EX, ADD_WR_fetch : std_logic_vector(4 downto 0);
 signal ADD_WR_SIG_mux : std_logic_vector(4 downto 0);
-signal imm2_sig,imm_j, imm_b, imm_brorj : std_logic_vector(n_bit-1 downto 0);
+signal imm2_sig,imm_j, imm_unsign, imm_brorj : std_logic_vector(n_bit-1 downto 0);
 signal j_imm_cont : std_logic;
 signal usls_co : std_logic;
 signal jump_PC, offset_j, offset_j_sig : std_logic_vector(n_bit-1 downto 0);
@@ -406,16 +406,16 @@ end process;
 --sign extention
 
 --immediate needed for the i-type operation
-imm2(15 downto 0) <= IRout(15 downto 0);
-imm2(31 downto 16) <= (others => IRout(15));
+imm_sign(15 downto 0) <= IRout(15 downto 0);
+imm_sign(31 downto 16) <= (others => IRout(15));
 
 --immediate needed for the j-type operation
 imm_j(25 downto 0) <= IRout(25 downto 0);
 imm_j(31 downto 26) <= (others =>IRout(25));
 
 --immediate needed for conditional branches
-imm_b(15 downto 0) <= IRout(15 downto 0);
-imm_b(31 downto 16) <= (others =>IRout(15));
+imm_unsign(16 downto 0) <= IRout(16 downto 0);
+imm_unsign(31 downto 17) <= (others => '0');
 
 
 
@@ -428,11 +428,11 @@ imm_b(31 downto 16) <= (others =>IRout(15));
 
 mux_imm_brorj : MUX21_GENERIC --first mux to choose between jump and branch 
 generic map (n_bit => 32)
-port map (imm_j, imm_b, MUXJ_SEL, imm_brorj); --if control is 0 the output is imm_b, else it's imm_j
+port map (imm_unsign, imm_sign, muxsign_sel, imm2); --if control is 1 the output is signed, if 0 imm2 is unsigned
 
 mux_imm_j: MUX21_GENERIC --second mux to choose between jump/branch and immediate
 generic map (n_bit => 32)
-port map (imm_brorj, imm2, MUXBRORJ_SEL, imm2_sig); --if control is 0 the output is imm2, else it's imm_brorj
+port map (imm_j, imm2, muximm_jvsimm, imm2_sig); --if control is 1, imm_j is chosen, if 0 imm2 (signed or unsigned) is chosen
 
 
 reg_imm : register_gen_en  --register to store the value of the immediate we want

@@ -46,8 +46,8 @@ component datapath
     RegA_LATCH_EN      : in std_logic;  -- Register A Latch Enable
     RegB_LATCH_EN      : in std_logic;  -- Register B Latch Enable
     RegIMM_LATCH_EN    : in std_logic;  -- Immediate Register Latch Enable
-    MUXJ_SEL           : in std_logic;
-    MUXBRORJ_SEL       : in std_logic;
+    muxsign_sel           : in std_logic;
+    muximm_jvsimm       : in std_logic;
     R_VS_IMM_J         : in std_logic;  -- control signal to select the register of the immediate for the calculation of npc
     JUMP_EN            : in std_logic;  -- JUMP Enable Signal for PC input MUX
     JUMP_branch        : in std_logic;  -- JUMP or branch operation identifier
@@ -110,8 +110,8 @@ component dlx_cu is
     RegA_LATCH_EN      : out std_logic;  -- Register A Latch Enable
     RegB_LATCH_EN      : out std_logic;  -- Register B Latch Enable
     RegIMM_LATCH_EN    : out std_logic;  -- Immediate Register Latch Enable
-    MUXJ_SEL           : out std_logic;
-    MUXBRORJ_SEL       : out std_logic;
+    muxsign_sel           : out std_logic;
+    muximm_jvsimm       : out std_logic;
     R_VS_IMM_J         : out std_logic;  -- control signal to select the register of the immediate for the calculation of npc
     JUMP_EN            : out std_logic;  -- JUMP Enable Signal for PC input MUX
     JUMP_branch        : out std_logic;  -- JUMP or branch operation identifier
@@ -173,8 +173,8 @@ signal not_clock : std_logic;
 signal s_RegA_LATCH_EN : std_logic;
 signal s_RegB_LATCH_EN : std_logic;
 signal s_RegIMM_LATCH_EN : std_logic;
-signal s_MUXJ_SEL : std_logic;
-signal s_MUXBRORJ_SEL : std_logic;
+signal s_muxsign_sel : std_logic;
+signal s_muximm_jvsimm : std_logic;
 signal s_R_VS_IMM_J : std_logic;
 signal s_MUXB_SEL : std_logic;
 signal s_ALU_OUTREG_EN : std_logic;
@@ -230,8 +230,8 @@ datapath_1 : datapath
     RegA_LATCH_EN       => s_RegA_LATCH_EN,
     RegB_LATCH_EN       => s_RegB_LATCH_EN,
     RegIMM_LATCH_EN     => s_RegIMM_LATCH_EN,
-    MUXJ_SEL            => s_MUXJ_SEL,
-    MUXBRORJ_SEL        => s_MUXBRORJ_SEL,
+    muxsign_sel            => s_muxsign_sel,
+    muximm_jvsimm        => s_muximm_jvsimm,
     R_VS_IMM_J            => s_R_VS_IMM_J,
     JUMP_EN             => s_JUMP_EN,
     JUMP_branch         => s_JUMP_BRANCH,
@@ -291,9 +291,9 @@ dlx_cu_0 : dlx_cu
     RegA_latch_en       => s_RegA_LATCH_EN,
     RegB_latch_en       => s_RegB_LATCH_EN,
     RegImm_latch_en     => s_RegIMM_LATCH_EN,
-    MUXJ_SEL            => s_MUXJ_SEL,
-    MUXBRORJ_SEL        => s_MUXBRORJ_SEL,
-    R_VS_IMM_J            => s_R_VS_IMM_J,
+    muxsign_sel         => s_muxsign_sel,
+    muximm_jvsimm       => s_muximm_jvsimm,
+    R_VS_IMM_J          => s_R_VS_IMM_J,
     JUMP_en             => s_JUMP_EN,
     JUMP_branch         => s_JUMP_BRANCH,
     PC_Latch_en         => s_PC_LATCH_EN,

@@ -29,8 +29,8 @@ entity dlx_cu is
              rega_latch_en      : out std_logic;  -- register a latch enable
              regb_latch_en      : out std_logic;  -- register b latch enable
              regimm_latch_en    : out std_logic;  -- immediate register latch enable
-             muxj_sel           : out std_logic;
-            muxbrorj_sel        : out std_logic;
+             muxsign_sel        : out std_logic;
+            muximm_jvsimm       : out std_logic;
              R_VS_IMM_J         : out std_logic;  -- control signal to select the register of the immediate for the calculation of npc
              jump_en            : out std_logic;  -- jump unconditioned identifier
              jump_branch        : out std_logic;  -- jump or branch operation identifier
@@ -72,24 +72,24 @@ architecture dlx_cu_hw of dlx_cu is
     signal cw_mem : mem_array := (
     "110000001001"&"0100"&"000"&"00011", --0 r type
     "000000000000"&"0000"&"000"&"00000", --1 	
-	"001110111010"&"1100"&"000"&"00000", --2 j (0x02) instruction encoding corresponds to the address to this rom
-    "001110111110"&"1100"&"000"&"00000", --3 jal 
-    "101010011010"&"1100"&"000"&"00000", --4 beqz 
-    "101010011000"&"1100"&"000"&"00000", --5 bnez
+	"001010111010"&"1100"&"000"&"00000", --2 j (0x02) instruction encoding corresponds to the address to this rom
+    "001010111110"&"1100"&"000"&"00000", --3 jal 
+    "101000011010"&"1100"&"000"&"00000", --4 beqz 
+    "101000011000"&"1100"&"000"&"00000", --5 bnez
     "000000000000"&"0000"&"000"&"00000", --6 bfpt (not implemented)
     "000000000000"&"0000"&"000"&"00000", --7 bfpf (not implemented)
     "101000001001"&"1100"&"000"&"00011", --8 add i
-    "101000001001"&"1100"&"000"&"00011", --9 addui (not implemented)
+    "101100001001"&"1100"&"000"&"00011", --9 addui (not implemented)
     "101000001001"&"1100"&"000"&"00011", --10 sub i 
-    "101000001001"&"1100"&"000"&"00011", --11 subui (not implemented)
+    "101100001001"&"1100"&"000"&"00011", --11 subui (not implemented)
     "101000001001"&"1100"&"000"&"00011", --12 and i 
     "101000001001"&"1100"&"000"&"00011", --13 or i 
     "101000001001"&"1100"&"000"&"00011", --14 xor i 
     "100000000000"&"0000"&"000"&"00000", --15 lhi (not implemented)
     "100000000000"&"0000"&"000"&"00000", --16 rfe (not implemented)
     "000000000000"&"0000"&"000"&"00000", --17 trap (not implemented)
-    "101101111010"&"1100"&"000"&"00000", --18 jr
-    "101101111110"&"1100"&"000"&"00000", --19 jalr
+    "101001111010"&"1100"&"000"&"00000", --18 jr
+    "101001111110"&"1100"&"000"&"00000", --19 jalr
     "101000001001"&"1100"&"000"&"00011", --20 slli 
     "100000000000"&"0000"&"000"&"00000", --21 nop
     "101000001001"&"1100"&"000"&"00011", --22 srli 
@@ -170,8 +170,8 @@ begin  -- dlx_cu_rtl
     rega_latch_en   <= cw2(cw_size - 1);
     regb_latch_en   <= cw2(cw_size - 2);
     regimm_latch_en <= cw2(cw_size - 3);
-    muxj_sel        <= cw2(cw_size-4);
-    muxbrorj_sel    <= cw2(cw_size-5);
+    muxsign_sel        <= cw2(cw_size-4);
+    muximm_jvsimm    <= cw2(cw_size-5);
     r_vs_imm_j      <= cw2(cw_size - 6);
     jump_en      <= cw2(cw_size - 7);
     jump_branch  <= cw2(cw_size - 8);
