@@ -161,7 +161,7 @@ signal MUX_BRANCHES_sig, PC_OUT_sig, PC_OUT_sig2: std_logic_vector(n_bit-1 downt
 signal pc_mux_sig_delayed : std_logic;
 
 --used in decode
-signal reg_file_in, regin1, reg_mux1, regin2, reg_mux2, imm_sign, imm2, imm_mux2: std_logic_vector(n_bit-1 downto 0);
+signal reg_file_in, regin1, reg_mux1, regin2, reg_mux2, imm_sign, imm2, imm_mux2, imm2_delay_mem, imm2_delay_exec: std_logic_vector(n_bit-1 downto 0);
 signal ADD_WR_SIG,ADD_WR_DEC,ADD_WR_EX, ADD_WR_fetch : std_logic_vector(4 downto 0);
 signal ADD_WR_SIG_mux : std_logic_vector(4 downto 0);
 signal imm2_sig,imm_j, imm_unsign, imm_brorj : std_logic_vector(n_bit-1 downto 0);
@@ -182,7 +182,7 @@ signal sign_ext_delay : std_logic_vector(n_bit -1  downto 0);
 signal regb_bypass, RET_ADD, store_data : std_logic_vector(n_bit-1 downto 0);
 
 --used in memory
-signal DRAMout, LMDout,reg_alu_mem : std_logic_vector(n_bit-1 downto 0);
+signal DRAMout, LMDout, load32, reg_alu_mem : std_logic_vector(n_bit-1 downto 0);
 signal jump_condition, not_clk : std_logic;
 
 --used in wb
@@ -414,8 +414,8 @@ imm_j(25 downto 0) <= IRout(25 downto 0);
 imm_j(31 downto 26) <= (others =>IRout(25));
 
 --immediate needed for conditional branches
-imm_unsign(16 downto 0) <= IRout(16 downto 0);
-imm_unsign(31 downto 17) <= (others => '0');
+imm_unsign(15 downto 0) <= IRout(15 downto 0);
+imm_unsign(31 downto 16) <= (others => '0');
 
 
 
@@ -623,6 +623,41 @@ CLK  => clk,
 DOUT  => LMDout);
 
 
+
+imm_delay_ex : register_gen_en --register to store the output of the DRAM
+    generic map (
+            n_bit  => 32 )
+port map (
+DIN  => imm_mux2,
+ENABLE  => LMD_LATCH_EN,
+RESET  => reset,
+CLK  => clk,
+DOUT  => imm2_delay_exec);
+
+
+--imm_delay_mem : register_gen_en --register to store the output of the DRAM
+    --generic map (
+            --n_bit  => 32 )
+--port map (
+--DIN  => imm2_delay_exec,
+--ENABLE  => LMD_LATCH_EN,
+--RESET  => reset,
+--CLK  => clk,
+--DOUT  => imm2_delay_mem);
+
+
+
+process (LMDout, imm2_delay_exec, LOAD_MUX)
+begin
+    if(LOAD_MUX="101") then
+        load32 <= imm2_delay_exec;
+    else 
+        load32 <= LMDout;
+    end if;
+end process;
+
+
+
 ALU_output_mem : register_gen_en  --register to store (delay) the result of the ALU
     generic map (
             n_bit  => 32 )
@@ -644,23 +679,26 @@ DOUT  => reg_alu_mem);
 ----------processes---------------
 
 --process to compare the branch register to 0
-process(LMDout, LOAD_MUX) 
+process(load32, LOAD_MUX) 
 begin
 
     if(LOAD_MUX="000" ) then 
-        load_data<=LMDout; 
+        load_data<=load32; 
     elsif(LOAD_MUX="001") then
-        load_data(7 downto 0) <= LMDout(7 downto 0);
-        load_data(31 downto 8) <= (others =>LMDout(7));
+        load_data(7 downto 0) <= load32(7 downto 0);
+        load_data(31 downto 8) <= (others =>load32(7));
     elsif(LOAD_MUX="010") then
-        load_data(7 downto 0) <= LMDout(7 downto 0);
+        load_data(7 downto 0) <= load32(7 downto 0);
         load_data(31 downto 8) <= (others =>'0');
     elsif(LOAD_MUX="011") then
-        load_data(15 downto 0) <= LMDout(15 downto 0);
-        load_data(31 downto 16) <= (others =>LMDout(15));
+        load_data(15 downto 0) <= load32(15 downto 0);
+        load_data(31 downto 16) <= (others =>load32(15));
     elsif(LOAD_MUX="100") then
-        load_data(15 downto 0) <= LMDout(15 downto 0);
+        load_data(15 downto 0) <= load32(15 downto 0);
         load_data(31 downto 16) <= (others =>'0');
+    elsif(LOAD_MUX="101") then
+        load_data(15 downto 0) <= (others =>'0');
+        load_data(31 downto 16) <= load32(15 downto 0);
     end if;
        
 end process;
