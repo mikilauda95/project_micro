@@ -1,3 +1,0 @@
-mux_imm_brorj : MUX21_GENERIC --second mux to choose between jump/branch and immediate
-generic map (n_bit => 32)
-port map (imm_brorj, imm2, MUXBRORJ_SEL, imm2_sig); --if control is 0 the output is imm2, else it's imm_brorj
